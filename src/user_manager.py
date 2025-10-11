@@ -45,10 +45,11 @@ class UManager:
         self.csv = self.__read_from_csv() 
 
     def email_exists(self, email: str) -> bool: 
-        for row in self.csv: 
-            if row[1].strip().lower() == email.lower(): 
-                return True 
-        return False 
+        with self.mutex: 
+            for row in self.csv: 
+                if row[1].strip().lower() == email.lower(): 
+                    return True 
+            return False 
 
     def key_exists(self, key: str) -> bool: 
         print("Checking path: ",self.__make_user_path(key))
@@ -61,23 +62,35 @@ class UManager:
         return None
 
     def save_user(self, user: User): 
-         with open(self.__make_user_path(user.key), "w") as fp: 
+        with open(self.__make_user_path(user.key), "w") as fp: 
             json.dump(vars(user), fp)
+        # Update CSV fields: 
+        with self.mutex: 
+            changed = False
+            for row in self.csv: 
+                if row[1].strip().lower() == user.email.lower(): 
+                    if row[2].strip() != user.name: 
+                        row[2] = user.name 
+                        changed = True
+            if changed: 
+                self.__write_csv()
+                print("Saved CSV!")
+
 
     def add_user(self, email: str, key: str): 
         with self.mutex: 
             # Add E-Mail to User-CSV 
             self.csv.append([str(len(self.csv)), email, "", "", "", ""]) 
-            self.__write_to_csv(self.csv)
+            self.__write_csv()
             # Create new User-Json 
             with open(self.__make_user_path(key), "w") as fp: 
                 json.dump({"key": key, "email": email}, fp)
 
     # Function to write data to CSV
-    def __write_to_csv(self, data):
+    def __write_csv(self):
         with open(self.CSV_PATH, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
-            csv_writer.writerows(data)
+            csv_writer.writerows(self.csv)
 
     # Function to read data from CSV
     def __read_from_csv(self):
