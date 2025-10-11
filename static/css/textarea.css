@@ -47,6 +47,7 @@
     linear-gradient(180deg, rgba(14,61,55,.10), rgba(14,61,55,.04) 60%, rgba(14,61,55,.10)),
     radial-gradient(600px 200px at 100% 0%, rgba(106,94,43,.10), transparent 60%),
     var(--bg-color);
+
   color: var(--text-color);
   line-height: 1.55;
   border-radius: calc(var(--radius) - 6px);

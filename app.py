@@ -2,6 +2,7 @@ import random
 import os
 import string
 from datetime import date
+from typing import MutableSequence
 from dotenv import load_dotenv
 from flask import Flask, json, redirect, render_template, request, url_for
 from threading import Lock
@@ -14,6 +15,11 @@ CSV = "data/anmeldungen.csv"
 
 MAIL_TEXT = "Thanks for joining Dost 2.0 FK. Login to edit you data with this entry-code: " 
 MAIL_SUBJ = "Dost 2.0 FK Registration" 
+
+MSG_INVALID = "Entry-Code invalid!"
+MSG_USED = "E-Mail already registered!"
+MSG_CONFIRM = "We've sent you a login code via mail."
+MSG_ERROR = "Unkown Error. We're sorry!"
 mail = Mailer()
 
 umanger = UManager()
@@ -27,6 +33,8 @@ def main():
 @app.route("/entry/<key>")
 def entry(key: str): 
     user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
     return render_template("access.html", user=user)
 
 @app.route("/access", methods=["POST"])
@@ -36,7 +44,7 @@ def reservieren():
         
     if "@" in str(access):
         if umanger.email_exists(access): 
-            error_msg = "E-Mail already registered"
+            error_msg = MSG_USED
         else: 
             key = __create_id()
             try:
@@ -47,23 +55,23 @@ def reservieren():
                     html_body=None
                 )
                 umanger.add_user(access, key)
-                error_msg="We've sent you a login code via mail"
+                error_msg=MSG_CONFIRM
             except Exception as err: 
-                error_msg = f"Unkown Error. We're sorry! ({repr(err)})"
+                error_msg = f"{MSG_ERROR} ({repr(err)})"
     elif umanger.key_exists(access): 
         return redirect(f"/entry/{access}")
     else: 
-        error_msg = "Entry-Code invalid"
+        error_msg = MSG_INVALID
     return redirect(url_for("main", msg=error_msg), code=303)
 
 @app.route("/entry/<key>/update/<field>", methods=["POST"])
 def update_name(key: str, field: str): 
     user = umanger.get_user(key)
     if user is None: 
-        return redirect("/") 
+        return redirect(url_for("main", msg="Entry-Code Unkown"), code=303)
     user.update_field(field, request.form[field])
     umanger.save_user(user)
-    return render_template("access.html", user=user)
+    return redirect(url_for("entry", key=key), code=303)
 
 def __create_id(): 
     def id_part(n): 

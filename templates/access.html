@@ -37,45 +37,63 @@
   <span>&#8212;</span> in leicht veränderter Form <span>&#8212;</span> im Spiel
   erscheinen.]</p> 
 
-  <h4>Natur-Erfahrungen</h4>
-  {% if user.pnature|length == 0 %}
-    <p class="small">
-      <i>Nenne uns eine positive Natur-Erfahrung: Ein Sturm, ein
-        Waldspaziergang, die Begegnung mit einem Vogel in den Bergen.</i>
-    </p>
-  {% endif %}
-  <div 
-    id="pnature_input" 
-    style="margin-top:-2em; {%- if user.pnature|length > 0 -%}display: none;{%- endif -%}"
-  >
-    <form action="/entry/{{user.key}}/update/pnature" method="post">
-      {% set label="Positive Natur-Erfahrung" %}
-      {% set field="pnature" %}
-      {% set value=user.pnature %}
-      {% include "forms/textarea.html" %}
+  <h4>Natur/Körper-Erfahrungen</h4>
+  <h6>Positiv</h6>
+  {% set desc="Nenne uns eine positive Natur/Körper-Erfahrung: Ein Sturm, ein
+  Waldspaziergang, die Begegnung mit einem Vogel in den Bergen, das Gefühl zu
+  fliegen." %}
+  {% set text=user.pnature %}
+  {% set id="pnature" %}
+  {% set elabel="Positive Natur-Erfahrung" %}
+  {% include "forms/erfahrung.html" %}
 
-      {% set label="update" %}
-      {% set type="submit" %}
-      {% include "forms/button.html" %}
-    </form>
-  </div>
-  <div id="pnature_text" style="{%- if user.pnature|length == 0 -%}display: none;{%- endif -%}">
-    <p>Deine positive Natur-Erfahrung: <i>{{user.pnature}}</i></p>
-    {% set label="edit" %}
-    {% set onclick="Edit('pnature');" %}
-    {% include "forms/button.html" %}
-  </div>
-  <br><br>
+  <h6>Negativ</h6>
+  {% set desc="Nenne uns eine negative Natur/Körper-Erfahrung: Fester, kalter Regen,
+  Schmerzen, die Angst zu Stürzen, Einsamkeit und Unbeherrschbarkeit,
+  das Gefühl, beherrschbar zu sein." %}
+  {% set text=user.nnature %}
+  {% set id="nnature" %}
+  {% set elabel="Negative Natur-Erfahrung" %}
+  {% include "forms/erfahrung.html" %}
 
-  <p>Deine negative Natur-Erfahrung:</p>
   <h4>Geist-Erfahrungen</h4>
-  <p>Deine positive Geist-Erfahrung:</p>
-  <br><br>
-  <p>Deine negative Geist-Erfahrung:</p>
+  <h6>Positiv</h6>
+  {% set desc="Nenne uns eine positive Geist-Erfahrung: Ein Buch, dass dich
+  fasziniert, ein Gedanke, der dich überrascht hat, vielleicht auch ein
+  Gespräch, eine Formel, ein Rätsel..." %}
+  {% set text=user.pspirit%}
+  {% set id="pspirit" %}
+  {% set elabel="Positive Geist-Erfahrung" %}
+  {% include "forms/erfahrung.html" %}
+
+  <h6>Negativ</h6>
+  {% set desc="Nenne uns eine negative Geist-Erfahrung: Eine schmerzende
+  Erkenntnis, die Erfahrung einer Grenze des eigenen Verstehens: sich selbst
+  getäuscht zu haben, verblendet gewesen zu sein -- auch und
+  gerade durch vermeintliche Rationalität. ZU VIEL!" %}
+  {% set text=user.nspirit%}
+  {% set id="nspirit" %}
+  {% set elabel="Negative Geist-Erfahrung" %}
+  {% include "forms/erfahrung.html" %}
 
   <h4>Traum-Erfahrungen</h4>
-  <p>Deine positive Traum-Erfahrung:</p>
-  <p>Deine negative Traum-Erfahrung:</p>
+  <h6>Positiv</h6>
+  {% set desc="Nenne uns eine positive Traum-Erfahrung." %}
+  {% set text=user.pdeam%}
+  {% set id="pdeam" %}
+  {% set elabel="Positive Traum-Erfahrung" %}
+  {% include "forms/erfahrung.html" %}
+
+  <h6>Negativ</h6>
+  {% set desc="Nenne uns eine negative Traum-Erfahrungen." %}
+  {% set text=user.ndream%}
+  {% set id="ndream" %}
+  {% set elabel="Negative Traum-Erfahrungen" %}
+  {% include "forms/erfahrung.html" %}
+
+  <br>
+  <br>
+  <br>
 
   <h2>Fragebogen</h2>
   <p>Wir informieren dich, sobald der Fragebogen hochgeladen ist.</p>
