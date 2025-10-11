@@ -1,0 +1,85 @@
+{% extends "layout.html" %} 
+{% block body %}
+
+<div class="container main center"> 
+  <h1>DOST 2.0 FK</h1>
+  <p class="small">{{user.key}}</p>
+
+  {% if user.name|length == 0 %}
+    <p class="small">
+      <i>Sag uns wie du wirklich heißt.</i>
+    </p>
+    <form action="/entry/{{user.key}}/update/name" method="post" style="margin-top:-2em;">
+      {% set label="Name" %}
+      {% set field="name" %}
+      {% set type="text" %}
+      {% set title="Ja, wir brauchen hier deinen echten Rufnamen" %}
+      {% include "forms/input.html" %}
+
+      {% set label="update" %}
+      {% set type="submit" %}
+      {% include "forms/button.html" %}
+    </form>
+  {% else %}
+    <p class="small">Name: {{user.name}}</p>
+  {% endif %}
+
+  <p>Hier werden demnächst noch mehr Fragen auftauchen, insbesondere einige
+  Monate vor dem Spiel der Fragebogen zur Charakterverteilung. Über alle
+  Änderungen wirst du per E-Mail informiert.</p>
+
+  <h2>Erfahrungen</h2> 
+  <p>Wir möchten dich gerne nach ein paar Erfahrungen fragen. Lass dir Zeit beim Schreiben,
+  genieße es, erforsche deine Erinnerungen, lass die Sprache in der du
+  schreibst, deine Erfahrungen spiegeln <span>&#8212;</span> wenn du magst. Du
+  hast bis Pfingsten Zeit.</p>
+  <p class="small">[Alles was du hier schreibst kann potentiell
+  <span>&#8212;</span> in leicht veränderter Form <span>&#8212;</span> im Spiel
+  erscheinen.]</p> 
+
+  <h4>Natur-Erfahrungen</h4>
+  {% if user.pnature|length == 0 %}
+    <p class="small">
+      <i>Nenne uns eine positive Natur-Erfahrung: Ein Sturm, ein
+        Waldspaziergang, die Begegnung mit einem Vogel in den Bergen.</i>
+    </p>
+  {% endif %}
+  <div 
+    id="pnature_input" 
+    style="margin-top:-2em; {%- if user.pnature|length > 0 -%}display: none;{%- endif -%}"
+  >
+    <form action="/entry/{{user.key}}/update/pnature" method="post">
+      {% set label="Positive Natur-Erfahrung" %}
+      {% set field="pnature" %}
+      {% set value=user.pnature %}
+      {% include "forms/textarea.html" %}
+
+      {% set label="update" %}
+      {% set type="submit" %}
+      {% include "forms/button.html" %}
+    </form>
+  </div>
+  <div id="pnature_text" style="{%- if user.pnature|length == 0 -%}display: none;{%- endif -%}">
+    <p>Deine positive Natur-Erfahrung: <i>{{user.pnature}}</i></p>
+    {% set label="edit" %}
+    {% set onclick="Edit('pnature');" %}
+    {% include "forms/button.html" %}
+  </div>
+  <br><br>
+
+  <p>Deine negative Natur-Erfahrung:</p>
+  <h4>Geist-Erfahrungen</h4>
+  <p>Deine positive Geist-Erfahrung:</p>
+  <br><br>
+  <p>Deine negative Geist-Erfahrung:</p>
+
+  <h4>Traum-Erfahrungen</h4>
+  <p>Deine positive Traum-Erfahrung:</p>
+  <p>Deine negative Traum-Erfahrung:</p>
+
+  <h2>Fragebogen</h2>
+  <p>Wir informieren dich, sobald der Fragebogen hochgeladen ist.</p>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+
+  {% if user.pnature|length == 0 %}
+    <p class="small">
+      <i>Nenne uns eine positive Natur-Erfahrung: Ein Sturm, ein
+        Waldspaziergang, die Begegnung mit einem Vogel in den Bergen.</i>
+    </p>
+  {% endif %}
+  <div 
+    id="pnature_input" 
+    style="margin-top:-2em; {%- if user.pnature|length > 0 -%}display: none;{%- endif -%}"
+  >
+    <form action="/entry/{{user.key}}/update/pnature" method="post">
+      {% set label="Positive Natur-Erfahrung" %}
+      {% set field="pnature" %}
+      {% set value=user.pnature %}
+      {% include "forms/textarea.html" %}
+
+      {% set label="update" %}
+      {% set type="submit" %}
+      {% include "forms/button.html" %}
+    </form>
+  </div>
+  <div id="pnature_text" style="{%- if user.pnature|length == 0 -%}display: none;{%- endif -%}">
+    <p>Deine positive Natur-Erfahrung: <i>{{user.pnature}}</i></p>
+    {% set label="edit" %}
+    {% set onclick="Edit('pnature');" %}
+    {% include "forms/button.html" %}
+  </div>
+

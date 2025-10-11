@@ -3,7 +3,7 @@ import os
 import string
 from datetime import date
 from dotenv import load_dotenv
-from flask import Flask, json, redirect, render_template, request
+from flask import Flask, json, redirect, render_template, request, url_for
 from threading import Lock
 from src.mailer import Mailer
 from src.user_manager import UManager
@@ -22,11 +22,15 @@ app = Flask(__name__)
 
 @app.route("/")
 def main(): 
-    return render_template("index.html")
+    return render_template("index.html", msg=request.args.get("msg"))
+
+@app.route("/entry/<key>")
+def entry(key: str): 
+    user = umanger.get_user(key)
+    return render_template("access.html", user=user)
 
 @app.route("/access", methods=["POST"])
 def reservieren(): 
-    print(request.form)
     access = request.form["access"]
     error_msg = ""
         
@@ -50,7 +54,16 @@ def reservieren():
         return redirect(f"/entry/{access}")
     else: 
         error_msg = "Entry-Code invalid"
-    return render_template("index.html", msg=error_msg)
+    return redirect(url_for("main", msg=error_msg), code=303)
+
+@app.route("/entry/<key>/update/<field>", methods=["POST"])
+def update_name(key: str, field: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect("/") 
+    user.update_field(field, request.form[field])
+    umanger.save_user(user)
+    return render_template("access.html", user=user)
 
 def __create_id(): 
     def id_part(n): 
