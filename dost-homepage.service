@@ -1,10 +1,10 @@
 [Unit]
-Description=JBB anarchieinnordberlin Webpage
+Description=DOST 2.0 FK Registration Page
 After=network.target
 
 [Service]
-WorkingDirectory=/usr/bin/jbb
-ExecStart=/bin/bash -c 'cd /usr/bin/jbb/ && source .venv/bin/activate && .venv/bin/python3 app.py' 
+WorkingDirectory=/usr/bin/dost/homepage
+ExecStart=/bin/bash -c 'cd /usr/bin/dost/homepage && source .venv/bin/activate && .venv/bin/python3 app.py' 
 Type=simple 
 Restart=on-failure
 
