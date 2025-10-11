@@ -1,0 +1,12 @@
+[Unit]
+Description=JBB anarchieinnordberlin Webpage
+After=network.target
+
+[Service]
+WorkingDirectory=/usr/bin/jbb
+ExecStart=/bin/bash -c 'cd /usr/bin/jbb/ && source .venv/bin/activate && .venv/bin/python3 app.py' 
+Type=simple 
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

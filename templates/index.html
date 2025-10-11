@@ -1,0 +1,91 @@
+{% extends "layout.html" %} 
+{% block body %}
+
+<div class="container main center"> 
+  <h1>DOST 2.0 FK</h1>
+  <p class="small">futur-dialektisches Liverollenspiel<br>
+  Wann: 07. bis zum 09. August 2026<br> 
+  Wo: Guten Haus Wahlsdorf</p>
+  <p><i>Das Liverollenspiel Dost.-2.0 FK wird vom 07. bis zum 09. August 2026
+  anlässlich fux’ 30sten Geburtstag im »Guten Haus Wahlsdorf« stattfinden. Das
+  Spiel wird von Alex und fux gemeinsam konzeptioniert und in verschiedenen
+  Gruppen mitgestaltet, ohne, dass die einzelnen Gruppen voneinander wissen. So
+  soll das Spiel kollektiv entstehen und zugleich für alle ein überraschendes
+  und hoffentlich gleichermaßen spannendes, ein wenig schauriges aber sicherlich
+  anregendes Ereignis werden. Wie immer gilt: 24h in-time, high secrecy-level
+  und schonungslose Immersion. Es lebe die kollektive Revolution!</i></p>
+
+  <br>
+  <p style="color: #452101">{% if msg %} 
+    {{msg}}
+  {% endif %}</p>
+  <p class="small">
+    <i>After entering your E-Mail to register, you will receive an entry code to
+    login.</i>
+  </p>
+  <form action="/access" method="post" style="margin-top:-2em;">
+    {% set label="E-Mail // Entry-Code" %}
+    {% set field="access" %}
+    {% set type="text" %}
+    {% include "forms/input.html" %}
+
+    {% set label="signin//-up" %}
+    {% set type="submit" %}
+    {% include "forms/button.html" %}
+  </form>
+
+  <br><br>
+  <h2>Abstract</h2>
+  <div style="text-align: left;">
+    <p>Dost.-2.0 FK ist der Name der zweiten internationalen Friedenskonferenz nach
+    dem Ausbruch des dritten Weltkriegs vor sieben-komma-drei Jahren (März vor
+    sieben Jahren). Die erste Friedenskonferenz – Dost.-1.0 – fand zwei-komma-vier
+    Jahre nach Ausbruch des Krieges statt und hatte weitreichende Erfolge erzielt
+    [1]. Dass so lange keine weiteren Verhandlungen eines solchen Ausmaßes mehr
+    stattgefunden hatten, war der Tatsache geschuldet, dass Staaten und Trusts
+    sich recht gut im Kriegszustand eingerichtet hatten und der Krieg das in den
+    0.0-Zonen grassierende Migrationsproblem löste: »überflüssige« Migrantinnen,
+    wurden an den Fronten verfeuert und 5.0-Zonen wurden erzeugt, die systematisch
+    entvölkert wurden, um in den menschenleeren Gebieten mittels AI-gesteuerter
+    Maschinen schonungslos die Natur auszubeuten.</p>
+
+    <p>Dass nun im Jahre XXII nach neuer Zeitrechung (NnZ)[2] eine zweite
+    Friedenskonferenz stattfinden sollte, war subjektiv das Verdienst Schweizer
+    Diplomaten (die Schweiz – Zone 1.A.X – war die einzig verbliebende, neutrale
+    Zone), objektiv aber der neu anlaufenden Akkumulationskrise geschuldet,
+    sodass, auf Druck der Trusts, die Regierungen der führenden Kriegsnationen
+    einer Neuauflage von Dost.-1.0 zustimmten. So wurde im August XXI NnZ
+    Dost.-2.0 FK angekündigt.</p>
+
+    <p>Dost.-2.0 FK soll im idyllischen Schweizer Berggebiet Graubünden
+    ausgerichtet werden und verspricht für sämtliche Gäste ein überaus erholsames
+    Umfeld, vielfältige kulinarische Kost, geschmackvolles intellektuelles und
+    ästhetisches Begleitprogramm, ekstatische Aftershowpartys und
+    selbstverständlich eine angemessene Atmosphäre, um den Fortgang des Krieges
+    zum Wohle aller Menschen zu koordinieren. Doch aufgetauter Schnee hinterlässt
+    seine Spuren und sammelte sich im Zweifel dort, wo Schwere ihm eine Kuhle zum
+    Verweilen schafft.</p>
+
+    <p class="small">[1] Eines der zentralsten Ergebnisse war eine gemeinsame Erklärung, keine
+    international noch kooperierenden Wirtschaftsstandorte anzugreifen, um nicht
+    nur die beteiligten, sondern alle Staaten vor einer wirtschaftlichen
+    Depression zu schützen.
+    <br>
+    [2] Nachdem 2026 vor unserer Zeit (VuZ) die Weltwirtschaft
+    zusammengebrochen war, wurden vom neu gegründeten internationalen
+    Komitee »Für Erneuerung und Modernisierung der globalen Ordnung«
+    weitreichende Strukturreformen durchgeführt, die unter anderem einen
+    neuen Kalender etabliert, die größten Wirtschaftsstärksten Nationen
+    (USA, Kanada, Brasilien, Italien, Schweiz, Indien, China) zu
+    0.0-Zonen erklärte und einige, besonders von der Krise ruinierte
+    Länder zur 5.0-Zonen deklassierte, aber »neue Maßstäbe demokratischer
+    Legitimität« einführte. Diese Maßnahmen konnten tatsächlich die
+    Depression abwenden und neue Akkumulationsanreize schaffen. Durch die
+    erhöhte internationale Konkurrenz verschärfte sich der Akkumulations-
+    und Profitzwang der Zonen und Trusts aber so drastisch, dass keine
+    fünfzehn-komma-drei Jahre nach den Reformen der größte Krieg der
+    Menschheit ausbrach.</p>
+  </div>
+</div>
+
+{% endblock %}

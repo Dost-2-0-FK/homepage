@@ -1,0 +1,71 @@
+  :root{
+    --btn-bg: rgba(0,0,0,0.3);
+    --btn-border: rgba(106,94,43,0.3);
+    --btn-text: rgb(106,94,43);
+    /*--btn-text: #16192f;*/
+
+    --btn-pad-x: 28px;
+    --btn-pad-y: 14px;
+    --plus-box: 16px;   /* square box for the + (controls hitbox/centering) */
+    --plus-font: 18px;  /* visual size of the + glyph */
+    --ease: 340ms cubic-bezier(.2,.8,.2,1);
+  }
+
+  .btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:.6rem;
+    padding: var(--btn-pad-y) var(--btn-pad-x);
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    letter-spacing:.02em;
+    font-weight:600;
+    font-size:15px;
+    line-height:1;
+    cursor:pointer;
+    /* no rounded corners: */
+    border-radius: 0;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  .btn__label{ position:relative; z-index:2; }
+
+  /* Plus marks (absolute, centered via translate(-50%,-50%) so we can place at 0/100%) */
+  .btn__plus{
+    position:absolute;
+    width: var(--plus-box);
+    height: var(--plus-box);
+    font-size: var(--plus-font);
+    line-height: var(--plus-box);
+    text-align:center;
+    color: var(--btn-text);
+    user-select:none;
+    pointer-events:none;
+    z-index:1;
+    transform: translate(-50%, -50%);
+    transition:
+      top var(--ease),
+      left var(--ease),
+      opacity var(--ease);
+    opacity:.9;
+  }
+
+  /* Start EXACTLY at the four corners (percent coordinates) */
+  .btn__plus--tl{ top: 0%;   left: 0%;   }
+  .btn__plus--tr{ top: 0%;   left: 100%; }
+  .btn__plus--br{ top: 100%; left: 100%; }
+  .btn__plus--bl{ top: 100%; left: 0%;   }
+
+  /* Hover motion rules */
+  .btn:hover .btn__plus--tl{ top: 0%;   left: 100%; }   /* TL → TR (clockwise) */
+  .btn:hover .btn__plus--br{ top: 100%; left: 0%;   }   /* BR → BL (clockwise) */
+  .btn:hover .btn__plus--bl{ top: 0%;   left: 0%;   }   /* BL → TL (clockwise) */
+
+  /* TR special: counter-clockwise to 66% of the top edge */
+  .btn:hover .btn__plus--tr{ top: 0%; left: 66%; }
+
+  /* Optional: a tiny emphasis on hover */
+  .btn:hover .btn__plus{ opacity:1; }

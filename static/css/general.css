@@ -1,0 +1,78 @@
+@font-face {
+  font-family: "Oxanium VF";
+  src: url("/static/fonts/Oxanium/static/Oxanium-ExtraLight.ttf") format("truetype");
+  font-weight: 200 800; 
+  font-style: normal; 
+  font-display: swap;
+}
+
+body {
+  font-family: 'Oxanium VF', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 16px;
+  color: #032d31; 
+  background-image: url('/static/images/dost-2-0-fk-landscape.jpg');
+}
+
+td {
+  vertical-align: top;
+}
+
+h1, h2, .title {
+  font-weight: 800;
+}
+
+.center {
+  margin-left: auto; 
+  margin-right: auto;
+  text-align: center;
+}
+
+.main {
+  width: 50%;
+  text-align: center;
+  padding: 50px;
+  margin-top: 1em;
+  margin-bottom: 3em;
+
+  transition: background-color 1s linear;
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: rgba(255, 255, 255, 0.35) 0px 7px 18px;
+}
+
+.main:hover {
+  transition: background-color 1s linear;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.ustyle {
+  text-decoration: underline;
+  display: inline-block;
+  color: red;
+}
+
+.black-link {
+  color: black;
+  font-size: 16px; 
+}
+
+.gesperrt {
+  letter-spacing: 0.1em;
+}
+
+.small {
+  font-size: 14px;
+}
+
+@media only screen and (max-width: 950px) {
+  /* For mobile phones: */ 
+  .main {
+    padding: 20px;
+    font-size: 14px;
+    width: 100%;
+  }
+  .img-background {
+    width: 100%%;
+    margin-left: 0%;
+    padding-left: 0em;
+  }
+}
