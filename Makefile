@@ -29,7 +29,6 @@ update:
 	rsync -a --delete src/ $(PREFIX)/src/
 	rsync -a --delete static/ $(PREFIX)/static/
 	rsync -a --delete templates/ $(PREFIX)/templates/
-	rsync -a --delete data/ $(PREFIX)/data/
 	$(PREFIX)/.venv/bin/pip install -r $(PREFIX)/requirements.txt
 	systemctl restart dost-homepage.service
 
