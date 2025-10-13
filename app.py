@@ -13,7 +13,7 @@ load_dotenv()
 PORT = os.getenv("PORT")
 CSV = "data/anmeldungen.csv"
 
-MAIL_PRE = "Thanks for joining Dost 2.0 FK. Login to edit you data with this entry-code:" 
+MAIL_PRE = "Thanks for joining Dost 2.0 FK. Login to edit your data with this entry-code:" 
 MAIL_POST = "Do not loose this code and under no circumstances share it with anybody else!" 
 MAIL_END = "Sincerely,\nDost 2.0 FK Team!" 
 MAIL_SUBJ = "Dost 2.0 FK Registration" 
