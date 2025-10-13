@@ -13,13 +13,16 @@ load_dotenv()
 PORT = os.getenv("PORT")
 CSV = "data/anmeldungen.csv"
 
-MAIL_TEXT = "Thanks for joining Dost 2.0 FK. Login to edit you data with this entry-code: " 
+MAIL_PRE = "Thanks for joining Dost 2.0 FK. Login to edit you data with this entry-code:" 
+MAIL_POST = "Do not loose this code and under no circumstances share it with anybody else!" 
+MAIL_END = "Sincerely,\nDost 2.0 FK Team!" 
 MAIL_SUBJ = "Dost 2.0 FK Registration" 
 
+MSG_UNKNOWN= "Entry-Code unknown!"
 MSG_INVALID = "Entry-Code invalid!"
 MSG_USED = "E-Mail already registered!"
 MSG_CONFIRM = "We've sent you a login code via mail."
-MSG_ERROR = "Unkown Error. We're sorry!"
+MSG_ERROR = "Unknown Error. We're sorry!"
 mail = Mailer()
 
 umanger = UManager()
@@ -35,7 +38,7 @@ def entry(key: str):
     user = umanger.get_user(key)
     if user is None: 
         return redirect(url_for("main", msg=MSG_INVALID), code=303)
-    return render_template("access.html", user=user)
+    return render_template("entry.html", user=user)
 
 @app.route("/access", methods=["POST"])
 def reservieren(): 
@@ -51,7 +54,7 @@ def reservieren():
                 mail.send(
                     to_addr=access, 
                     subject=MAIL_SUBJ, 
-                    text_body=MAIL_TEXT + key,
+                    text_body=f"{MAIL_PRE} {key}\n{MAIL_POST}\n\n{MAIL_END}",
                     html_body=None
                 )
                 umanger.add_user(access, key)
@@ -68,7 +71,7 @@ def reservieren():
 def update_name(key: str, field: str): 
     user = umanger.get_user(key)
     if user is None: 
-        return redirect(url_for("main", msg="Entry-Code Unkown"), code=303)
+        return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
     user.update_field(field, request.form[field])
     umanger.save_user(user)
     return redirect(url_for("entry", key=key), code=303)

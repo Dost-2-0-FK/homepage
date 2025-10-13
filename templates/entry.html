@@ -49,8 +49,8 @@
 
   <h6>Negativ</h6>
   {% set desc="Nenne uns eine negative Natur/Körper-Erfahrung: Fester, kalter Regen,
-  Schmerzen, die Angst zu Stürzen, Einsamkeit und Unbeherrschbarkeit,
-  das Gefühl, beherrschbar zu sein." %}
+  Schmerzen, die Angst zu Stürzen, Einsamkeit in und Unbeherrschbarkeit der
+  Natur, die Verletzlichkeit, Beherrschbarkeit des Körper." %}
   {% set text=user.nnature %}
   {% set id="nnature" %}
   {% set elabel="Negative Natur-Erfahrung" %}
@@ -69,8 +69,8 @@
   <h6>Negativ</h6>
   {% set desc="Nenne uns eine negative Geist-Erfahrung: Eine schmerzende
   Erkenntnis, die Erfahrung einer Grenze des eigenen Verstehens: sich selbst
-  getäuscht zu haben, verblendet gewesen zu sein -- auch und
-  gerade durch vermeintliche Rationalität. ZU VIEL!" %}
+  getäuscht zu haben, verblendet gewesen zu sein — auch und
+  gerade durch vermeintliche Rationalität." %}
   {% set text=user.nspirit%}
   {% set id="nspirit" %}
   {% set elabel="Negative Geist-Erfahrung" %}
@@ -78,14 +78,19 @@
 
   <h4>Traum-Erfahrungen</h4>
   <h6>Positiv</h6>
-  {% set desc="Nenne uns eine positive Traum-Erfahrung." %}
+  {% set desc="Nenne uns eine positive Traum-Erfahrung: Töte, stiehle schneller,
+  liebe so viel du magst, du hast keinen Namen, die Leichtigkeit mit der alles
+  geschieht ist ohne Maß. Alles ist nahe, die schlimmsten materiellen
+  Bedingungen sind großartig. Die Wälder sind weiß oder schwarz, M muss niemals
+  wachen. " %}
   {% set text=user.pdream%}
   {% set id="pdream" %}
   {% set elabel="Positive Traum-Erfahrung" %}
   {% include "forms/erfahrung.html" %}
 
   <h6>Negativ</h6>
-  {% set desc="Nenne uns eine negative Traum-Erfahrungen." %}
+  {% set desc="Nenne uns eine negative Traum-Erfahrungen: sterben, nicht
+  sprechen können, nie endende Realität." %}
   {% set text=user.ndream%}
   {% set id="ndream" %}
   {% set elabel="Negative Traum-Erfahrungen" %}
