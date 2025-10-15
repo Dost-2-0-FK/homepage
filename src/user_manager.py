@@ -4,11 +4,14 @@ import os
 from threading import Lock
 from typing import Dict
 
+from src.seafiler import Seafile
+
 try:
     from dotenv import load_dotenv
     load_dotenv()
 except Exception:
     pass
+
 
 class User: 
     def __init__(self, ujson: Dict[str, str]) -> None:
@@ -41,8 +44,10 @@ class User:
 class UManager: 
     def __init__(self):
         self.CSV_PATH = "data/anmeldungen.csv"
+        self.SEAF_CSV_DIR = "/Orga/Anmeldungen"
         self.mutex = Lock()
         self.csv = self.__read_from_csv() 
+        self.seaf = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
 
     def email_exists(self, email: str) -> bool: 
         with self.mutex: 
@@ -91,6 +96,14 @@ class UManager:
         with open(self.CSV_PATH, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
             csv_writer.writerows(self.csv)
+        try:
+            if self.seaf.use_seafile: 
+                ok = self.seaf.upload_csv(self.CSV_PATH, self.SEAF_CSV_DIR)
+                print("Uploaded:", ok)
+            else: 
+                print("Skipped seafile")
+        except: 
+            pass
 
     # Function to read data from CSV
     def __read_from_csv(self):
