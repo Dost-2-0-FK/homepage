@@ -101,4 +101,12 @@ sprechen können, nie endende Realität." %}
 <h2>Fragebogen</h2>
 <p>Wir informieren dich, sobald der Fragebogen hochgeladen ist.</p>
 
+
+<form action="/entry/{{user.key}}/delete-me/" method="post" style="margin-top:2em;">
+  {% set label="delete me" %}
+  {% set type="submit" %}
+  {% include "forms/button.html" %}
+</form>
+
+
 {% endblock %}

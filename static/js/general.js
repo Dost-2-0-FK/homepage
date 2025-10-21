@@ -4,7 +4,7 @@ addEventListener("scroll", (_) => {
 
 document.addEventListener("DOMContentLoaded", (_) => {
   var scrollPosition = sessionStorage.getItem("scrollPosition");
-  if (scrollPosition !== null) {
+  if (scrollPosition !== null && location.pathname.indexOf("/entry") == 0) {
     window.scrollTo({top: parseInt(scrollPosition, 10), behavior: "smooth"});
   }
 });

@@ -99,6 +99,15 @@ class UManager:
             with open(self.__make_user_path(key), "w") as fp: 
                 json.dump({"key": key, "email": email}, fp)
 
+    def delete_user(self, user: User): 
+        with self.mutex: 
+            # Remove user from csv: 
+            csv = self.__get_csv() 
+            csv = filter(lambda row: row[1].strip().lower() != user.email, csv)
+            self.__upload_csv(csv) 
+            # remove user JSON 
+            os.remove(self.__make_user_path(user.key))
+
     # Function to write data to CSV
     def __upload_csv(self, csv):
         if self.seaf.use_seafile:

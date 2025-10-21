@@ -23,6 +23,7 @@ MSG_INVALID = "Entry-Code invalid!"
 MSG_USED = "E-Mail already registered!"
 MSG_CONFIRM = "We've sent you a login code via mail."
 MSG_ERROR = "Unknown Error. We're sorry!"
+MSG_DELETED = "we successfully deleted you from our system."
 mail = Mailer()
 
 umanger = UManager()
@@ -75,6 +76,15 @@ def update_name(key: str, field: str):
     user.update_field(field, request.form[field])
     umanger.save_user(user)
     return redirect(url_for("entry", key=key), code=303)
+
+@app.route("/entry/<key>/delete-me/", methods=["POST"])
+def delete_user(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
+    umanger.delete_user(user)
+    return redirect(url_for("main", msg=f"{key}, {MSG_DELETED}"), code=303)
+
 
 def __create_id(): 
     def id_part(n): 
