@@ -1,0 +1,56 @@
+{% extends "layout.html" %} 
+{% block body %}
+
+  <p class="small">Name: {{me}}@dost-2-0-fk.art</p>
+
+  <h3>Kollektive</h3>
+  {% for mail, collective in collectives.items() %} 
+    {% if mail in me %}
+      <h4>{{collective.name}} </h4> 
+    {% else %}
+      <h5>{{collective.name}} </h5> 
+    {% endif %}
+
+    <p class="small mail" onclick="OpenMailSender('{{mail}}');">{{mail}}@dost-2-0-fk.art</p>
+    <div id="send-mail-{{mail}}" style="display: none;">
+      <form action="/communicate/{{user.key}}/send/{{me}}/{{mail}}" method="post">
+        {% set label="Your mail" %}
+        {% set field="content" %}
+        {% include "forms/textarea.html" %}
+
+        {% set label="send" %}
+        {% set type="submit" %}
+        {% include "forms/button.html" %}
+      </form>
+      <br><br>
+    </div>
+
+    {% if "members" in collective %} 
+      <h6 style="margin-top: 0em;">members:</h6>
+      {% for member in collective.members %} 
+        {% if member not in me %}
+          <p class="small mail" onclick="OpenMailSender('{{member}}');" >
+        {% else %}
+          <p class="small">
+        {% endif %}
+          {{member}}.{{mail}}@dost-2-0-fk.art
+        </p>
+        <div id="send-mail-{{member}}" style="display: none;">
+          <form action="/communicate/{{user.key}}/send/{{me}}/{{member}}.{{mail}}" method="post">
+            {% set label="Your mail to" %}
+            {% set field="content" %}
+            {% include "forms/textarea.html" %}
+
+            {% set label="send" %}
+            {% set type="submit" %}
+            {% include "forms/button.html" %}
+          </form>
+          <br><br>
+        </div>
+
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+
+{% endblock %}

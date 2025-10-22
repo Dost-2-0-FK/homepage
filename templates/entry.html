@@ -2,6 +2,9 @@
 {% block body %}
 
 <p class="small">{{user.key}}</p>
+<p class="small">
+  <a href="/communicate/{{user.key}}">communicate</a>
+</p>
 
 {% if user.name|length == 0 %}
   <p class="small">

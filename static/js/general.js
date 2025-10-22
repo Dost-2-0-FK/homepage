@@ -23,3 +23,8 @@ window.addEventListener("submit", (event) => {
     sessionStorage.setItem("nextScrollTop", 25);
   }
 });
+
+function OpenMailSender(member) {
+  console.log("opening send to: ", "send-mail-" + member);
+  document.getElementById("send-mail-" + member).style.display='block';
+}

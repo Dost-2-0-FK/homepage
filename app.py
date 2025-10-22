@@ -18,6 +18,8 @@ MAIL_POST = "Do not loose this code and under no circumstances share it with any
 MAIL_END = "Sincerely,\nDost 2.0 FK Team!" 
 MAIL_SUBJ = "Dost 2.0 FK Registration" 
 
+MAIL_HOST = "@dost-2-0-fk.art"
+
 MSG_UNKNOWN= "Entry-Code unknown!"
 MSG_INVALID = "Entry-Code invalid!"
 MSG_USED = "E-Mail already registered!"
@@ -29,6 +31,10 @@ mail = Mailer()
 umanger = UManager()
 
 app = Flask(__name__)
+with open("resources/communicate.json", "r") as f: 
+    j = json.load(f)
+    COMM_COLLECTIVES = j["collectives"]
+    COMM_USERS = j["users"]
 
 @app.route("/")
 def main(): 
@@ -40,6 +46,19 @@ def entry(key: str):
     if user is None: 
         return redirect(url_for("main", msg=MSG_INVALID), code=303)
     return render_template("entry.html", user=user)
+
+@app.route("/communicate/<key>")
+def communicate(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = COMM_USERS[user.email] if user.email in COMM_USERS else ""
+    return render_template(
+        "communicate.html", 
+        user=user, 
+        collectives=COMM_COLLECTIVES,
+        me=me
+    )
 
 @app.route("/access", methods=["POST"])
 def reservieren(): 
@@ -85,6 +104,14 @@ def delete_user(key: str):
     umanger.delete_user(user)
     return redirect(url_for("main", msg=f"{key}, {MSG_DELETED}"), code=303)
 
+@app.route("/communicate/<key>/send/<me>/<to>", methods=["POST"]) 
+def communicate_send(key: str, me: str, to: str): 
+    me = me + MAIL_HOST 
+    to = to + MAIL_HOST 
+    print(request.form)
+    content = request.form["content"]
+    print(f"{me} sends mail to {to}: {content}")
+    return redirect(url_for("communicate", key=key), code=303)
 
 def __create_id(): 
     def id_part(n): 

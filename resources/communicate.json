@@ -1,0 +1,47 @@
+{
+  "collectives": {
+    "chars-schweiz": {
+      "name": "Charakter-Entwicklung Schweiz",
+      "members": [ "adler", "aristippos", "aristoteles" ]
+    },
+    "chars-blau": {
+      "name": "Charakter-Entwicklung blauer Block",
+      "members": [ "bacon", "benjamin", "brecht" ]
+    },
+    "chars-rot": {
+      "name": "Charakter-Entwicklung roter Block", 
+      "members": [ "calvin", "cassier", "cornelius" ]
+    },
+    "weltanschauung-schweiz": {
+      "name": "Weltanschauung Schweiz",
+      "members": ["dilthey", "durkheim"]
+    },
+    "weltanschauung-blau": {
+      "name": "Weltanschauung roter Block"
+    },
+    "weltanschauung-rot": {
+      "name": "Weltanschauung roter Block"
+    },
+    "background": {
+      "name": "Weltanschauung roter Block"
+    },
+    "it": {
+      "name": "IT",
+      "members": [ "ebbinghaus", "eisler", "elias", "epikur" ]
+    }
+  },
+  "users": {
+    "sophie273@gmx.de":"adler.chars-schweiz",
+    "jgoeckede@me.com":"weltanschauung-schweiz",
+    "marieberonneau@aol.com":"brecht.chars-blau",
+    "bronecanna@gmail.com":"benjamin.chars-blau", 
+    "Johanna.lilian@hotmail.de": "calvin.chars-rot",
+    "rauschbenno@gmail.com": "bacon.chars-blau",
+    "jonasheimpel@gmail.com": "cassier.chars-rot",
+    "florian.eschey@hotmail.de": "aristippos.chars-schweiz",
+    "bundschuh.dennis@gmail.com": "it",
+    "simonthormeyer@gmail.com": "it",
+    "Janne.volz@proton.me": "it",
+    "jan.dick@bdp.org": "aristoteles.chars-schweiz"
+  }
+}
