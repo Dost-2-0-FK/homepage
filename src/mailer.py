@@ -40,7 +40,8 @@ class Mailer:
         subject: str, 
         text_body: str, 
         html_body: str | None = None, 
-        timeout: float = 20.0
+        from_addr: str | None = self.from_addr,
+        timeout: float = 20.0,
     ):
         if not to_addr:
             raise ValueError("to_addr is required")

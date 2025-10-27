@@ -38,6 +38,11 @@
           </p>
           <div id="send-mail-{{member}}" style="display: none;">
             <form action="/communicate/{{user.key}}/send/{{me}}/{{member}}.{{mail}}" method="post">
+	      {% set label="Subject" %}
+	      {% set field="subject" %}
+	      {% set type="text" %}
+	      {% include "forms/input.html" %}
+
               {% set label="Your mail to" %}
               {% set field="content" %}
               {% include "forms/textarea.html" %}

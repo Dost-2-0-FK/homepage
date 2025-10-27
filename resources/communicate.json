@@ -3,34 +3,34 @@
     "chars-schweiz": {
       "name": "Charakter-Entwicklung Schweiz",
       "members": [ "adler", "aristippos", "aristoteles" ],
-      "hide": ["it", "orga"]
+      "hide": ["it"]
     },
     "chars-blau": {
       "name": "Charakter-Entwicklung blauer Block",
       "members": [ "bacon", "benjamin", "brecht" ],
-      "hide": ["it", "orga"]
+      "hide": ["it"]
     },
     "chars-rot": {
       "name": "Charakter-Entwicklung roter Block", 
       "members": [ "calvin", "cassier", "cornelius" ],
-      "hide": ["it", "orga"]
+      "hide": ["it"]
     },
     "weltanschauung-schweiz": {
       "name": "Weltanschauung Schweiz",
       "members": ["dilthey", "durkheim"],
-      "hide": ["it", "orga"]
+      "hide": ["it"]
     },
     "weltanschauung-blau": {
       "name": "Weltanschauung roter Block",
-      "hide": ["it", "orga"]
+      "hide": ["it"]
     },
     "weltanschauung-rot": {
       "name": "Weltanschauung roter Block",
-      "hide": ["it", "orga"]
+      "hide": ["it"]
     },
     "background": {
       "name": "Weltanschauung roter Block",
-      "hide": ["it", "orga"]
+      "hide": ["it"]
     },
     "it": {
       "name": "IT",

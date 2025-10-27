@@ -11,6 +11,7 @@ install:
 	rsync -a --delete static/ $(PREFIX)/static/
 	rsync -a --delete templates/ $(PREFIX)/templates/
 	rsync -a --delete data/ $(PREFIX)/data/
+	rsync -a --delete resources/ $(PREFIX)/resources/
 
 	# create venv IN PLACE (do not copy an existing one)
 	$(PYTHON) -m venv $(PREFIX)/.venv
@@ -29,6 +30,7 @@ update:
 	rsync -a --delete src/ $(PREFIX)/src/
 	rsync -a --delete static/ $(PREFIX)/static/
 	rsync -a --delete templates/ $(PREFIX)/templates/
+	rsync -a --delete resources/ $(PREFIX)/resources/
 	$(PREFIX)/.venv/bin/pip install -r $(PREFIX)/requirements.txt
 	systemctl restart dost-homepage.service
 

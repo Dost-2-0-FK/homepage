@@ -3,7 +3,7 @@ import json, os, subprocess, sys
 from pathlib import Path
 
 DOMAIN = "dost-2-0-fk.art"
-JSON_PATH = "/etc/dost/collectives.json"
+JSON_PATH = "/usr/bin/dost/collectives.json"
 OUT = "/etc/postfix/virtual_collectives"   # wir bauen LMDB daraus
 
 def main(path = None, out = None): 
