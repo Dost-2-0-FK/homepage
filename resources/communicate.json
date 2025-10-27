@@ -2,37 +2,57 @@
   "collectives": {
     "chars-schweiz": {
       "name": "Charakter-Entwicklung Schweiz",
-      "members": [ "adler", "aristippos", "aristoteles" ]
+      "members": [ "adler", "aristippos", "aristoteles" ],
+      "hide": ["it", "orga"]
     },
     "chars-blau": {
       "name": "Charakter-Entwicklung blauer Block",
-      "members": [ "bacon", "benjamin", "brecht" ]
+      "members": [ "bacon", "benjamin", "brecht" ],
+      "hide": ["it", "orga"]
     },
     "chars-rot": {
       "name": "Charakter-Entwicklung roter Block", 
-      "members": [ "calvin", "cassier", "cornelius" ]
+      "members": [ "calvin", "cassier", "cornelius" ],
+      "hide": ["it", "orga"]
     },
     "weltanschauung-schweiz": {
       "name": "Weltanschauung Schweiz",
-      "members": ["dilthey", "durkheim"]
+      "members": ["dilthey", "durkheim"],
+      "hide": ["it", "orga"]
     },
     "weltanschauung-blau": {
-      "name": "Weltanschauung roter Block"
+      "name": "Weltanschauung roter Block",
+      "hide": ["it", "orga"]
     },
     "weltanschauung-rot": {
-      "name": "Weltanschauung roter Block"
+      "name": "Weltanschauung roter Block",
+      "hide": ["it", "orga"]
     },
     "background": {
-      "name": "Weltanschauung roter Block"
+      "name": "Weltanschauung roter Block",
+      "hide": ["it", "orga"]
     },
     "it": {
       "name": "IT",
-      "members": [ "ebbinghaus", "eisler", "elias", "epikur" ]
+      "members": [ "ebbinghaus", "eisler", "elias", "epikur" ],
+      "hide": [
+        "orga", 
+        "chars-schweiz", 
+        "chars-rot", 
+        "chars-blau",
+        "weltanschauung-rot",
+        "weltanschauung-blau",
+        "weltanschauung-schweiz"
+      ]
+    },
+    "orga": {
+      "name": "Orga",
+      "members": ["haffmans", "hauptmann", "hebel"]
     }
   },
   "users": {
     "sophie273@gmx.de":"adler.chars-schweiz",
-    "jgoeckede@me.com":"weltanschauung-schweiz",
+    "jgoeckede@me.com":"dilthey.weltanschauung-schweiz",
     "marieberonneau@aol.com":"brecht.chars-blau",
     "bronecanna@gmail.com":"benjamin.chars-blau", 
     "Johanna.lilian@hotmail.de": "calvin.chars-rot",
@@ -42,6 +62,7 @@
     "bundschuh.dennis@gmail.com": "it",
     "simonthormeyer@gmail.com": "it",
     "Janne.volz@proton.me": "it",
-    "jan.dick@bdp.org": "aristoteles.chars-schweiz"
+    "jan.dick@bdp.org": "haffmans.orga",
+    "equinox.salexander": "hebel.orga"
   }
 }

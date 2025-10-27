@@ -2,9 +2,9 @@
 {% block body %}
 
 <p class="small">{{user.key}}</p>
-<p class="small">
+<p class="small">{% if has_communicate %}
   <a href="/communicate/{{user.key}}">communicate</a>
-</p>
+{% endif %}</p>
 
 {% if user.name|length == 0 %}
   <p class="small">
@@ -24,6 +24,10 @@
 {% else %}
   <p class="small">Name: {{user.name}}</p>
 {% endif %}
+
+<p style="color: #452101">{% if msg %} 
+  {{msg}}
+{% endif %}</p>
 
 <p>Hier werden demnächst noch mehr Fragen auftauchen, insbesondere einige
 Monate vor dem Spiel der Fragebogen zur Charakterverteilung. Über alle

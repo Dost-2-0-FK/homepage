@@ -6,6 +6,7 @@ from typing import MutableSequence
 from dotenv import load_dotenv
 from flask import Flask, json, redirect, render_template, request, url_for
 from threading import Lock
+from src.communicator import Comm
 from src.mailer import Mailer
 from src.user_manager import UManager
 
@@ -22,19 +23,18 @@ MAIL_HOST = "@dost-2-0-fk.art"
 
 MSG_UNKNOWN= "Entry-Code unknown!"
 MSG_INVALID = "Entry-Code invalid!"
+MSG_UNAUTHORIZED = "You have no right to be here!"
 MSG_USED = "E-Mail already registered!"
 MSG_CONFIRM = "We've sent you a login code via mail."
 MSG_ERROR = "Unknown Error. We're sorry!"
 MSG_DELETED = "we successfully deleted you from our system."
 mail = Mailer()
 
+comm = Comm()
+
 umanger = UManager()
 
 app = Flask(__name__)
-with open("resources/communicate.json", "r") as f: 
-    j = json.load(f)
-    COMM_COLLECTIVES = j["collectives"]
-    COMM_USERS = j["users"]
 
 @app.route("/")
 def main(): 
@@ -45,18 +45,25 @@ def entry(key: str):
     user = umanger.get_user(key)
     if user is None: 
         return redirect(url_for("main", msg=MSG_INVALID), code=303)
-    return render_template("entry.html", user=user)
+    return render_template(
+        "entry.html", 
+        user=user, 
+        msg=request.args.get("msg"),
+        has_communicate=comm.get_user(user.email) is not None
+    )
 
 @app.route("/communicate/<key>")
 def communicate(key: str): 
     user = umanger.get_user(key)
     if user is None: 
         return redirect(url_for("main", msg=MSG_INVALID), code=303)
-    me = COMM_USERS[user.email] if user.email in COMM_USERS else ""
+    me = comm.get_user(user.email)
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
     return render_template(
         "communicate.html", 
         user=user, 
-        collectives=COMM_COLLECTIVES,
+        collectives=comm.collectives,
         me=me
     )
 
