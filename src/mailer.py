@@ -40,17 +40,20 @@ class Mailer:
         subject: str, 
         text_body: str, 
         html_body: str | None = None, 
-        from_addr: str | None = self.from_addr,
+        from_addr: str | None = None,
         timeout: float = 20.0,
     ):
         if not to_addr:
             raise ValueError("to_addr is required")
 
+        if not from_addr: 
+            from_addr = self.from_addr
+
         msg = EmailMessage()
-        msg["From"] = self.from_addr
+        msg["From"] = from_addr
         msg["To"] = to_addr
         msg["Subject"] = subject
-        msg["Message-ID"] = make_msgid(domain=self.from_addr.split("@")[-1])
+        msg["Message-ID"] = make_msgid(domain=from_addr.split("@")[-1])
 
         if html_body:
             # Provide plain text for compatibility if HTML provided
