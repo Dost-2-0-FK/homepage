@@ -57,7 +57,7 @@ def communicate(key: str):
     user = umanger.get_user(key)
     if user is None: 
         return redirect(url_for("main", msg=MSG_INVALID), code=303)
-    me = comm.get_user(user.email)
+    me = comm.get_user(user.email.lower())
     if me is None:
         return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
     return render_template(
