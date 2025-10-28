@@ -20,6 +20,8 @@ install:
 	$(PREFIX)/.venv/bin/pip install -r $(PREFIX)/requirements.txt
 
 	# install service
+	cp -f dost-aliases.service /etc/systemd/system/
+	cp -f dost-aliases.path/etc/systemd/system/
 	cp -f dost-homepage.service /etc/systemd/system/
 	systemctl daemon-reload
 	systemctl enable --now dost-homepage.service

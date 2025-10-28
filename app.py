@@ -121,7 +121,7 @@ def communicate_send(key: str, me: str, to: str):
     print(f"{me} sends mail \"{subject}\" to {to}: {content}")
     if mail.mode == "server":
         mail.send(
-            to_addr=access, 
+            to_addr=to, 
             subject=subject, 
             text_body=content,
             html_body=None,

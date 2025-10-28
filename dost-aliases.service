@@ -1,0 +1,6 @@
+[Unit]
+Description=Build Dost 2.0 FK Postfix aliases
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/dost/homepage/scripts/build_aliases.py

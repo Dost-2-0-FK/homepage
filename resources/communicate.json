@@ -45,9 +45,25 @@
         "weltanschauung-schweiz"
       ]
     },
+    "szenografie": {
+      "name": "Szenografie",
+      "hide": [
+        "orga", 
+        "chars-schweiz", 
+        "chars-rot", 
+        "chars-blau",
+        "weltanschauung-rot",
+        "weltanschauung-blau",
+        "weltanschauung-schweiz"
+      ]
+    },
     "orga": {
       "name": "Orga",
       "members": ["haffmans", "hauptmann", "hebel"]
+    },
+    "test": {
+      "name": "Test",
+      "members": [ "noone" ]
     }
   },
   "users": {
@@ -63,6 +79,9 @@
     "simonthormeyer@gmail.com": "it",
     "Janne.volz@proton.me": "it",
     "jan.dick@bdp.org": "haffmans.orga",
-    "equinox.salexander": "hebel.orga"
+    "equinox.salexander": "hebel.orga",
+    "post@fraulou.ch": "szenografie",
+    "e.egenbauer@hotmail.de": "weltanschauung-rot",
+    "janvandick@gmail.com": "noone.test"
   }
 }

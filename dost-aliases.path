@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch collectives.json
+
+[Path]
+PathChanged=/usr/bin/dost/homepage/resources/communicate.json
+
+[Install]
+WantedBy=multi-user.target
+
