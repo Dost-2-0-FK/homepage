@@ -12,9 +12,14 @@
         <h5>{{collective.name}} </h5> 
       {% endif %}
 
-      <p class="small mail" onclick="OpenMailSender('{{mail}}');">{{mail}}@dost-2-0-fk.art</p>
+      <p class="small mail" onclick="ToggleMailSender('{{mail}}');">{{mail}}@dost-2-0-fk.art</p>
       <div id="send-mail-{{mail}}" style="display: none;">
-        <form action="/communicate/{{user.key}}/send/{{me}}/{{mail}}" method="post">
+        <form action="/communicate/{{user.key}}/send/{{me.mail}}/{{mail}}" method="post">
+          {% set label="Subject" %}
+          {% set field="subject" %}
+          {% set type="text" %}
+          {% include "forms/input.html" %}
+
           {% set label="Your mail" %}
           {% set field="content" %}
           {% include "forms/textarea.html" %}
@@ -30,18 +35,18 @@
         <h6 style="margin-top: 0em;">members:</h6>
         {% for member in collective.members %} 
           {% if member not in me.mail %}
-            <p class="small mail" onclick="OpenMailSender('{{member}}');" >
+            <p class="small mail" onclick="ToggleMailSender('{{member}}');" >
           {% else %}
             <p class="small">
           {% endif %}
             {{member}}.{{mail}}@dost-2-0-fk.art
           </p>
           <div id="send-mail-{{member}}" style="display: none;">
-            <form action="/communicate/{{user.key}}/send/{{me}}/{{member}}.{{mail}}" method="post">
-	      {% set label="Subject" %}
-	      {% set field="subject" %}
-	      {% set type="text" %}
-	      {% include "forms/input.html" %}
+            <form action="/communicate/{{user.key}}/send/{{me.mail}}/{{member}}.{{mail}}" method="post">
+              {% set label="Subject" %}
+              {% set field="subject" %}
+              {% set type="text" %}
+              {% include "forms/input.html" %}
 
               {% set label="Your mail to" %}
               {% set field="content" %}

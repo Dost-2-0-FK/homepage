@@ -24,7 +24,10 @@ window.addEventListener("submit", (event) => {
   }
 });
 
-function OpenMailSender(member) {
+function ToggleMailSender(member) {
   console.log("opening send to: ", "send-mail-" + member);
-  document.getElementById("send-mail-" + member).style.display='block';
+  if (document.getElementById("send-mail-" + member).style.display === 'none')
+    document.getElementById("send-mail-" + member).style.display='block';
+  else
+    document.getElementById("send-mail-" + member).style.display='none';
 }

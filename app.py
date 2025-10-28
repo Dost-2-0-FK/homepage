@@ -117,15 +117,16 @@ def communicate_send(key: str, me: str, to: str):
     to = to + MAIL_HOST 
     print(request.form)
     content = request.form["content"]
-    subject = request.form["content"]
-    print(f"{me} sends mail to {to}: {content}")
-    mail.send(
-        to_addr=access, 
-        subject=subject, 
-        text_body=content,
-        html_body=None,
-        from_addr=me
-    )
+    subject = request.form["subject"]
+    print(f"{me} sends mail \"{subject}\" to {to}: {content}")
+    if mail.mode == "server":
+        mail.send(
+            to_addr=access, 
+            subject=subject, 
+            text_body=content,
+            html_body=None,
+            from_addr=me
+        )
 
     return redirect(url_for("communicate", key=key), code=303)
 
