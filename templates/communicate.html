@@ -3,6 +3,31 @@
 
   <p class="small">Name: {{me.mail}}@dost-2-0-fk.art</p>
 
+  <h3>Contactaufnahme</h3>
+  {% if me.collective == "orga" %}
+    <form action="/communicate/{{user.key}}/send/{{me.mail}}/all" method="post">
+      {% set label="mail to" %}
+      {% set field="group" %}
+      {% set options={'users': 'Teilnehmer:innen', 'collectives': 'Kollektive'} %}
+      {% include "forms/select.html" %}
+
+      {% set label="Subject" %}
+      {% set field="subject" %}
+      {% set type="text" %}
+      {% include "forms/input.html" %}
+
+      {% set label="Your mail" %}
+      {% set field="content" %}
+      {% include "forms/textarea.html" %}
+
+      {% set label="send" %}
+      {% set type="submit" %}
+      {% include "forms/button.html" %}
+    </form>
+    <br><br>
+  {% endif %}
+
+
   <h3>Kollektive</h3>
   {% for mail, collective in collectives.items() %} 
     {% if mail not in me.hidden %} 

@@ -24,11 +24,12 @@ und schonungslose Immersion. Es lebe die kollektive Revolution!</i></p>
   <i>After entering your E-Mail to register, you will receive an entry code to
   login (it may take up to 5 minutes for the E-Mail to arrive).</i>
 </p>
-<form action="/access" method="post" style="margin-top:-2em;">
+<form action="/access" method="post">
   {% set label="E-Mail // Entry-Code" %}
   {% set field="access" %}
   {% set type="text" %}
   {% include "forms/input.html" %}
+  <br>
 
   {% set label="signin//-up" %}
   {% set type="submit" %}

@@ -1,7 +1,7 @@
 import json
 import os
 from threading import Lock
-from typing import Dict
+from typing import Dict, List
 
 from src.seafiler import SeafBytes, Seafile
 
@@ -71,6 +71,15 @@ class UManager:
             with open(self.__make_user_path(key), "r") as f: 
                 return User(json.load(f)) 
         return None
+
+    def all_mails(self) -> List[str]: 
+        mails = []
+        with self.mutex: 
+            for row in self.__get_csv():
+                print(row)
+                if "@" in row[1]:
+                    mails.append(row[1].strip().lower())
+        return mails
 
     def save_user(self, user: User): 
         with open(self.__make_user_path(user.key), "w") as fp: 

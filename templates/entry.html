@@ -10,12 +10,13 @@
   <p class="small">
     <i>Sag uns wie du wirklich heißt.</i>
   </p>
-  <form action="/entry/{{user.key}}/update/name" method="post" style="margin-top:-2em;">
+  <form action="/entry/{{user.key}}/update/name" method="post">
     {% set label="Name" %}
     {% set field="name" %}
     {% set type="text" %}
     {% set title="Ja, wir brauchen hier deinen 'echten' Rufnamen" %}
     {% include "forms/input.html" %}
+    <br>
 
     {% set label="update" %}
     {% set type="submit" %}

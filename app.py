@@ -113,20 +113,27 @@ def delete_user(key: str):
 
 @app.route("/communicate/<key>/send/<me>/<to>", methods=["POST"]) 
 def communicate_send(key: str, me: str, to: str): 
-    me = me + MAIL_HOST 
-    to = to + MAIL_HOST 
-    print(request.form)
     content = request.form["content"]
     subject = request.form["subject"]
-    print(f"{me} sends mail \"{subject}\" to {to}: {content}")
-    if mail.mode == "server":
-        mail.send(
-            to_addr=to, 
-            subject=subject, 
-            text_body=content,
-            html_body=None,
-            from_addr=me
-        )
+    me_mail = me + MAIL_HOST 
+    to_mail = [to + MAIL_HOST]
+    print(request.form)
+    if to == "all":
+        group = request.form["group"]
+        if group == "users": 
+            to_mail = umanger.all_mails()
+        elif group == "collectives": 
+            to_mail = comm.users.keys()
+    for addr in to_mail: 
+        print(f"{me} sends mail \"{subject}\" to {addr}: {content}")
+        if mail.mode == "server":
+            mail.send(
+                to_addr=addr, 
+                subject=subject, 
+                text_body=content,
+                html_body=None,
+                from_addr=me_mail
+            )
 
     return redirect(url_for("communicate", key=key), code=303)
 
