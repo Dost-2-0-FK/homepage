@@ -3,15 +3,11 @@ import json, os, subprocess, sys
 from pathlib import Path
 
 DOMAIN = "dost-2-0-fk.art"
-JSON_PATH = "/usr/bin/dost/collectives.json"
+JSON_PATH = "/usr/bin/dost/homepage/resources/communicate.json"
 OUT = "/etc/postfix/virtual_collectives"   # wir bauen LMDB daraus
 
 def main(path = None, out = None): 
-    if path:
-        JSON_PATH = path 
-    if out: 
-        OUT = out
-    with open(JSON_PATH, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     users = {k.strip().lower(): v.strip().lower() for k, v in data.get("users", {}).items()}
@@ -42,18 +38,17 @@ def main(path = None, out = None):
             lines.append(f"{nick}.{coll}@{DOMAIN}\t{email}")
 
     content = "\n".join(lines) + ("\n" if lines else "")
-    Path(OUT).write_text(content, encoding="utf-8")
+    Path(out).write_text(content, encoding="utf-8")
 
     # LMDB bauen und Postfix neu laden
-    if not path and not out:
-        subprocess.check_call(["postmap", f"lmdb:{OUT}"])
+    if "/etc" in out:
+        subprocess.check_call(["postmap", f"lmdb:{out}"])
         subprocess.check_call(["systemctl", "reload", "postfix"])
-        print(f"Built {OUT} with {len(lines)} aliases.")
+        print(f"Built {out} with {len(lines)} aliases.")
 
 if __name__ == "__main__":
     try:
-        main("resources/communicate.json", "virtual")
+        main(JSON_PATH, OUT)
     except Exception as e:
         print("ERROR:", e, file=sys.stderr)
         sys.exit(1)
-
