@@ -49,7 +49,7 @@ def entry(key: str):
         "entry.html", 
         user=user, 
         msg=request.args.get("msg"),
-        has_communicate=comm.get_user(user.email) is not None
+        has_communicate=comm.get_user(user.email.lower()) is not None
     )
 
 @app.route("/communicate/<key>")
