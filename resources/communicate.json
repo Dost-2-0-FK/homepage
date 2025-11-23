@@ -3,40 +3,46 @@
     "chars-schweiz": {
       "name": "Charakter-Entwicklung Schweiz",
       "members": [ "adler", "aristippos", "aristoteles" ],
-      "hide": ["it"]
+      "hide": ["it", "szenografie", "test"]
     },
     "chars-blau": {
       "name": "Charakter-Entwicklung blauer Block",
       "members": [ "bacon", "benjamin", "brecht" ],
-      "hide": ["it"]
+      "hide": ["it", "szenografie", "test"]
     },
     "chars-rot": {
       "name": "Charakter-Entwicklung roter Block", 
       "members": [ "calvin", "cassier", "cornelius" ],
-      "hide": ["it"]
+      "hide": ["it", "szenografie", "test"]
     },
     "weltanschauung-schweiz": {
       "name": "Weltanschauung Schweiz",
       "members": ["dilthey", "durkheim"],
-      "hide": ["it"]
+      "hide": ["it", "szenografie", "test"]
     },
     "weltanschauung-blau": {
       "name": "Weltanschauung roter Block",
-      "hide": ["it"]
+      "hide": ["it", "szenografie", "test"]
     },
     "weltanschauung-rot": {
       "name": "Weltanschauung roter Block",
-      "hide": ["it"]
+      "hide": ["it", "szenografie", "test"]
     },
     "background": {
       "name": "Weltanschauung roter Block",
-      "hide": ["it"]
+      "hide": ["it", "szenografie", "test"]
+    },
+    "kostüm": {
+      "name": "Kostüm",
+      "members": ["rot", "blau", "schweiz"],
+      "hide": ["it", "szenografie", "test"]
     },
     "it": {
       "name": "IT",
       "members": [ "ebbinghaus", "eisler", "elias", "epikur" ],
       "hide": [
-        "orga", 
+        "test", 
+        "szenografie", 
         "chars-schweiz", 
         "chars-rot", 
         "chars-blau",
@@ -48,7 +54,8 @@
     "szenografie": {
       "name": "Szenografie",
       "hide": [
-        "orga", 
+        "test", 
+        "szenografie", 
         "chars-schweiz", 
         "chars-rot", 
         "chars-blau",
@@ -83,6 +90,10 @@
     "post@fraulou.ch": "szenografie",
     "e.egenbauer@hotmail.de": "weltanschauung-rot",
     "janvandick@gmail.com": "noone.test",
-    "Dennis.heiler@me.com": "cornelius.chars-rot"
+    "Dennis.heiler@me.com": "cornelius.chars-rot",
+    "schrammsv@gmail.com": "hauptmann",
+    "maddin.g@hotmail.de": "aristoteles",
+    "natascha.kordts@web.de":"schweiz.kostüm",
+    "Lilith@huggle.de":"rot.kostüm"
   }
 }
