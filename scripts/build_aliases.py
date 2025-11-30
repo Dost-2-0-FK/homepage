@@ -68,7 +68,7 @@ if __name__ == "__main__":
             f"{POSTFIX_PATH}/{OUT_REWRITE}"
         )
         # local
-        main(JSON_PATH, OUT_FORWARD, OUT_REWRITE)
+        # main(JSON_PATH, OUT_FORWARD, OUT_REWRITE)
 
     except Exception as e:
         print("ERROR:", e, file=sys.stderr)
