@@ -55,6 +55,7 @@ def main(path, out_forward, out_rewrite):
     # LMDB bauen und Postfix neu laden
     if "/etc" in out_forward:
         subprocess.check_call(["postmap", f"lmdb:{out_forward}"])
+        subprocess.check_call(["postmap", f"lmdb:{out_rewrite}"])
         subprocess.check_call(["systemctl", "reload", "postfix"])
         print(f"Built {out_forward} with {len(lines)} aliases.")
 
