@@ -30,6 +30,7 @@ update:
 	cp -f requirements.txt $(PREFIX)/
 	cp -f app.py $(PREFIX)/
 	cp -f .env $(PREFIX)/
+	chmod +x scripts/larp_rewrite.py
 	rsync -a --delete src/ $(PREFIX)/src/
 	rsync -a --delete static/ $(PREFIX)/static/
 	rsync -a --delete templates/ $(PREFIX)/templates/
