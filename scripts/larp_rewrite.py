@@ -6,12 +6,13 @@ from email.parser import BytesParser
 from email.generator import BytesGenerator 
 from email.utils import parseaddr
 from subprocess import Popen, PIPE
-from typing import Tuple 
+from typing import Dict
 
+DEBUG_LOG = "/tmp/larp_rewrite.log"
 DOMAIN = "@dost-2-0-fk.art"
 MAP_PATH = "/etc/postfix/generic_collectives"
 
-def load_real_to_alias():
+def load_real_to_alias() -> Dict[str, str]:
     """
     Returns dict: real_email -> alias_localpart (e.g. 'alex@gmail.com' -> 'hebel')
     based on your JSON structure.
@@ -47,6 +48,9 @@ def main():
 
     name, header_from_addr = parseaddr(msg.get("From", "")) 
     header_from_addr_l = header_from_addr.lower()
+
+    with open(DEBUG_LOG, "a") as fp:
+        fp.write(f"CALLED sender={envelope_sender!r} rcpt={rcpt!r} from_header={header_from_addr_l!r}\n")
 
     # Load mapping 
     try: 
