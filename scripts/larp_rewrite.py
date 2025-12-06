@@ -1,11 +1,11 @@
 import argparse
 from email.message import EmailMessage
+import smtplib 
 import sys
 from email import policy 
 from email.parser import BytesParser 
 from email.generator import BytesGenerator 
 from email.utils import parseaddr
-from subprocess import Popen, PIPE
 from typing import Dict
 
 DEBUG_LOG = "/tmp/larp_rewrite.log"
@@ -23,14 +23,17 @@ def load_real_to_alias() -> Dict[str, str]:
     return mapping
 
 def parse_message(raw: bytes) -> EmailMessage: 
-    msg = BytesParser(policy=policy.SMTP).parsebytes(raw) 
-    return msg
+    return BytesParser(policy=policy.SMTP).parsebytes(raw) 
 
 def msg_to_bytes(msg: EmailMessage) -> bytes: 
     from io import BytesIO 
     buf = BytesIO() 
     BytesGenerator(buf, policy=policy.SMTP).flatten(msg) 
     return buf.getvalue() 
+
+def send_via_local_smtp(env_from: str, rcpt: str, msg_bytes: bytes): 
+    with smtplib.SMTP("127.0.0.1", 10026) as s: 
+        s.sendmail(env_from, [rcpt], msg_bytes)
 
 def main(): 
     ap = argparse.ArgumentParser() 
@@ -39,7 +42,6 @@ def main():
     args = ap.parse_args() 
 
     envelope_sender = args.sender.strip("<>").strip()
-
     rcpt = args.recipient.strip() 
 
     # Parse message and rewrite from 
@@ -63,17 +65,17 @@ def main():
     # sender already alias -> no rewrite (let postfix deliver as-is)
     if header_from_addr_l.endswith("@" + DOMAIN): 
         env_from = envelope_sender or header_from_addr or ""
-        p = Popen(["/usr/sbin/sendmail", "-oi", "-f", env_from, rcpt], stdin=PIPE)
-        p.communicate(raw) 
-        return p.returncode
+        send_via_local_smtp(env_from, rcpt, raw)
+        return 0
 
+    # Look ip mapping real -> alias
     alias_addr = real_to_alias.get(header_from_addr_l)
+
     # unkown real sender -> no rewrite (let postfix deliver as-is)
     if not alias_addr: 
         env_from = envelope_sender or header_from_addr or ""
-        p = Popen(["/usr/sbin/sendmail", "-oi", "-f", env_from, rcpt], stdin=PIPE)
-        p.communicate(raw) 
-        return p.returncode
+        send_via_local_smtp(env_from, rcpt, raw)
+        return 0
 
     # Only rewrite if header_from matches or is blank; 
     # if MUAs forge something else, we still rewrite based on envelope_sender 
@@ -82,11 +84,17 @@ def main():
     else: 
         msg["From"] = alias_addr 
 
+    # Optional debug header
+    msg.add_header("X-Dost-Rewritten-From", header_from_addr_l)
+
     out_bytes = msg_to_bytes(msg) 
 
-    p = Popen(["/usr/sbin/sendmail", "-oi", "-f", alias_addr, rcpt], stdin=PIPE)
-    p.communicate(out_bytes) 
-    return p.returncode
+    # Envelope sender also becomes alias (hide real address)
+    env_from = alias_addr
+
+    send_via_local_smtp(env_from, rcpt, out_bytes)
+    return 0
+
 
 if __name__ == "__main__": 
     sys.exit(main())
