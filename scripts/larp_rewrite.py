@@ -5,7 +5,7 @@ import sys
 from email import policy 
 from email.parser import BytesParser 
 from email.generator import BytesGenerator 
-from email.utils import parseaddr
+from email.utils import parseaddr, formataddr
 from typing import Dict
 
 DEBUG_LOG = "/tmp/larp_rewrite.log"
@@ -63,13 +63,17 @@ def main():
         return 0 
 
     # sender already alias -> no rewrite (let postfix deliver as-is)
-    if header_from_addr_l.endswith("@" + DOMAIN): 
+    if header_from_addr_l.endswith(DOMAIN): 
         env_from = envelope_sender or header_from_addr or ""
         send_via_local_smtp(env_from, rcpt, raw)
         return 0
 
     # Look ip mapping real -> alias
     alias_addr = real_to_alias.get(header_from_addr_l)
+    if not alias_addr and "googlemail" in header_from_addr_l: 
+        alias_addr = real_to_alias.get(header_from_addr_l.replace("googlemail", "gmail"))
+    elif not alias_addr and "gmail" in header_from_addr_l: 
+        alias_addr = real_to_alias.get(header_from_addr_l.replace("gmail", "googlemail"))
 
     # unkown real sender -> no rewrite (let postfix deliver as-is)
     if not alias_addr: 
@@ -79,10 +83,15 @@ def main():
 
     # Only rewrite if header_from matches or is blank; 
     # if MUAs forge something else, we still rewrite based on envelope_sender 
-    if name: 
-        msg["From"] = f"{name} <{alias_addr}>" 
+    display_name = alias_addr.split("@")[0] 
+    if "." in display_name: 
+        display_name = alias_addr.split(".")[0] 
+    display_name = display_name.capitalize()
+    new_from = formataddr((display_name, alias_addr))
+    if "From" in msg: 
+        msg.replace_header("From", new_from)
     else: 
-        msg["From"] = alias_addr 
+        msg["From"] = new_from
 
     # Optional debug header
     msg.add_header("X-Dost-Rewritten-From", header_from_addr_l)
