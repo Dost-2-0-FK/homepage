@@ -1,0 +1,75 @@
+<form action="/secret/<key>/entry/update" method="post">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Vorname" aria-label="Name" name="name" id="name">
+    <input type="text" class="form-control" placeholder="Nachname" aria-label="Nachname" name="sirname" id="sirname">
+    <input type="text" class="form-control" placeholder="ggf. Geboren" 
+        aria-label="Geboren" name="maidenname" id="maidenname">
+  </div>
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Geburtsjahr" aria-label="dob" name="dob" id="dob">
+    <select class="form-select" aria-label="Default select example">
+      <option selected title="Nach neuer Zeitrechnung" value="nnz">NnZ</option>
+      <option title="Vor neuer Zeitrechnung" value="vnz">VnZ</option>
+    </select>
+    <input type="text" class="form-control" placeholder="Gender" aria-label="gender" name="gender" id="gender">
+    <input type="text" class="form-control" placeholder="Zone" aria-label="zone" name="zone" id="zone">
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon-gms">GMs</span>
+    <input type="text" class="form-control" placeholder="Genetisch Modifikationen" 
+        aria-label="genetic_augmentations" name="genetic_augmentations" id="genetic_augmentations">
+    <span class="input-group-text" id="basic-addon-cbis">CBIs</span>
+    <input type="text" class="form-control" placeholder="Computer Brain Interfaces" 
+        aria-label="computer_brain_interfaces" name="computer_brain_interfaces" id="computer_brain_interfaces">
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon-gewalt">Gewaltpotential</span>
+    <select class="form-select" aria-label="">
+      <option selected value=0>Klasse Sigma (ε) – Latent / Geduldig</option>
+      <option value=1>Klasse Gamma (γ) – Reguliert / Kontrolliert</option>
+      <option value=2>Klasse Beta (β) – Direktiv / Durchsetzend</option>
+      <option value=3>Klasse Alpha (α) – Offensiv / Vernichtend</option>
+      <option value=4>Klasse Omega (ω) – Systemkollaps / Unbändig</option>
+    </select>
+    <span class="input-group-text" id="basic-addon-gewalt">Geschätzter Wohlstand</span>
+    <select class="form-select" aria-label="">
+      <option selected value=0>Subsistenz-Allokation – Zum physischen Überleben gerade ausreichend.</option>
+      <option value=1>Grundkontingent / Zivilquote – Deckt Basisbedürfnisse, ohne Spielraum.</option>
+      <option value=2>Prämienstufe / Leistungskonto – Komfort, kleine Luxusgüter, Status</option>
+      <option value=3>Direktorats-Budget / Ressourcenmandat – Zugang zu Exklusivität und Macht.</option>
+      <option value=4>Kern-Akteur / Architekten-Privileg – Kontrolle über Ressourcenströme selbst.</option>
+    </select>
+  </div>
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Straftaten" 
+        aria-label="crimes" name="crimes" id="crimes">
+    <input type="text" class="form-control" placeholder="Krankheiten"
+        aria-label="illnesses" name="illnesses" id="illnesses">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Beziehungen" 
+        aria-label="connections" name="connections" id="connections">
+    <input type="text" class="form-control" placeholder="Arbeitgeben" 
+        aria-label="empoyes" name="empoyes" id="empoyes">
+  </div>
+
+  <label for="background" class="form-label">Hintergrund</label>
+  <div class="input-group mb-3">
+    <textarea class="form-control" aria-label="background" name="background" id="background"></textarea>
+  </div>
+  <label for="notes" class="form-label">Notizen</label>
+  <div class="input-group mb-3">
+    <textarea class="form-control" aria-label="notes" name="notes" id="notes"></textarea>
+  </div>
+
+  <input hidden type="text" name="key" id="key" value="">
+  <input hidden type="text" name="_creator" id="_creator" value="{{user.key}}">
+  <input hidden type="text" name="_published" id="_published" value="">
+  <input hidden type="number" name="_published" id="_published" value=0>
+  <input hidden type="number" name="_review" id="_review" value=0>
+
+  {% set label="create // update" %}
+  {% set type="submit" %}
+  {% include "forms/button.html" %}
+</form>

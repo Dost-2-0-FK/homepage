@@ -1,11 +1,9 @@
 import random
 import os
 import string
-from datetime import date
-from typing import MutableSequence
 from dotenv import load_dotenv
 from flask import Flask, json, redirect, render_template, request, url_for
-from threading import Lock
+from src.secretor import SecretFileEntry, Secretor
 from src.communicator import Comm
 from src.mailer import Mailer
 from src.user_manager import UManager
@@ -31,7 +29,7 @@ MSG_DELETED = "we successfully deleted you from our system."
 mail = Mailer()
 
 comm = Comm()
-
+secretor = Secretor()
 umanger = UManager()
 
 app = Flask(__name__)
@@ -66,6 +64,82 @@ def communicate(key: str):
         collectives=comm.collectives,
         me=me
     )
+
+@app.route("/secret/<key>")
+def secret_file(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    return render_template(
+        "secret-file.html", 
+        user=user, 
+        me=me,
+        entries=secretor.secret_files(),
+        is_editor= "chars" in me.collective or "orga" in me.collective
+    )
+
+@app.route("/secret/<key>/edit")
+def secret_file_entries(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    return render_template(
+        "secret-file/edit.html", 
+        user=user, 
+        me=me,
+        entries=secretor.users_secret_file_entries(key),
+        is_editor= "chars" in me.collective or "orga" in me.collective
+    )
+
+@app.route("/secret/<key>/reviews")
+def secret_file_reviews(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    return render_template(
+        "secret-file/review.html", 
+        user=user, 
+        me=me,
+        entries=secretor.secret_files_in_review(me.collective),
+        is_editor= "chars" in me.collective or "orga" in me.collective
+    )
+
+@app.route("/secret/<key>/entry/update", methods=["POST"])
+def secret_file_update_entry(key: str):
+    print(request.form.to_dict(flat=False))
+    entry = SecretFileEntry(
+        key=request.form.get("key", __create_id()),
+        name=request.form.get("name", ""),
+        sirname=request.form.get("sirname", ""),
+        maidenname=request.form.get("maidenname", ""),
+        gender=request.form.get("gender", ""),
+        dob=request.form.get("dob", ""),
+        zone=request.form.get("zone", ""),
+        genetic_augmentations=request.form.get("genetic_augmentations", "").split("; "),
+        computer_brain_interfaces=request.form.get("computer_brain_interfaces", "").split("; "),
+        violence_potential=int(request.form.get("violence_potential", "0")),
+        estimated_wealth=int(request.form.get("estimated_wealth", "0")),
+        crimes=request.form.get("crimes", "0").split(";"),
+        employers=request.form.get("employers", "0").split(";"),
+        connections=request.form.get("connections", "0").split(";"),
+        illnesses=request.form.get("illnesses", "0").split(";"),
+        background=request.form.get("background", ""),
+        notes=request.form.get("notes", ""),
+        _creator=request.form.get("_creator", ""),
+        _published=bool(request.form.get("_published", "")),
+        _review=bool(request.form.get("_review", ""))
+    )
+
+    return redirect(url_for("secret_file_entries", key=key), code=303)
 
 @app.route("/access", methods=["POST"])
 def reservieren(): 

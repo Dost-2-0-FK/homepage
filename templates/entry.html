@@ -5,6 +5,9 @@
 <p class="small">{% if has_communicate %}
   <a href="/communicate/{{user.key}}">communicate</a>
 {% endif %}</p>
+<p class="small">{% if has_communicate %}
+  <a href="/secret/{{user.key}}">secret-file</a>
+{% endif %}</p>
 
 {% if user.name|length == 0 %}
   <p class="small">

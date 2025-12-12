@@ -2,7 +2,6 @@ import json
 import os
 from threading import Lock
 from typing import Dict, List
-
 from src.seafiler import SeafBytes, Seafile
 
 try:
