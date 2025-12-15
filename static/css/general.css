@@ -95,6 +95,27 @@ select {
   border: none;
 }
 
+.table-hint {
+  font-size: 8px; 
+  margin-left: 1em;
+  float: right;
+}
+
+.nav {
+  float: right;
+  margin-top: -2em;
+  margin-left: -3em;
+  column-gap: 0.5em;
+}
+
+.button-container {
+  margin-bottom: 2em;
+  display: flex; 
+  column-gap: 1em;
+  justify-content: center;
+  font-size: small;
+}
+
 @media only screen and (max-width: 950px) {
   /* For mobile phones: */ 
   body {

@@ -3,12 +3,23 @@
 
   <p class="small">Name: {{me.mail}}@dost-2-0-fk.art</p>
 
-  <h4>New Entry</h4>
+  <h4>{{ "New Entry" if cur.key == "" else "Update Entry: " + cur.sirname + ", " + cur.name }}</h4>
   {% include "secret-file/edit-entry.html" %}
 
   <h4>Entries</h4>
   {% for entry in entries %} 
     {% include "secret-file/view-entry.html" %}
+
+    <div class="button-container">
+      {% set label="edit" %}
+      {% set onclick="EditEntry('" + entry.key + "');" %}
+      {% include "forms/button.html" %}
+
+      {% set label="publish" %}
+      {% set onclick="SendInReview('" + entry.key + "');" %}
+      {% include "forms/button.html" %}
+    </div>
+
   {% endfor %}
 
 {% endblock %}

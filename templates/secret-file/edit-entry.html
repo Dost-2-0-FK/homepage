@@ -1,73 +1,108 @@
-<form action="/secret/<key>/entry/update" method="post">
+<form action="/secret/{{user.key}}/entry/update" method="post">
   <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Vorname" aria-label="Name" name="name" id="name">
-    <input type="text" class="form-control" placeholder="Nachname" aria-label="Nachname" name="sirname" id="sirname">
+    <input type="text" class="form-control" placeholder="Vorname" aria-label="Name" 
+        name="name" id="name" value="{{cur.name}}">
+    <input type="text" class="form-control" placeholder="Nachname" aria-label="Nachname" 
+        name="sirname" id="sirname" value="{{cur.sirname}}">
     <input type="text" class="form-control" placeholder="ggf. Geboren" 
-        aria-label="Geboren" name="maidenname" id="maidenname">
+        aria-label="Geboren" name="maidenname" id="maidenname" value="{{cur.maidenname}}">
   </div>
   <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Geburtsjahr" aria-label="dob" name="dob" id="dob">
-    <select class="form-select" aria-label="Default select example">
-      <option selected title="Nach neuer Zeitrechnung" value="nnz">NnZ</option>
-      <option title="Vor neuer Zeitrechnung" value="vnz">VnZ</option>
+    <input type="text" class="form-control" placeholder="Geburtsjahr" 
+        aria-label="dob" name="dob" id="dob" value="{{cur.dob}}">
+    <select class="form-select" aria-label="Default select example" name="dob_zr" id="dob_zr">
+      <option title="Nach neuer Zeitrechnung" value="NnZ" {{ "selected" if cur.dob_zr == "NnZ" else ""}}>
+        NnZ
+      </option>
+      <option title="Vor unserer Zeit" value="VuZ" {{ "selected" if cur.dob_zr == "VuZ" else ""}}>
+        VuZ
+      </option>
     </select>
-    <input type="text" class="form-control" placeholder="Gender" aria-label="gender" name="gender" id="gender">
-    <input type="text" class="form-control" placeholder="Zone" aria-label="zone" name="zone" id="zone">
+    <input type="text" class="form-control" placeholder="Gender" aria-label="gender" 
+        name="gender" id="gender" value="{{cur.gender}}">
+    <input type="text" class="form-control" placeholder="Zone" aria-label="zone" 
+        name="zone" id="zone" value="{{cur.zone}}">
   </div>
   <div class="input-group mb-3">
     <span class="input-group-text" id="basic-addon-gms">GMs</span>
     <input type="text" class="form-control" placeholder="Genetisch Modifikationen" 
-        aria-label="genetic_augmentations" name="genetic_augmentations" id="genetic_augmentations">
+        aria-label="genetic_augmentations" name="genetic_augmentations" id="genetic_augmentations"
+        value="{{'; '.join(cur.genetic_augmentations)}}">
     <span class="input-group-text" id="basic-addon-cbis">CBIs</span>
     <input type="text" class="form-control" placeholder="Computer Brain Interfaces" 
-        aria-label="computer_brain_interfaces" name="computer_brain_interfaces" id="computer_brain_interfaces">
+        aria-label="computer_brain_interfaces" name="computer_brain_interfaces" id="computer_brain_interfaces"
+        value="{{'; '.join(cur.computer_brain_interfaces)}}">
   </div>
   <div class="input-group mb-3">
     <span class="input-group-text" id="basic-addon-gewalt">Gewaltpotential</span>
-    <select class="form-select" aria-label="">
-      <option selected value=0>Klasse Sigma (ε) – Latent / Geduldig</option>
-      <option value=1>Klasse Gamma (γ) – Reguliert / Kontrolliert</option>
-      <option value=2>Klasse Beta (β) – Direktiv / Durchsetzend</option>
-      <option value=3>Klasse Alpha (α) – Offensiv / Vernichtend</option>
-      <option value=4>Klasse Omega (ω) – Systemkollaps / Unbändig</option>
+    <select class="form-select" name="violence_potential" id="violence_potential">
+      <option value=0 {{ "selected" if cur.violence_potential == 0 else "" }}>
+        Klasse Sigma (ε) – Latent / Geduldig
+      </option>
+      <option value=1 {{ "selected" if cur.violence_potential == 1 else "" }}>
+        Klasse Gamma (γ) – Reguliert / Kontrolliert
+      </option>
+      <option value=2 {{ "selected" if cur.violence_potential == 2 else "" }}>
+        Klasse Beta (β) – Direktiv / Durchsetzend
+      </option>
+      <option value=3 {{ "selected" if cur.violence_potential == 3 else "" }}>
+        Klasse Alpha (α) – Offensiv / Vernichtend
+      </option>
+      <option value=4 {{ "selected" if cur.violence_potential == 4 else "" }}>
+        Klasse Omega (ω) – Systemkollaps / Unbändig
+      </option>
     </select>
     <span class="input-group-text" id="basic-addon-gewalt">Geschätzter Wohlstand</span>
-    <select class="form-select" aria-label="">
-      <option selected value=0>Subsistenz-Allokation – Zum physischen Überleben gerade ausreichend.</option>
-      <option value=1>Grundkontingent / Zivilquote – Deckt Basisbedürfnisse, ohne Spielraum.</option>
-      <option value=2>Prämienstufe / Leistungskonto – Komfort, kleine Luxusgüter, Status</option>
-      <option value=3>Direktorats-Budget / Ressourcenmandat – Zugang zu Exklusivität und Macht.</option>
-      <option value=4>Kern-Akteur / Architekten-Privileg – Kontrolle über Ressourcenströme selbst.</option>
+    <select class="form-select" name="estimated_wealth" id="estimated_wealth">
+      <option value=0 {{ "selected" if cur.estimated_wealth == 0 else "" }}>
+        Subsistenz-Allokation
+      </option>
+      <option value=1 {{ "selected" if cur.estimated_wealth == 1 else "" }}>
+        Grundkontingent 
+      </option>
+      <option value=2 {{ "selected" if cur.estimated_wealth == 2 else "" }}>
+        Prämienstufe 
+      </option>
+      <option value=3 {{ "selected" if cur.estimated_wealth == 3 else "" }}>
+        Direktorats-Budget 
+      </option>
+      <option value=4 {{ "selected" if cur.estimated_wealth == 4 else "" }}>
+        Kern-Akteur 
+      </option>
     </select>
   </div>
   <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Straftaten" 
-        aria-label="crimes" name="crimes" id="crimes">
-    <input type="text" class="form-control" placeholder="Krankheiten"
-        aria-label="illnesses" name="illnesses" id="illnesses">
+    <input type="text" class="form-control" placeholder="Straftaten" aria-label="crimes" 
+      name="crimes" id="crimes" value="{{'; '.join(cur.crimes)}}">
+    <input type="text" class="form-control" placeholder="Krankheiten" aria-label="illnesses" 
+      name="illnesses" id="illnesses" value="{{'; '.join(cur.illnesses)}}">
   </div>
 
   <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Beziehungen" 
-        aria-label="connections" name="connections" id="connections">
-    <input type="text" class="form-control" placeholder="Arbeitgeben" 
-        aria-label="empoyes" name="empoyes" id="empoyes">
+    <input type="text" class="form-control" placeholder="Beziehungen" aria-label="connections" 
+      name="connections" id="connections" value="{{'; '.join(cur.connections)}}">
+    <input type="text" class="form-control" placeholder="Arbeitgeben" aria-label="employers" 
+      name="employers" id="employers" value="{{'; '.join(cur.employers)}}">
   </div>
 
   <label for="background" class="form-label">Hintergrund</label>
   <div class="input-group mb-3">
-    <textarea class="form-control" aria-label="background" name="background" id="background"></textarea>
+    <textarea class="form-control" style="justify-content: left;" aria-label="background" name="background" id="background">
+      {{cur.background}}
+    </textarea>
   </div>
   <label for="notes" class="form-label">Notizen</label>
   <div class="input-group mb-3">
-    <textarea class="form-control" aria-label="notes" name="notes" id="notes"></textarea>
+    <textarea class="form-control" style="justify-content: left;" aria-label="notes" name="notes" id="notes">
+      {{cur.notes}}
+    </textarea>
   </div>
 
-  <input hidden type="text" name="key" id="key" value="">
+  <input hidden type="text" name="key" id="key" value="{{cur.key}}">
   <input hidden type="text" name="_creator" id="_creator" value="{{user.key}}">
-  <input hidden type="text" name="_published" id="_published" value="">
-  <input hidden type="number" name="_published" id="_published" value=0>
-  <input hidden type="number" name="_review" id="_review" value=0>
+  <input hidden type="text" name="_published" id="_published" value="{{cur.key}}">
+  <input hidden type="number" name="_published" id="_published" value={{cur._published}}>
+  <input hidden type="number" name="_review" id="_review" value={{cur._review}}>
 
   {% set label="create // update" %}
   {% set type="submit" %}

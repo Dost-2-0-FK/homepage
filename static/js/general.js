@@ -31,3 +31,20 @@ function ToggleMailSender(member) {
   else
     document.getElementById("send-mail-" + member).style.display='none';
 }
+
+function EditEntry(key) {
+  var searchParams = new URLSearchParams(window.location.search);
+  searchParams.set("entry-key", key);
+  window.location.search = searchParams.toString();
+}
+
+function SendInReview(key) {
+  fetch("/secret/entry/review/" + key, { method: "post" }) 
+    .then( (response) => {
+      if (!response.ok) {
+        alert("Key " + key + " not found!");
+      } else {
+        alert("<3<3<3");
+      }
+    });
+}

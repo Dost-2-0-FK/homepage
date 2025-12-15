@@ -1,0 +1,80 @@
+<table class="table table-bordered border-secondary" style="text-align: left; margin-top: 2em;">
+  <tbody>
+    <tr>
+      <td scope="col">
+        {{entry.sirname}}
+        <span class="table-hint">name</span>
+      </td>
+      <td scope="col">
+        {{entry.name}}
+        <span class="table-hint">Vorname</span>
+      </td>
+      <td scope="col">
+        {{entry.maidenname}} 
+        <span class="table-hint">geboren</span>
+      </td>
+      <td scope="col">
+        {{entry.dob}} {{entry.dob_zr}}
+        <span class="table-hint">Geburtsjahr</span>
+      </td>
+      <td scope="col">
+        {{entry.gender}} 
+        <span class="table-hint">Geschlecht</span>
+      </td>
+      <td scope="col" colspan="2">
+        {{entry.zone}} 
+        <span class="table-hint">Zone</span>
+      </td>
+    </tr>
+    <tr>
+      <td scope="col">
+        {{entry.estimated_wealth}} 
+        <span class="table-hint">Geschätzter Wohlstand</span>
+      </td>
+      <td scope="col">
+        {{entry.violence_potential}} 
+        <span class="table-hint">Gewaltpotenzial</span>
+      </td>
+      <td scope="col" colspan="2">
+        {{print_list(entry.genetic_augmentations)}}
+        <span class="table-hint">Genetisch Modifikationen</span>
+      </td>
+      <td scope="col" colspan="2">
+        {{ print_list(entry.computer_brain_interfaces) }}
+        <span class="table-hint">Computer Brain Interfaces</span>
+      </td>
+    </tr>
+    <tr>
+      <td scope="col" colspan="3">
+        {{ print_list(entry.crimes) }}
+        <span class="table-hint">Straftaten</span>
+      </td>
+      <td scope="col" colspan="3">
+        {{ print_list(entry.illnesses) }}
+        <span class="table-hint">Krankheiten</span>
+      </td>
+    </tr>
+    <tr>
+      <td scope="col" colspan="3">
+        {{ print_list(entry.connections) }}
+        <span class="table-hint">Beziehungen</span>
+      </td>
+      <td scope="col" colspan="3">
+        {{ print_list(entry.employers) }}
+        <span class="table-hint">Arbeitgeber</span>
+      </td>
+    </tr>
+    <tr>
+      <td scope="col" colspan="6">
+        {{ entry.background }}
+        <span class="table-hint">Hintergrund</span>
+      </td>
+    </tr>
+    <tr>
+      <td scope="col" colspan="6">
+        {{ entry.notes }}
+        <span class="table-hint">Notizen</span>
+      </td>
+    </tr>
+  <tbody>
+</table>

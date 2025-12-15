@@ -23,6 +23,17 @@
 
   <body>
     <div id="main" class="container main center"> 
+      <div class="nav">
+        {% if user %} 
+          <a href="/">dost 2.0 fk</a> 
+          <a href="/entry/{{user.key}}">entry</a> 
+        {% endif %}
+        {% if has_communicate %} 
+          <a href="/communicate/{{user.key}}">communicate</a>
+          <a href="/secret/{{user.key}}">secret-file</a>
+        {% endif %}
+      </div>
+
       <h1>DOST 2.0 FK</h1>
       {% block body %} {% endblock %}
     </div>

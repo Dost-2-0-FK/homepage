@@ -4,6 +4,10 @@
   <p class="small">Name: {{me.mail}}@dost-2-0-fk.art</p>
 
   <h4>Entries from your Collective</h4>
+  {% for entry in entries %} 
+    {% include "secret-file/view-entry.html" %}
+  {% endfor %}
+
 
 
 {% endblock %}

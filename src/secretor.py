@@ -1,38 +1,39 @@
 import dataclasses
 import json
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, List
 
 SECRET_FILE_PATH = "data/file"
 
 @dataclass 
 class SecretFileEntry: 
-    key: str
+    key: str = field(default="")
     # Name
-    name: str
-    sirname: str
-    maidenname: str
+    name: str = field(default="")
+    sirname: str = field(default="")
+    maidenname: str = field(default="")
     # Gender, birth, zone
-    gender: str
-    dob: str 
-    zone: str 
+    gender: str = field(default="")
+    dob: str = field(default="")
+    dob_zr: str = field(default="")
+    zone: str = field(default="")
     # Mods
-    genetic_augmentations: list[str]
-    computer_brain_interfaces: list[str]
+    genetic_augmentations: list[str] = field(default_factory=lambda: [''])
+    computer_brain_interfaces: list[str] = field(default_factory=lambda: [''])
     # Violence
-    violence_potential: int
-    estimated_wealth: int
+    violence_potential: int = field(default=0)
+    estimated_wealth: int = field(default=0)
     # Background
-    crimes: list[str]
-    employers: list[str]
-    background: str
-    connections: list[str]
-    illnesses: list[str]
-    notes: str
-    _creator: str
-    _published: bool 
-    _review: bool
+    crimes: list[str] = field(default_factory=lambda: [''])
+    employers: list[str] = field(default_factory=lambda: [''])
+    background: str = field(default="")
+    connections: list[str] = field(default_factory=lambda: [''])
+    illnesses: list[str] = field(default_factory=lambda: [''])
+    notes: str = field(default="")
+    _creator: str = field(default="")
+    _published: bool = field(default=False)
+    _review: bool = field(default=False)
 
 class Secretor: 
     def __init__(self):
@@ -49,7 +50,7 @@ class Secretor:
         block = collective.split("-")[0] if "-" in collective else collective
         entries = []
         for _, entry in self.secret_file.items():
-            if entry._review and (not block or block in entry._creator): 
+            if entry._review and (not block or block in entry._creator or collective == "orga"): 
                 entries.append(entry) 
         return entries
 
@@ -60,13 +61,24 @@ class Secretor:
                 entries.append(entry) 
         return entries
 
-    def add_secret_file_entry(self, json_str: str): 
-        entry = SecretFileEntry(**json.loads(json_str)) 
+    def get_secret_file_entry(self, key: str) -> SecretFileEntry: 
+        if key in self.secret_file: 
+            return self.secret_file[key]
+        return SecretFileEntry()
+
+    def add_secret_file_entry(self, entry: SecretFileEntry): 
         self.secret_file[entry.key] = entry 
         self.__save_entry(entry)
 
+    def review_secret_file_entry(self, key: str) -> bool: 
+        if key in self.secret_file: 
+            self.secret_file[key]._review = True 
+            self.__save_entry(self.secret_file[key]) 
+            return True 
+        return False
+
     def __save_entry(self, entry: SecretFileEntry): 
-        with open(os.path.join(SECRET_FILE_PATH, entry.key), "w") as f: 
+        with open(f"{os.path.join(SECRET_FILE_PATH, entry.key)}.json", "w") as f: 
             json.dump(dataclasses.asdict(entry), f)
 
     def __load_secret_file(self) -> Dict[str, SecretFileEntry]: 
@@ -75,5 +87,5 @@ class Secretor:
         for filename in os.listdir(SECRET_FILE_PATH): 
             with open(os.path.join(SECRET_FILE_PATH, filename), "r") as f: 
                 json_data = json.load(f)
-                entries[filename] = SecretFileEntry(**json_data)
+                entries[os.path.splitext(filename)[0]] = SecretFileEntry(**json_data)
         return entries

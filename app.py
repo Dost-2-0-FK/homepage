@@ -1,8 +1,9 @@
 import random
 import os
 import string
+from typing import List
 from dotenv import load_dotenv
-from flask import Flask, json, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for
 from src.secretor import SecretFileEntry, Secretor
 from src.communicator import Comm
 from src.mailer import Mailer
@@ -32,7 +33,13 @@ comm = Comm()
 secretor = Secretor()
 umanger = UManager()
 
+def print_list(lst: List[str]) -> str: 
+    if len(lst) == 0 or lst[0] == '': 
+        return '---' 
+    return str(lst)
+
 app = Flask(__name__)
+app.jinja_env.globals.update(print_list=print_list)
 
 @app.route("/")
 def main(): 
@@ -47,7 +54,7 @@ def entry(key: str):
         "entry.html", 
         user=user, 
         msg=request.args.get("msg"),
-        has_communicate=comm.get_user(user.email.lower()) is not None
+        has_communicate=comm.get_user(user.email.lower()) is not None,
     )
 
 @app.route("/communicate/<key>")
@@ -61,6 +68,7 @@ def communicate(key: str):
     return render_template(
         "communicate.html", 
         user=user, 
+        has_communicate=comm.get_user(user.email.lower()) is not None,
         collectives=comm.collectives,
         me=me
     )
@@ -76,6 +84,7 @@ def secret_file(key: str):
     return render_template(
         "secret-file.html", 
         user=user, 
+        has_communicate=comm.get_user(user.email.lower()) is not None,
         me=me,
         entries=secretor.secret_files(),
         is_editor= "chars" in me.collective or "orga" in me.collective
@@ -89,10 +98,14 @@ def secret_file_entries(key: str):
     me = comm.get_user(user.email.lower())
     if me is None:
         return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    cur = secretor.get_secret_file_entry(request.args.get("entry-key", ""))
+    print("CUR: ", cur)
     return render_template(
         "secret-file/edit.html", 
         user=user, 
         me=me,
+        cur=cur,
+        has_communicate=comm.get_user(user.email.lower()) is not None,
         entries=secretor.users_secret_file_entries(key),
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
@@ -108,6 +121,7 @@ def secret_file_reviews(key: str):
     return render_template(
         "secret-file/review.html", 
         user=user, 
+        has_communicate=comm.get_user(user.email.lower()) is not None,
         me=me,
         entries=secretor.secret_files_in_review(me.collective),
         is_editor= "chars" in me.collective or "orga" in me.collective
@@ -117,29 +131,36 @@ def secret_file_reviews(key: str):
 def secret_file_update_entry(key: str):
     print(request.form.to_dict(flat=False))
     entry = SecretFileEntry(
-        key=request.form.get("key", __create_id()),
-        name=request.form.get("name", ""),
-        sirname=request.form.get("sirname", ""),
-        maidenname=request.form.get("maidenname", ""),
-        gender=request.form.get("gender", ""),
-        dob=request.form.get("dob", ""),
-        zone=request.form.get("zone", ""),
+        key=request.form.get("key") if request.form.get("key", "") != "" else __create_id(),
+        name=request.form.get("name", "---"),
+        sirname=request.form.get("sirname", "---"),
+        maidenname=request.form.get("maidenname", "---"),
+        gender=request.form.get("gender", "???"),
+        dob=request.form.get("dob", "???"),
+        dob_zr=request.form.get("dob_zr", ""),
+        zone=request.form.get("zone", "???"),
         genetic_augmentations=request.form.get("genetic_augmentations", "").split("; "),
         computer_brain_interfaces=request.form.get("computer_brain_interfaces", "").split("; "),
         violence_potential=int(request.form.get("violence_potential", "0")),
         estimated_wealth=int(request.form.get("estimated_wealth", "0")),
         crimes=request.form.get("crimes", "0").split(";"),
-        employers=request.form.get("employers", "0").split(";"),
-        connections=request.form.get("connections", "0").split(";"),
-        illnesses=request.form.get("illnesses", "0").split(";"),
+        employers=request.form.get("employers", "").split(";"),
+        connections=request.form.get("connections", "").split(";"),
+        illnesses=request.form.get("illnesses", "").split(";"),
         background=request.form.get("background", ""),
         notes=request.form.get("notes", ""),
         _creator=request.form.get("_creator", ""),
         _published=bool(request.form.get("_published", "")),
         _review=bool(request.form.get("_review", ""))
     )
+    secretor.add_secret_file_entry(entry)
+    return redirect(f"/secret/{key}/edit")
 
-    return redirect(url_for("secret_file_entries", key=key), code=303)
+@app.route("/secret/entry/review/<key>", methods=["POST"])
+def secret_file_review_entry(key: str):
+    if secretor.review_secret_file_entry(key): 
+        return "", 200 
+    return "", 404
 
 @app.route("/access", methods=["POST"])
 def reservieren(): 
