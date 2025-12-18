@@ -4,7 +4,7 @@ import string
 from typing import List
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
-from src.secretor import SecretFileEntry, Secretor
+from src.secretor import Abbr, SecretFileEntry, Secretor
 from src.communicator import Comm
 from src.mailer import Mailer
 from src.user_manager import UManager
@@ -87,6 +87,8 @@ def secret_file(key: str):
         has_communicate=comm.get_user(user.email.lower()) is not None,
         me=me,
         entries=secretor.secret_files(),
+        gms=secretor.gms,
+        cbis=secretor.cbis,
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
 
@@ -107,6 +109,9 @@ def secret_file_entries(key: str):
         cur=cur,
         has_communicate=comm.get_user(user.email.lower()) is not None,
         entries=secretor.users_secret_file_entries(key),
+        gms=secretor.gms,
+        cbis=secretor.cbis,
+        chars=secretor.get_chars(),
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
 
@@ -124,6 +129,8 @@ def secret_file_reviews(key: str):
         has_communicate=comm.get_user(user.email.lower()) is not None,
         me=me,
         entries=secretor.secret_files_in_review(me.collective),
+        gms=secretor.gms,
+        cbis=secretor.cbis,
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
 
@@ -143,10 +150,10 @@ def secret_file_update_entry(key: str):
         computer_brain_interfaces=request.form.get("computer_brain_interfaces", "").split("; "),
         violence_potential=int(request.form.get("violence_potential", "0")),
         estimated_wealth=int(request.form.get("estimated_wealth", "0")),
-        crimes=request.form.get("crimes", "0").split(";"),
-        employers=request.form.get("employers", "").split(";"),
-        connections=request.form.get("connections", "").split(";"),
-        illnesses=request.form.get("illnesses", "").split(";"),
+        crimes=request.form.get("crimes", "0").split("; "),
+        employers=request.form.get("employers", "").split("; "),
+        connections=request.form.get("connections", "").split("; "),
+        illnesses=request.form.get("illnesses", "").split("; "),
         background=request.form.get("background", ""),
         notes=request.form.get("notes", ""),
         _creator=request.form.get("_creator", ""),
@@ -161,6 +168,20 @@ def secret_file_review_entry(key: str):
     if secretor.review_secret_file_entry(key): 
         return "", 200 
     return "", 404
+
+@app.route("/secret/add/<lst_name>/", methods=["POST"]) 
+def add_lst_entry(lst_name: str): 
+    lst = Abbr(
+        abbr=request.form.get("abbr"),
+        name=request.form.get("name"), 
+        desc=request.form.get("desc"),
+        _creator=request.form.get("_creator") 
+    )
+    if lst_name == "gm":
+        secretor.add_gm(lst)
+    if lst_name == "cbi":
+        secretor.add_cbi(lst)
+    return "", 200
 
 @app.route("/access", methods=["POST"])
 def reservieren(): 

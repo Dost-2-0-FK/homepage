@@ -48,3 +48,37 @@ function SendInReview(key) {
       }
     });
 }
+
+function AddElementToInp(list, name) {
+  let inp = document.getElementById(list);
+  if (inp.value != "") {
+    inp.value += "; ";
+  }
+  inp.value += name;
+}
+
+document.getElementById("gm_form").addEventListener("submit", (event) => SubmitLstForm(event, "gm"));
+document.getElementById("cbi_form").addEventListener("submit", (event) => SubmitLstForm(event, "cbi"));
+
+async function SubmitLstForm(e, lst_name) {
+  e.preventDefault(); 
+  const form = e.target;
+  const formData = new FormData(form);
+
+  const response = await fetch("/secret/add/" + lst_name, {
+    method: "POST",
+    body: formData
+  });
+
+  if (response.ok) {
+    const modalEl = document.getElementById(lst_name + "Modal");
+    const modal = bootstrap.Modal.getInstance(modalEl) 
+                  || new bootstrap.Modal(modalEl);
+    modal.hide();
+    form.reset();
+    const full_name = (lst_name == "gm") ? "genetic_augmentations" : "computer_brain_interfaces";
+    AddElementToInp(full_name, formData.get("abbr"));
+  } else {
+    alert("Failed to create " + lst_name);
+  }
+}

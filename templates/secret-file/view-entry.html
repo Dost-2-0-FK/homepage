@@ -36,11 +36,29 @@
         <span class="table-hint">Gewaltpotenzial</span>
       </td>
       <td scope="col" colspan="2">
-        {{print_list(entry.genetic_augmentations)}}
+        {% for gm in entry.genetic_augmentations %} 
+          {% if loop.index != 1 %} 
+            {{ ";" }}
+          {% endif %}
+          {% if gm in gms %}
+            <span title="{{gm}}: {{gms[gm].name}} ({{gms[gm].desc}})">{{gm}}</span>
+          {% else %}
+            <span>{{gm}}</span>
+          {% endif %}
+        {% endfor %}
         <span class="table-hint">Genetisch Modifikationen</span>
       </td>
       <td scope="col" colspan="2">
-        {{ print_list(entry.computer_brain_interfaces) }}
+        {% for cbi in entry.computer_brain_interfaces %} 
+          {% if loop.index != 1 %} 
+            {{ ";" }}
+          {% endif %}
+          {% if gm in gms %}
+            <span title="{{cbi}}: {{cbis[cbi].name}} ({{cbis[cbi].desc}})">{{cbi}}</span>
+          {% else %}
+            <span>{{gm}}</span>
+          {% endif %}
+        {% endfor %}
         <span class="table-hint">Computer Brain Interfaces</span>
       </td>
     </tr>

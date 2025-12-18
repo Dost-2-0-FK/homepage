@@ -101,6 +101,11 @@ select {
   float: right;
 }
 
+.char-hint {
+  font-size: 12px; 
+  margin-left: 1em;
+}
+
 .nav {
   float: right;
   margin-top: -2em;

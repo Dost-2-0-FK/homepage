@@ -11,7 +11,14 @@
     --ease: 340ms cubic-bezier(.2,.8,.2,1);
   }
 
-  .btn{
+  .btn {
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    letter-spacing:.02em;
+  }
+
+  .pbtn {
     position:relative;
     display:inline-flex;
     align-items:center;
@@ -60,12 +67,12 @@
   .btn__plus--bl{ top: 100%; left: 0%;   }
 
   /* Hover motion rules */
-  .btn:hover .btn__plus--tl{ top: 0%;   left: 100%; }   /* TL → TR (clockwise) */
-  .btn:hover .btn__plus--br{ top: 100%; left: 0%;   }   /* BR → BL (clockwise) */
-  .btn:hover .btn__plus--bl{ top: 0%;   left: 0%;   }   /* BL → TL (clockwise) */
+  .pbtn:hover .btn__plus--tl{ top: 0%;   left: 100%; }   /* TL → TR (clockwise) */
+  .pbtn:hover .btn__plus--br{ top: 100%; left: 0%;   }   /* BR → BL (clockwise) */
+  .pbtn:hover .btn__plus--bl{ top: 0%;   left: 0%;   }   /* BL → TL (clockwise) */
 
   /* TR special: counter-clockwise to 66% of the top edge */
-  .btn:hover .btn__plus--tr{ top: 0%; left: 66%; }
+  .pbtn:hover .btn__plus--tr{ top: 0%; left: 66%; }
 
   /* Optional: a tiny emphasis on hover */
-  .btn:hover .btn__plus{ opacity:1; }
+  .pbtn:hover .btn__plus{ opacity:1; }

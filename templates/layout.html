@@ -25,12 +25,22 @@
     <div id="main" class="container main center"> 
       <div class="nav">
         {% if user %} 
-          <a href="/">dost 2.0 fk</a> 
-          <a href="/entry/{{user.key}}">entry</a> 
+          <a href="/">
+            dost 2.0 fk
+          </a> 
+          <a style="{{ 'color: #6b402b' if 'entry' in request.endpoint else ''}}" href="/entry/{{user.key}}">
+            entry
+          </a> 
         {% endif %}
         {% if has_communicate %} 
-          <a href="/communicate/{{user.key}}">communicate</a>
-          <a href="/secret/{{user.key}}">secret-file</a>
+          <a style="{{ 'color: #6b402b' if 'communicate' in request.endpoint else ''}}" 
+            href="/communicate/{{user.key}}">
+            communicate
+          </a>
+          <a style="{{ 'color: #6b402b' if 'secret' in request.endpoint else ''}}"
+            href="/secret/{{user.key}}">
+            secret-file
+          </a>
         {% endif %}
       </div>
 

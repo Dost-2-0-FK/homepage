@@ -24,11 +24,49 @@
         name="zone" id="zone" value="{{cur.zone}}">
   </div>
   <div class="input-group mb-3">
-    <span class="input-group-text" id="basic-addon-gms">GMs</span>
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+      data-bs-toggle="dropdown" aria-expanded="false">GMs</button>
+    <ul class="dropdown-menu">
+      {% for id, gm in gms.items() %} 
+        <li>
+          <button 
+            class="dropdown-item" 
+            type="button" 
+            onclick="AddElementToInp('genetic_augmentations', '{{gm.abbr}}');"
+          >
+            + {{gm.abbr}} <span class="char-hint">[{{gm.name}}]</span>
+          </button>
+        </li>
+      {% endfor %}
+      <li><hr class="dropdown-divider"></li>
+      <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
+          data-bs-target="#gmModal">Create GM</button></li>
+    </ul>
+
     <input type="text" class="form-control" placeholder="Genetisch Modifikationen" 
         aria-label="genetic_augmentations" name="genetic_augmentations" id="genetic_augmentations"
         value="{{'; '.join(cur.genetic_augmentations)}}">
-    <span class="input-group-text" id="basic-addon-cbis">CBIs</span>
+
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+      data-bs-toggle="dropdown" aria-expanded="false">CBIs</button>
+    <ul class="dropdown-menu">
+      {% for id, cbi in cbis.items() %} 
+        <li>
+          <button 
+            class="dropdown-item" 
+            type="button" 
+            onclick="AddElementToInp('genetic_augmentations', '{{cbi.abbr}}');"
+          >
+            + {{cbi.abbr}} <span class="char-hint">[{{cbi.name}}]</span>
+          </button>
+        </li>
+      {% endfor %}
+      <li><hr class="dropdown-divider"></li>
+      <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
+          data-bs-target="#cbiModal">Create CBI</button></li>
+    </ul>
+
+ 
     <input type="text" class="form-control" placeholder="Computer Brain Interfaces" 
         aria-label="computer_brain_interfaces" name="computer_brain_interfaces" id="computer_brain_interfaces"
         value="{{'; '.join(cur.computer_brain_interfaces)}}">
@@ -37,19 +75,19 @@
     <span class="input-group-text" id="basic-addon-gewalt">Gewaltpotential</span>
     <select class="form-select" name="violence_potential" id="violence_potential">
       <option value=0 {{ "selected" if cur.violence_potential == 0 else "" }}>
-        Klasse Sigma (ε) – Latent / Geduldig
+        Klasse Sigma (ε) – Latent 
       </option>
       <option value=1 {{ "selected" if cur.violence_potential == 1 else "" }}>
-        Klasse Gamma (γ) – Reguliert / Kontrolliert
+        Klasse Gamma (γ) – Reguliert 
       </option>
       <option value=2 {{ "selected" if cur.violence_potential == 2 else "" }}>
-        Klasse Beta (β) – Direktiv / Durchsetzend
+        Klasse Beta (β) – Direktiv 
       </option>
       <option value=3 {{ "selected" if cur.violence_potential == 3 else "" }}>
-        Klasse Alpha (α) – Offensiv / Vernichtend
+        Klasse Alpha (α) – Offensiv 
       </option>
       <option value=4 {{ "selected" if cur.violence_potential == 4 else "" }}>
-        Klasse Omega (ω) – Systemkollaps / Unbändig
+        Klasse Omega (ω) – Unbändig
       </option>
     </select>
     <span class="input-group-text" id="basic-addon-gewalt">Geschätzter Wohlstand</span>
@@ -79,8 +117,18 @@
   </div>
 
   <div class="input-group mb-3">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+      data-bs-toggle="dropdown" aria-expanded="false">Chars</button>
+    <ul class="dropdown-menu">
+      {% for name, info in chars %} 
+        <li><button class="dropdown-item" type="button" onclick="AddElementToInp('connections', '{{name}}');">
+          + {{name}} <span class="char-hint">[{{info}}]</span>
+        </button></li>
+      {% endfor %}
+    </ul>
     <input type="text" class="form-control" placeholder="Beziehungen" aria-label="connections" 
       name="connections" id="connections" value="{{'; '.join(cur.connections)}}">
+
     <input type="text" class="form-control" placeholder="Arbeitgeben" aria-label="employers" 
       name="employers" id="employers" value="{{'; '.join(cur.employers)}}">
   </div>
@@ -108,3 +156,65 @@
   {% set type="submit" %}
   {% include "forms/button.html" %}
 </form>
+
+<div class="modal fade" id="gmModal" tabindex="-1" aria-labelledby="gmModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="gmModalLabel">Neue Genetische Modifikation hinzufügen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="gm_form" action="/secret/add/gm/" method="post"> 
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Abkürzung" name="abbr" id="abbr" >
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Name" name="name" id="name" >
+          </div>
+          <label for="desc" class="form-label">Beschreibung</label>
+          <div class="input-group mb-3">
+             <textarea class="form-control" style="justify-content: left;" aria-label="desc" name="desc" id="desc">
+            </textarea>
+          </div>
+          <input hidden type="text" name="_creator" id="_creator" value="{{user.key}}">
+
+          {% set label="create" %}
+          {% set type="submit" %}
+          {% include "forms/button.html" %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="cbiModal" tabindex="-1" aria-labelledby="cbiModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cbiModalLabel">Neues Computer Brain Interface hinzufügen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="cbi_form" action="/secret/add/cbi/" method="post"> 
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Abkürzung" name="abbr" id="abbr" >
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Name" name="name" id="name" >
+          </div>
+          <label for="desc" class="form-label">Beschreibung</label>
+          <div class="input-group mb-3">
+             <textarea class="form-control" style="justify-content: left;" aria-label="desc" name="desc" id="desc">
+            </textarea>
+          </div>
+          <input hidden type="text" name="_creator" id="_creator" value="{{user.key}}">
+
+          {% set label="create" %}
+          {% set type="submit" %}
+          {% include "forms/button.html" %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

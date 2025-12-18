@@ -2,9 +2,12 @@ import dataclasses
 import json
 import os
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 SECRET_FILE_PATH = "data/file"
+LIST_PATH = "data/lists/"
+CBI_PATH = os.path.join(LIST_PATH, "cbis.json")
+GM_PATH = os.path.join(LIST_PATH, "gms.json")
 
 @dataclass 
 class SecretFileEntry: 
@@ -35,9 +38,18 @@ class SecretFileEntry:
     _published: bool = field(default=False)
     _review: bool = field(default=False)
 
+@dataclass 
+class Abbr: 
+    abbr: str
+    name: str
+    desc: str 
+    _creator: str 
+
 class Secretor: 
     def __init__(self):
         self.secret_file = self.__load_secret_file()
+        self.gms = self.__load_list(GM_PATH)
+        self.cbis = self.__load_list(CBI_PATH)
 
     def users_secret_file_entries(self, creator: str) -> List[SecretFileEntry]: 
         users_entries = []
@@ -61,6 +73,12 @@ class Secretor:
                 entries.append(entry) 
         return entries
 
+    def get_chars(self) -> List[Tuple[str, str]]: 
+        chars = [] 
+        for _, entry in self.secret_file.items(): 
+            chars.append((f"{entry.sirname}, {entry.name}", f"zone: {entry.zone}"))
+        return chars
+
     def get_secret_file_entry(self, key: str) -> SecretFileEntry: 
         if key in self.secret_file: 
             return self.secret_file[key]
@@ -77,6 +95,14 @@ class Secretor:
             return True 
         return False
 
+    def add_gm(self, gm: Abbr): 
+        self.gms[gm.abbr] = gm 
+        self.__save_list(GM_PATH, self.gms)
+
+    def add_cbi(self, cbi: Abbr): 
+        self.cbis[cbi.abbr] = cbi
+        self.__save_list(CBI_PATH, self.cbis)
+
     def __save_entry(self, entry: SecretFileEntry): 
         with open(f"{os.path.join(SECRET_FILE_PATH, entry.key)}.json", "w") as f: 
             json.dump(dataclasses.asdict(entry), f)
@@ -89,3 +115,17 @@ class Secretor:
                 json_data = json.load(f)
                 entries[os.path.splitext(filename)[0]] = SecretFileEntry(**json_data)
         return entries
+
+    def __load_list(self, path: str) -> Dict[str, Abbr]: 
+        """ Loads secret service files """
+        lst = {}
+        with open(path, "r") as f: 
+            for abbr, j_lst in json.load(f).items():
+                print(j_lst)
+                lst[abbr] = Abbr(**j_lst)
+        return lst
+
+    def __save_list(self, path, lst): 
+        json_ready = {k: dataclasses.asdict(v) for k, v in lst.items()}
+        with open(path, "w") as f: 
+            json.dump(json_ready, f)
