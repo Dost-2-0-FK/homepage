@@ -53,7 +53,7 @@
           {% if loop.index != 1 %} 
             {{ ";" }}
           {% endif %}
-          {% if gm in gms %}
+          {% if cbi in cbis %}
             <span title="{{cbi}}: {{cbis[cbi].name}} ({{cbis[cbi].desc}})">{{cbi}}</span>
           {% else %}
             <span>{{gm}}</span>

@@ -4,6 +4,10 @@
   <p class="small">Name: {{me.mail}}@dost-2-0-fk.art</p>
 
   <h4>{{ "New Entry" if cur.key == "" else "Update Entry: " + cur.sirname + ", " + cur.name }}</h4>
+  <p>Remember (!) this is NOT the main character description, but the short
+    description that is availible for EVERYONE! So <i>do not add actuall secrets
+    about your characters hear!</i> You may however play with <i>supposed</i> secrets
+    and information-mismatching between the secret-file and the diary entry.</p>
   {% include "secret-file/edit-entry.html" %}
 
   <h4>Entries</h4>
