@@ -25,6 +25,15 @@ LOCAL_SMTP_PASS=supersafepassword
 LOCAL_SMTP_SECURITY=starttls
 ```
 
+**Not needed anymore, however good for documentation purposes**
+```
+mkdir data
+mkdir data/file
+mkdir data/lists
+echo '{}' > data/lists/cbis.json
+echo '{}' > data/lists/gms.json
+```
+
 Start app, through `python3`: 
 ```
 source .venv/bin/activate 

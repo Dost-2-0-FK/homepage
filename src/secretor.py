@@ -47,6 +47,10 @@ class Abbr:
 
 class Secretor: 
     def __init__(self):
+        if not os.path.exists(SECRET_FILE_PATH):
+            os.makedirs(SECRET_FILE_PATH)
+        if not os.path.exists(LIST_PATH):
+            os.makedirs(LIST_PATH)
         self.secret_file = self.__load_secret_file()
         self.gms = self.__load_list(GM_PATH)
         self.cbis = self.__load_list(CBI_PATH)
@@ -118,6 +122,9 @@ class Secretor:
 
     def __load_list(self, path: str) -> Dict[str, Abbr]: 
         """ Loads secret service files """
+        if not os.path.exists(path):
+            with open(path,'w') as f:
+                f.write("{}")
         lst = {}
         with open(path, "r") as f: 
             for abbr, j_lst in json.load(f).items():
