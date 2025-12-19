@@ -4,7 +4,7 @@
   <p class="small">Name: {{me.mail}}@dost-2-0-fk.art</p>
 
   <h4>{{ "New Entry" if cur.key == "" else "Update Entry: " + cur.sirname + ", " + cur.name }}</h4>
-  <p>Remember (!) this is NOT the main character description, but the short
+  <p style="color: #6b402b;">REMEMBER (!) this is NOT the main character description, but the short
     description that is availible for EVERYONE! So <i>do not add actuall secrets
     about your characters hear!</i> You may however play with <i>supposed</i> secrets
     and information-mismatch between the secret-file and the diary entry.</p>
@@ -20,6 +20,7 @@
       {% include "forms/button.html" %}
 
       {% set label="publish" %}
+      {% set title="publish to your collective (this does not publish to everyone yet!)" %}
       {% set onclick="SendInReview('" + entry.key + "');" %}
       {% include "forms/button.html" %}
     </div>
