@@ -154,8 +154,8 @@ def secret_file_update_entry(key: str):
         employers=request.form.get("employers", "").split("; "),
         connections=request.form.get("connections", "").split("; "),
         illnesses=request.form.get("illnesses", "").split("; "),
-        background=request.form.get("background", ""),
-        notes=request.form.get("notes", ""),
+        background=request.form.get("background", "").strip(),
+        notes=request.form.get("notes", "").strip(),
         _creator=request.form.get("_creator", ""),
         _published=bool(request.form.get("_published", "")),
         _review=bool(request.form.get("_review", ""))
@@ -174,7 +174,7 @@ def add_lst_entry(lst_name: str):
     lst = Abbr(
         abbr=request.form.get("abbr"),
         name=request.form.get("name"), 
-        desc=request.form.get("desc"),
+        desc=request.form.get("desc").strip(),
         _creator=request.form.get("_creator") 
     )
     if lst_name == "gm":
