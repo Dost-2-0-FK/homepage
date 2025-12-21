@@ -50,11 +50,13 @@ def entry(key: str):
     user = umanger.get_user(key)
     if user is None: 
         return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
     return render_template(
         "entry.html", 
         user=user, 
         msg=request.args.get("msg"),
-        has_communicate=comm.get_user(user.email.lower()) is not None,
+        has_communicate=me is not None,
+        is_editor= me is not None and ("chars" in me.collective or "orga" in me.collective)
     )
 
 @app.route("/communicate/<key>")
@@ -69,6 +71,7 @@ def communicate(key: str):
         "communicate.html", 
         user=user, 
         has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_editor= "chars" in me.collective or "orga" in me.collective,
         collectives=comm.collectives,
         me=me
     )
