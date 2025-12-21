@@ -37,6 +37,8 @@
             href="/communicate/{{user.key}}">
             communicate
           </a>
+        {% endif %}
+        {% if is_editor %} 
           <a style="{{ 'color: #6b402b' if 'secret' in request.endpoint else ''}}"
             href="/secret/{{user.key}}">
             secret-file
