@@ -39,6 +39,7 @@ def main():
     ap = argparse.ArgumentParser() 
     ap.add_argument("--sender", required=True)
     ap.add_argument("--recipient", required=True) 
+    ap.add_argument("rcpt_args", nargs="*")         # postfix may append actual rcpt(s)
     args = ap.parse_args() 
 
     envelope_sender = args.sender.strip("<>").strip()
@@ -48,7 +49,7 @@ def main():
     raw = sys.stdin.buffer.read() 
     msg = parse_message(raw) 
 
-    name, header_from_addr = parseaddr(msg.get("From", "")) 
+    _, header_from_addr = parseaddr(msg.get("From", "")) 
     header_from_addr_l = header_from_addr.lower()
 
     with open(DEBUG_LOG, "a") as fp:
