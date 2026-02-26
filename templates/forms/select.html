@@ -10,7 +10,12 @@
       title={{title}}
     >
       {% for val, text in options.items() %}
-        <option value='{{val}}'>{{text}}</option>
+        <option 
+          value='{{val}}'
+          {% if val == option_selected %}
+            selected 
+          {% endif %}
+        >{{text}}</option>
       {% endfor %}
     </select>
 

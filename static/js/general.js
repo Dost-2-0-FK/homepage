@@ -57,8 +57,10 @@ function AddElementToInp(list, name) {
   inp.value += name;
 }
 
-document.getElementById("gm_form").addEventListener("submit", (event) => SubmitLstForm(event, "gm"));
-document.getElementById("cbi_form").addEventListener("submit", (event) => SubmitLstForm(event, "cbi"));
+if (document.getElementById("gm_form") !== null && document.getElementById("gm_form") !== undefined) {
+  document.getElementById("gm_form").addEventListener("submit", (event) => SubmitLstForm(event, "gm"));
+  document.getElementById("cbi_form").addEventListener("submit", (event) => SubmitLstForm(event, "cbi"));
+}
 
 async function SubmitLstForm(e, lst_name) {
   e.preventDefault(); 

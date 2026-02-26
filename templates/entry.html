@@ -3,25 +3,48 @@
 
 <p class="small">{{user.key}}</p>
 
-{% if user.name|length == 0 %}
-  <p class="small">
-    <i>Sag uns wie du wirklich heißt.</i>
-  </p>
-  <form action="/entry/{{user.key}}/update/name" method="post">
-    {% set label="Name" %}
-    {% set field="name" %}
-    {% set type="text" %}
-    {% set title="Ja, wir brauchen hier deinen 'echten' Rufnamen" %}
-    {% include "forms/input.html" %}
+<p class="small">
+  {% if user.name|length > 0 %}
+    Name: {{user.name}}
+  {% endif %}
+  <br>
+  {% if user.status|length > 0 %}
+    Status: {{user.status}}
+  {% endif %}
+  <br>
+  <button 
+    class="btn-link" 
+    style="vertical-align: text-top;"
+    onclick="document.getElementById('user_info_container').classList.toggle('d-none');"
+  >edit</button>
+</p>
+
+<div id="user_info_container"
+  {% if user.name|length > 0 and user.status|length > 0 %}
+    class="d-none"
+  {% endif %}
+>
+  <form action="/entry/{{user.key}}/update/user" method="post">
+    {% if user.name|length == 0 %}
+      {% set label="Wie heißt du wirklich?" %}
+      {% set field="name" %}
+      {% set type="text" %}
+      {% set title="Ja, wir brauchen hier deinen 'echten' Rufnamen" %}
+      {% include "forms/input.html" %}
+      <br>
+    {% endif %}
+    {% set label="Sag uns, ob du dabei bist." %}
+    {% set field="status" %}
+    {% set option_selected=user.status %}
+    {% set options={'Anwesend': 'Anwesend', 'Unsicher': 'Unsicher', 'Account Löschen': 'Account Löschen', 'Nur Support': 'Nur Support' } %}
+    {% include "forms/select.html" %}
     <br>
 
     {% set label="update" %}
     {% set type="submit" %}
     {% include "forms/button.html" %}
   </form>
-{% else %}
-  <p class="small">Name: {{user.name}}</p>
-{% endif %}
+</div>
 
 <p style="color: #452101">{% if msg %} 
   {{msg}}

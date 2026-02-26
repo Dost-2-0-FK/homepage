@@ -36,8 +36,9 @@ umanger = UManager()
 def __build_register_mail(key: str) -> str: 
     return (
         "Thanks for joining Dost 2.0 FK.\n\n"
-        "Login to edit your data with this entry-code:\n\n"
-        f"Do not loose this code and under no circumstances share it with anybody else!    {key}\n\n"
+        "Login to edit your data with this entry-code:\n\n"    
+        f"    {key}\n\n"
+        "Do not loose this code and under no circumstances share it with anybody else!\n\n"
         ".\n\n"
         "Sincerely,\n"
         "Dost 2.0 FK Team"
@@ -253,12 +254,15 @@ def reservieren():
         error_msg = MSG_MISSING if "forgot_key" in request.form.keys() else MSG_INVALID
     return redirect(url_for("main", msg=error_msg), code=303)
 
-@app.route("/entry/<key>/update/<field>", methods=["POST"])
-def update_name(key: str, field: str): 
+@app.route("/entry/<key>/update/user", methods=["POST"])
+def update_user(key: str): 
     user = umanger.get_user(key)
     if user is None: 
         return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
-    user.update_field(field, request.form[field])
+    if "name" in request.form.keys():
+        user.update_field("name", request.form["name"])
+    if "status" in request.form.keys():
+        user.update_field("status", request.form["status"])
     umanger.save_user(user)
     return redirect(url_for("entry", key=key), code=303)
 

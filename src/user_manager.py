@@ -22,8 +22,10 @@ class User:
             raise Exception("FATAL! Corrupted JSON: missing \"email\"")
         self.email = ujson["email"]
 
-        # Get Optional fields:
+        # Get fields for user data
         self.name = ujson.get("name", "") 
+        self.status = ujson.get("status", "") 
+        # Get user memories:
         self.pdream = ujson.get("pdream", "") 
         self.ndream = ujson.get("ndream", "") 
         self.pnature = ujson.get("pnature", "") 
@@ -34,6 +36,8 @@ class User:
     def update_field(self, field: str, value: str) -> None: 
         if field == "name": 
             self.name = value 
+        if field == "status": 
+            self.status = value
         if field == "pnature": 
             self.pnature = value 
         if field == "nnature": 
@@ -105,16 +109,18 @@ class UManager:
                     if row[2].strip() != user.name: 
                         row[2] = user.name 
                         changed = True
+                    if row[6].strip() != user.status: 
+                        row[6] = user.status
+                        changed = True
             if changed: 
                 self.__upload_csv(csv)
                 print("Saved CSV!")
-
 
     def add_user(self, email: str, key: str): 
         with self.mutex: 
             # Add E-Mail to User-CSV 
             csv = self.__get_csv()
-            csv.append([str(len(csv)), email, "", "", "", ""]) 
+            csv.append([str(len(csv)), email, "", "", "", "", ""]) 
             self.__upload_csv(csv)
             # Create new User-Json 
             with open(self.__make_user_path(key), "w") as fp: 
@@ -124,7 +130,7 @@ class UManager:
         with self.mutex: 
             # Remove user from csv: 
             csv = self.__get_csv() 
-            csv = filter(lambda row: row[1].strip().lower() != user.email, csv)
+            csv = [row for row in csv if row[1].strip().lower() != user.email.strip().lower()]
             self.__upload_csv(csv) 
             # remove user JSON 
             os.remove(self.__make_user_path(user.key))
