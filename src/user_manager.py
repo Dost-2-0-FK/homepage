@@ -1,5 +1,6 @@
 import json
 import os
+from pathlib import Path
 from threading import Lock
 from typing import Dict, List
 from src.seafiler import SeafBytes, Seafile
@@ -53,6 +54,7 @@ class UManager:
         self.SEAF_CSV_DIR = os.getenv("SEAFILE_CSV", "")
         self.mutex = Lock()
         self.seaf = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
+        self.data_dir = Path("data")
 
     def email_exists(self, email: str) -> bool: 
         with self.mutex: 
@@ -60,6 +62,17 @@ class UManager:
                 if row[1].strip().lower() == email.lower(): 
                     return True 
             return False 
+
+    def get_key_from_email(self, email: str) -> str | None: 
+        email = email.strip().lower()
+        for file in self.data_dir.glob("*.json"):
+            try:
+                data = json.loads(file.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                continue
+            if data.get("email", "").lower() == email:
+                return data.get("key")
+        return None
 
     def key_exists(self, key: str) -> bool: 
         print("Checking path: ",self.__make_user_path(key))
@@ -129,5 +142,5 @@ class UManager:
             return self.seaf.download_data(self.SEAF_CSV_DIR).csv()
         raise Exception("Using local CSV file not implemented")
 
-    def __make_user_path(self, key: str) -> str: 
-        return f"data/{key}.json"
+    def __make_user_path(self, key: str) -> Path: 
+        return self.data_dir.joinpath(f"{key}.json")

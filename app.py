@@ -13,13 +13,13 @@ load_dotenv()
 PORT = os.getenv("PORT")
 CSV = "data/anmeldungen.csv"
 
-MAIL_PRE = "Thanks for joining Dost 2.0 FK. Login to edit your data with this entry-code:" 
-MAIL_POST = "Do not loose this code and under no circumstances share it with anybody else!" 
-MAIL_END = "Sincerely,\nDost 2.0 FK Team!" 
-MAIL_SUBJ = "Dost 2.0 FK Registration" 
+REGISTRATION_MAIL_SUBJ = "Dost 2.0 FK Registration" 
+RESEND_MAIL_SUBJ = "Dost 2.0 FK Entry Code" 
 
 MAIL_HOST = "@dost-2-0-fk.art"
 
+MSG_MISSING = "Enter e-mail adress to send your entry code to!"
+MSG_EMAIL_UNKOWN = "E-mail unknown!"
 MSG_UNKNOWN= "Entry-Code unknown!"
 MSG_INVALID = "Entry-Code invalid!"
 MSG_UNAUTHORIZED = "You have no right to be here!"
@@ -33,6 +33,27 @@ comm = Comm()
 secretor = Secretor()
 umanger = UManager()
 
+def __build_register_mail(key: str) -> str: 
+    return (
+        "Thanks for joining Dost 2.0 FK.\n\n"
+        "Login to edit your data with this entry-code:\n\n"
+        f"Do not loose this code and under no circumstances share it with anybody else!    {key}\n\n"
+        ".\n\n"
+        "Sincerely,\n"
+        "Dost 2.0 FK Team"
+    )
+
+def __build_resend_mail(key: str) -> str: 
+    return (
+        "Forgot your code? Well, in the past this used to happen.\n\n"
+        "Here is your entry code:\n\n"
+        f"    {key}\n\n"
+        "Do not loose this code and under no circumstances share it with anybody else!.\n\n"
+        "Thanks for being part of Dost 2.0 FK.\n\n"
+        "Sincerely,\n"
+        "Dost 2.0 FK Team"
+    )
+        
 def print_list(lst: List[str]) -> str: 
     if len(lst) == 0 or lst[0] == '': 
         return '---' 
@@ -190,27 +211,46 @@ def add_lst_entry(lst_name: str):
 def reservieren(): 
     access = request.form["access"]
     error_msg = ""
+
+    def handle_registration(access: str) -> str: 
+        if umanger.email_exists(access): 
+            return MSG_USED
+        key = __create_id()
+        try:
+            mail.send(
+                to_addr=access, 
+                subject=REGISTRATION_MAIL_SUBJ, 
+                text_body=__build_register_mail(key),
+                html_body=None
+            )
+            umanger.add_user(access, key)
+            return MSG_CONFIRM
+        except Exception as err: 
+            return f"{MSG_ERROR} ({repr(err)})"
+
+    def handle_resend_key(access: str) -> str: 
+        key = umanger.get_key_from_email(access)
+        if key is not None:
+            mail.send(
+                to_addr=access, 
+                subject=RESEND_MAIL_SUBJ, 
+                text_body=__build_resend_mail(key),
+                html_body=None
+            )
+            return MSG_CONFIRM
+        else: 
+            return MSG_EMAIL_UNKOWN
         
     if "@" in str(access):
-        if umanger.email_exists(access): 
-            error_msg = MSG_USED
+        print("FORM KEYS: ", request.form.keys())
+        if "forgot_key" in request.form.keys(): 
+            error_msg = handle_resend_key(access) 
         else: 
-            key = __create_id()
-            try:
-                mail.send(
-                    to_addr=access, 
-                    subject=MAIL_SUBJ, 
-                    text_body=f"{MAIL_PRE} {key}\n{MAIL_POST}\n\n{MAIL_END}",
-                    html_body=None
-                )
-                umanger.add_user(access, key)
-                error_msg=MSG_CONFIRM
-            except Exception as err: 
-                error_msg = f"{MSG_ERROR} ({repr(err)})"
+            error_msg = handle_registration(access) 
     elif umanger.key_exists(access): 
         return redirect(f"/entry/{access}")
     else: 
-        error_msg = MSG_INVALID
+        error_msg = MSG_MISSING if "forgot_key" in request.form.keys() else MSG_INVALID
     return redirect(url_for("main", msg=error_msg), code=303)
 
 @app.route("/entry/<key>/update/<field>", methods=["POST"])
