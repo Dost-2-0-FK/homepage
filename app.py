@@ -263,6 +263,8 @@ def update_user(key: str):
         user.update_field("name", request.form["name"])
     if "status" in request.form.keys():
         user.update_field("status", request.form["status"])
+    if "arrival" in request.form.keys():
+        user.update_field("arrival", request.form["arrival"])
     umanger.save_user(user)
     return redirect(url_for("entry", key=key), code=303)
 

@@ -3,9 +3,31 @@ addEventListener("scroll", (_) => {
 });
 
 document.addEventListener("DOMContentLoaded", (_) => {
-  var scrollPosition = sessionStorage.getItem("scrollPosition");
-  if (scrollPosition !== null && location.pathname.indexOf("/entry") == 0) {
-    window.scrollTo({top: parseInt(scrollPosition, 10), behavior: "smooth"});
+  if (location.pathname.indexOf("/entry") == 0) {
+    // Add initial scroll on entry page
+    var scrollPosition = sessionStorage.getItem("scrollPosition");
+    if (scrollPosition !== null && location.pathname.indexOf("/entry") == 0) {
+      window.scrollTo({top: parseInt(scrollPosition, 10), behavior: "smooth"});
+    }
+    // Add auto-update user-info-form
+    const statusSelect = document.querySelector('select[name="status"]');
+    const arrivalContainer = document.getElementById('arrival_container');
+    
+    // Add event listener to status select
+    if (statusSelect) {
+      statusSelect.addEventListener('change', function() {
+          if (this.value === 'Anwesend') {
+            arrivalContainer?.classList.remove('d-none');
+          } else {
+            arrivalContainer?.classList.add('d-none');
+          }
+      });
+      
+      // Trigger initial state based on current selection
+      if (statusSelect.value === 'Anwesend') {
+        arrivalContainer?.classList.remove('d-none');
+      }
+    }
   }
 });
 

@@ -25,6 +25,7 @@ class User:
         # Get fields for user data
         self.name = ujson.get("name", "") 
         self.status = ujson.get("status", "") 
+        self.arrival = ujson.get("arrival", "") 
         # Get user memories:
         self.pdream = ujson.get("pdream", "") 
         self.ndream = ujson.get("ndream", "") 
@@ -38,6 +39,8 @@ class User:
             self.name = value 
         if field == "status": 
             self.status = value
+        if field == "arrival": 
+            self.arrival = value
         if field == "pnature": 
             self.pnature = value 
         if field == "nnature": 
@@ -106,11 +109,18 @@ class UManager:
             csv = self.__get_csv()
             for row in csv: 
                 if row[1].strip().lower() == user.email.lower(): 
+                    # Ensure row has at least 8 elements (indices 0-7)
+                    while len(row) < 8:
+                        row.append("")
+                    # Update name, status or arrival if changed.
                     if row[2].strip() != user.name: 
                         row[2] = user.name 
                         changed = True
                     if row[6].strip() != user.status: 
                         row[6] = user.status
+                        changed = True
+                    if row[7].strip() != user.arrival: 
+                        row[7] = user.arrival
                         changed = True
             if changed: 
                 self.__upload_csv(csv)

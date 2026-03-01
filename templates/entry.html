@@ -11,6 +11,10 @@
   {% if user.status|length > 0 %}
     Status: {{user.status}}
   {% endif %}
+  {% if user.arrival|length > 0 %}
+    (Ankunft möglich ab {{user.arrival}})
+  {% endif %}
+
   <br>
   <button 
     class="btn-link" 
@@ -20,7 +24,7 @@
 </p>
 
 <div id="user_info_container"
-  {% if user.name|length > 0 and user.status|length > 0 %}
+  {% if user.name|length > 0 and user.status|length > 0 and user.arrival|length > 0%}
     class="d-none"
   {% endif %}
 >
@@ -33,11 +37,24 @@
       {% include "forms/input.html" %}
       <br>
     {% endif %}
+
     {% set label="Sag uns, ob du dabei bist." %}
     {% set field="status" %}
     {% set option_selected=user.status %}
     {% set options={'Anwesend': 'Anwesend', 'Unsicher': 'Unsicher', 'Account Löschen': 'Account Löschen', 'Nur Support': 'Nur Support' } %}
     {% include "forms/select.html" %}
+
+    <br>
+
+    <div id="arrival_container" class="d-none">
+      {% set label="Ab wann kannst du anreisen?" %}
+      {% set field="arrival" %}
+      {% set option_selected=user.arrival %}
+      {% set options={'15:00': 'ab 15:00 (Abfahrt Berlin ca. 13:00)', '16:00': 'ab 16:00 (Abfahrt Berlin ab ca. 14:00)', '17:30': 'bis 17:30', 'später': 'später' } %}
+      {% include "forms/select.html" %}
+    </div>
+
+
     <br>
 
     {% set label="update" %}
