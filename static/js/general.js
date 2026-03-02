@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", (_) => {
             arrivalContainer?.classList.remove('d-none');
           } else {
             arrivalContainer?.classList.add('d-none');
-            arrivalSelect?.value = "---";
+            arrivalSelect.value = "---";
           }
       });
       
