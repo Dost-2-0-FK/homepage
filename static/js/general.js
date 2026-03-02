@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", (_) => {
     }
     // Add auto-update user-info-form
     const statusSelect = document.querySelector('select[name="status"]');
+    const arrivalSelect = document.querySelector('select[name="arrival"]');
     const arrivalContainer = document.getElementById('arrival_container');
     
     // Add event listener to status select
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", (_) => {
             arrivalContainer?.classList.remove('d-none');
           } else {
             arrivalContainer?.classList.add('d-none');
+            arrivalSelect?.value = "---";
           }
       });
       

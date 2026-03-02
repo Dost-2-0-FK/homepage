@@ -50,7 +50,7 @@
       {% set label="Ab wann kannst du anreisen?" %}
       {% set field="arrival" %}
       {% set option_selected=user.arrival %}
-      {% set options={'15:00': 'ab 15:00 (Abfahrt Berlin ca. 13:00)', '16:00': 'ab 16:00 (Abfahrt Berlin ab ca. 14:00)', '17:30': 'bis 17:30', 'später': 'später' } %}
+      {% set options={'---': '---', '15:00': 'ab 15:00 (Abfahrt Berlin ca. 13:00)', '16:00': 'ab 16:00 (Abfahrt Berlin ab ca. 14:00)', '17:30': 'bis 17:30', 'später': 'später' } %}
       {% include "forms/select.html" %}
     </div>
 
