@@ -33,7 +33,13 @@ def msg_to_bytes(msg: EmailMessage) -> bytes:
 
 def send_via_local_smtp(env_from: str, rcpt: str, msg_bytes: bytes): 
     with smtplib.SMTP("127.0.0.1", 10026) as s: 
-        s.sendmail(env_from, [rcpt], msg_bytes)
+        refused = s.sendmail(env_from, [rcpt], msg_bytes)
+
+    if refused:
+        with open(DEBUG_LOG, "a") as fp:
+            fp.write(f"SMTP REFUSED env_from={env_from!r} refused={refused!r}\n")
+        return 75
+    return 0
 
 def main(): 
     ap = argparse.ArgumentParser() 
@@ -42,8 +48,8 @@ def main():
     ap.add_argument("rcpt_args", nargs="*")         # postfix may append actual rcpt(s)
     args = ap.parse_args() 
 
-    envelope_sender = args.sender.strip("<>").strip()
-    rcpt = args.recipient.strip() 
+    envelope_sender = args.sender.strip().strip("<>").strip()
+    rcpt = args.recipient.strip().strip("<>").strip()
 
     # Parse message and rewrite from 
     raw = sys.stdin.buffer.read() 
@@ -66,8 +72,7 @@ def main():
     # sender already alias -> no rewrite (let postfix deliver as-is)
     if header_from_addr_l.endswith(DOMAIN): 
         env_from = envelope_sender or header_from_addr or ""
-        send_via_local_smtp(env_from, rcpt, raw)
-        return 0
+        return send_via_local_smtp(env_from, rcpt, raw)
 
     # Look ip mapping real -> alias
     alias_addr = real_to_alias.get(header_from_addr_l)
@@ -79,8 +84,7 @@ def main():
     # unkown real sender -> no rewrite (let postfix deliver as-is)
     if not alias_addr: 
         env_from = envelope_sender or header_from_addr or ""
-        send_via_local_smtp(env_from, rcpt, raw)
-        return 0
+        return send_via_local_smtp(env_from, rcpt, raw)
 
     # Only rewrite if header_from matches or is blank; 
     # if MUAs forge something else, we still rewrite based on envelope_sender 
@@ -102,8 +106,7 @@ def main():
     # Envelope sender also becomes alias (hide real address)
     env_from = alias_addr
 
-    send_via_local_smtp(env_from, rcpt, out_bytes)
-    return 0
+    return send_via_local_smtp(env_from, rcpt, out_bytes)
 
 
 if __name__ == "__main__": 
