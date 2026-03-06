@@ -148,6 +148,8 @@ class UManager:
     # Function to write data to CSV
     def __upload_csv(self, csv):
         if self.seaf.use_seafile:
+            # Ensure numbering
+            csv = self.__ensure_numbering(csv)
             self.seaf.upload_data(SeafBytes.from_csv(csv).bytes, self.SEAF_CSV_DIR)
         else:
             raise Exception("Using local CSV file not implemented")
@@ -157,6 +159,14 @@ class UManager:
         if self.seaf.use_seafile:
             return self.seaf.download_data(self.SEAF_CSV_DIR).csv()
         raise Exception("Using local CSV file not implemented")
+
+    def __ensure_numbering(self, csv): 
+        counter = 0
+        for row in csv: 
+            if counter > 0:
+                row[0] = str(counter)
+            counter += 1
+        return csv
 
     def __make_user_path(self, key: str) -> Path: 
         return self.data_dir.joinpath(f"{key}.json")
