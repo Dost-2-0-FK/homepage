@@ -55,12 +55,10 @@ class User:
             self.ndream = value 
 
 class UManager: 
-    def __init__(self):
-        if "SEAFILE_CSV" not in os.environ: 
-            exit("Missing SEAFILE_CSV!")
+    def __init__(self, seafiler: Seafile):
         self.SEAF_CSV_DIR = os.getenv("SEAFILE_CSV", "")
         self.mutex = Lock()
-        self.seaf = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
+        self.seaf = seafiler
         self.data_dir = Path("data")
 
     def email_exists(self, email: str) -> bool: 

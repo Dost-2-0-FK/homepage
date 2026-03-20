@@ -1,7 +1,7 @@
 import csv
 import io
 import os
-from typing import List
+from typing import List, Tuple
 import requests
 from dotenv import load_dotenv
 
@@ -26,6 +26,9 @@ class SeafBytes:
         text = self.bytes.decode("utf-8", errors="replace")
         return list(csv.reader(io.StringIO(text)))
 
+    def text(self) -> str: 
+        return self.bytes.decode("utf-8", errors="replace")
+
 
 class Seafile: 
     def __init__(self, use_seafile: bool): 
@@ -37,6 +40,27 @@ class Seafile:
         self.token = self.__seafile_login()
         print("GOT TOKEN", self.token)
         self.headers = {"Authorization": f"Token {self.token}"} 
+
+    def list_files(self, dir_path: str) -> list[str]:
+        dir_path = dir_path if dir_path.startswith("/") else "/" + dir_path
+
+        r = requests.get(
+            f"{BASE}/api2/repos/{REPO}/dir/",
+            headers=self.headers,
+            params={"p": dir_path}
+        )
+        r.raise_for_status()
+
+        items = r.json()
+
+        print(items)
+
+        # only keep files (ignore subdirectories)
+        return [
+            item["name"]
+            for item in items
+            if item["type"] == "file"
+        ]
 
     def download_data(self, file_path: str) -> SeafBytes: 
         file_path = file_path if file_path.startswith("/") else "/" + file_path

@@ -8,6 +8,7 @@ from src.secretor import Abbr, SecretFileEntry, Secretor
 from src.communicator import Comm
 from src.mailer import Mailer
 from src.user_manager import UManager
+from src.seafiler import Seafile
 
 load_dotenv()
 PORT = os.getenv("PORT")
@@ -30,19 +31,32 @@ MSG_DELETED = "we successfully deleted you from our system."
 mail = Mailer()
 
 comm = Comm()
+if "SEAFILE_CSV" not in os.environ: 
+    exit("Missing SEAFILE_CSV!")
+seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
+umanger = UManager(seafiler)
 secretor = Secretor()
-umanger = UManager()
+
+SEAFILE_MAIL_DIR = os.getenv("SEAFILE_MAILS", "")
+
 
 def __build_register_mail(key: str) -> str: 
-    return (
+    msg = (
         "Thanks for joining Dost 2.0 FK.\n\n"
         "Login to edit your data with this entry-code:\n\n"    
         f"    {key}\n\n"
         "Do not loose this code and under no circumstances share it with anybody else!\n\n"
         ".\n\n"
         "Sincerely,\n"
-        "Dost 2.0 FK Team"
+        "Dost 2.0 FK Team\n\n\n"
+        "-----\n"
+        "previous mails you might have missed:\n"
+        "-----\n"
     )
+    for name in seafiler.list_files(SEAFILE_MAIL_DIR): 
+        mail_content = seafiler.download_data(f"{SEAFILE_MAIL_DIR}/{name}").text()
+        msg += f"\n\n-----\nOn the {name[:-3]} we wrote: \n" + mail_content
+    return msg
 
 def __build_resend_mail(key: str) -> str: 
     return (
