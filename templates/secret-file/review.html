@@ -5,6 +5,7 @@
 
   <h4>Entries from your Collective</h4>
   {% for entry in entries %} 
+    {% set allow_feedback=True %}
     {% include "secret-file/view-entry.html" %}
   {% endfor %}
 

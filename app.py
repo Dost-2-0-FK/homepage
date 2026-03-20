@@ -5,9 +5,9 @@ from typing import List
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
 from src.secretor import Abbr, SecretFileEntry, Secretor
-from src.communicator import Comm
+from src.communicator import Comm, CommUser
 from src.mailer import Mailer
-from src.user_manager import UManager
+from src.user_manager import UManager, User
 from src.seafiler import Seafile
 
 load_dotenv()
@@ -74,8 +74,16 @@ def print_list(lst: List[str]) -> str:
         return '---' 
     return str(lst)
 
+def get_user_from_key(key: str) -> CommUser|None: 
+    user = umanger.get_user(key)
+    if user is None: 
+        return None
+    comm_user = comm.get_user(user.email.lower())
+    return comm_user
+
 app = Flask(__name__)
 app.jinja_env.globals.update(print_list=print_list)
+app.jinja_env.globals.update(get_user_from_key=get_user_from_key)
 
 @app.route("/")
 def main(): 
@@ -292,8 +300,11 @@ def delete_user(key: str):
 
 @app.route("/communicate/<key>/send/<me>/<to>", methods=["POST"]) 
 def communicate_send(key: str, me: str, to: str): 
+    feedback_to = request.args.get("feedback_to", default="")
     content = request.form["content"]
     subject = request.form["subject"]
+    if feedback_to: 
+        subject = f"[Dost:fb/{feedback_to}] {subject}"
     me_mail = me + MAIL_HOST 
     to_mail = [to + MAIL_HOST]
     print(request.form)
@@ -314,7 +325,7 @@ def communicate_send(key: str, me: str, to: str):
                 from_addr=me_mail
             )
 
-    return redirect(url_for("communicate", key=key), code=303)
+    return redirect(url_for("secret_file_reviews", key=key), code=303)
 
 def __create_id(): 
     def id_part(n): 

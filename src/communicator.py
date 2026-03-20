@@ -3,7 +3,7 @@ import json
 from typing import Dict, List
 
 class CommUser: 
-    def __init__(self, mail: str, collective: str, hidden: List[str]) -> None:
+    def __init__(self, mail: str, collective: str, alias: str, hidden: List[str]) -> None:
         self.mail = mail 
         self.collective = collective
         self.hidden = hidden
@@ -38,4 +38,4 @@ class Comm:
             mail = alias
         print(alias, collective, mail)
         hidden = self.collectives[collective].get("hide") or []
-        return CommUser(mail, collective, hidden)
+        return CommUser(mail, collective, alias, hidden)

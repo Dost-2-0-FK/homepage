@@ -96,3 +96,37 @@
     </tr>
   <tbody>
 </table>
+
+{% if allow_feedback %}
+  {% if not get_user_from_key(entry._creator) %}
+    <p>User not found! from key: entry._creator</p>
+  {% else %}
+    {% set user_creator = get_user_from_key(entry._creator) %}
+    <p>Send feedback to: 
+      <span
+        class="small mail" 
+        onclick="ToggleMailSender('{{user_creator.alias}}');"
+      >{{user_creator.mail}}@dost-2-0-fk.art</p>
+    </p>
+    <div id="send-mail-{{mail}}" style="display: none;">
+      <form
+        action="/communicate/{{user.key}}/send/{{me.mail}}/{{user_creator.mail}}?feedback_to={{entry.name}}" 
+        method="post"
+      >
+        {% set label="Subject" %}
+        {% set field="subject" %}
+        {% set type="text" %}
+        {% include "forms/input.html" %}
+
+        {% set label="Your mail" %}
+        {% set field="content" %}
+        {% include "forms/textarea.html" %}
+
+        {% set label="send" %}
+        {% set type="submit" %}
+        {% include "forms/button.html" %}
+      </form>
+      <br><br>
+    </div>
+  {% endif %}
+{% endif %}
