@@ -216,6 +216,12 @@ def secret_file_review_entry(key: str):
         return "", 200 
     return "", 404
 
+@app.route("/secret/entry/delete/<key>", methods=["POST"])
+def secret_file_delete_entry(key: str):
+    if secretor.delete_secret_file_entry(key):
+        return "", 200 
+    return "", 404
+
 @app.route("/secret/add/<lst_name>/", methods=["POST"]) 
 def add_lst_entry(lst_name: str): 
     lst = Abbr(

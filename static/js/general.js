@@ -73,6 +73,18 @@ function SendInReview(key) {
     });
 }
 
+function DeleteEntry(key) {
+  fetch("/secret/entry/delete/" + key, { method: "post" }) 
+    .then( (response) => {
+      if (!response.ok) {
+        alert("Key " + key + " not found!");
+      } else {
+        alert("Character deleted!");
+        window.location.reload();
+      }
+    });
+}
+
 function AddElementToInp(list, name) {
   let inp = document.getElementById(list);
   if (inp.value != "") {

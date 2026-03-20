@@ -99,6 +99,13 @@ class Secretor:
             return True 
         return False
 
+    def delete_secret_file_entry(self, key: str) -> bool:
+        if key in self.secret_file: 
+            os.remove(f"{os.path.join(SECRET_FILE_PATH, key)}.json")
+            del self.secret_file[key]
+            return True 
+        return False
+
     def add_gm(self, gm: Abbr): 
         self.gms[gm.abbr] = gm 
         self.__save_list(GM_PATH, self.gms)

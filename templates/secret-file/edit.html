@@ -23,6 +23,11 @@
       {% set title="publish to your collective (this does not publish to everyone yet!)" %}
       {% set onclick="SendInReview('" + entry.key + "');" %}
       {% include "forms/button.html" %}
+
+      {% set label="delete" %}
+      {% set title="Delete character" %}
+      {% set onclick="DeleteEntry('" + entry.key + "');" %}
+      {% include "forms/button.html" %}
     </div>
 
   {% endfor %}
