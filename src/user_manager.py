@@ -80,7 +80,6 @@ class UManager:
         return None
 
     def key_exists(self, key: str) -> bool: 
-        print("Checking path: ",self.__make_user_path(key))
         return os.path.exists(self.__make_user_path(key))
 
     def get_user(self, key: str) -> User | None: 
@@ -93,7 +92,6 @@ class UManager:
         mails = []
         with self.mutex: 
             for row in self.__get_csv():
-                print(row)
                 if "@" in row[1]:
                     mails.append(row[1].strip().lower())
         return mails

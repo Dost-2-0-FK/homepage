@@ -80,7 +80,7 @@ function DeleteEntry(key) {
         alert("Key " + key + " not found!");
       } else {
         alert("Character deleted!");
-        window.location.reload();
+        window.location.reload()
       }
     });
 }

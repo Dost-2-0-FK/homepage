@@ -77,11 +77,30 @@ class Secretor:
                 entries.append(entry) 
         return entries
 
-    def get_chars(self) -> List[Tuple[str, str]]: 
-        chars = [] 
+    def get_chars_by_name(self) -> Dict[str, Tuple[str, str]]:
+        chars = {}
         for _, entry in self.secret_file.items(): 
-            chars.append((f"{entry.sirname}, {entry.name}", f"zone: {entry.zone}"))
+            chars[f"{entry.sirname}, {entry.name}"] = (entry.key, f"zone: {entry.zone}")
         return chars
+
+    def get_chars_by_key(self) -> Dict[str, Tuple[str, str]]:
+        chars = {}
+        for _, entry in self.secret_file.items(): 
+            chars[entry.key] = (f"{entry.sirname}, {entry.name}", f"zone: {entry.zone}")
+        return chars
+
+    def replace_connection_names_with_keys(
+        self, connections: List[str]
+    ) -> List[str]:
+        chars = self.get_chars_by_name()
+        keys = []
+        for connection in connections: 
+            if connection in chars: 
+                key, _ = chars[connection]
+                keys.append(key) 
+            else:
+                keys.append(connection) 
+        return keys
 
     def get_secret_file_entry(self, key: str) -> SecretFileEntry: 
         if key in self.secret_file: 

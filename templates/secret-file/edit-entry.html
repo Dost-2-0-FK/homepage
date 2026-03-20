@@ -21,7 +21,9 @@
     <input type="text" class="form-control" placeholder="Gender" aria-label="gender" 
         name="gender" id="gender" value="{{cur.gender}}">
     <input type="text" class="form-control" placeholder="Zone" aria-label="zone" 
-        name="zone" id="zone" value="{{cur.zone}}">
+        name="zone" id="zone" value="{{cur.zone}}" 
+        title="Die Block-Zugehörigkeit wird bei nicht-neutralen Zonen mit 'W' (Westblock), bzw. 'E' (Ostblock) angegeben. Z.B. '0.1 (E)'"
+    >
   </div>
   <div class="input-group mb-3">
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
@@ -120,14 +122,14 @@
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
       data-bs-toggle="dropdown" aria-expanded="false">Chars</button>
     <ul class="dropdown-menu">
-      {% for name, info in chars %} 
+      {% for ckey, (name, info) in chars.items() %} 
         <li><button class="dropdown-item" type="button" onclick="AddElementToInp('connections', '{{name}}');">
           + {{name}} <span class="char-hint">[{{info}}]</span>
         </button></li>
       {% endfor %}
     </ul>
     <input type="text" class="form-control" placeholder="Beziehungen" aria-label="connections" 
-      name="connections" id="connections" value="{{'; '.join(cur.connections)}}">
+      name="connections" id="connections" value="{{print_connections(cur.connections)}}">
 
     <input type="text" class="form-control" placeholder="Arbeitgeben" aria-label="employers" 
       name="employers" id="employers" value="{{'; '.join(cur.employers)}}">

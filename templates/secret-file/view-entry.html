@@ -74,7 +74,15 @@
     </tr>
     <tr>
       <td scope="col" colspan="3">
-        {{ print_list(entry.connections) }}
+        {% for connection in entry.connections %}
+          {% if loop.index != 1 %}; {% endif %}
+          {% if connection in chars %}
+            {% set cname, cinfo = chars[connection] %}
+            <span title="{{cname}} [{{cinfo}}]"><u>{{cname}}</u></span>
+          {% else %}
+            {{connection}}
+          {% endif %}
+        {% endfor %}
         <span class="table-hint">Beziehungen</span>
       </td>
       <td scope="col" colspan="3">

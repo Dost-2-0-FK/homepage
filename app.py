@@ -74,6 +74,17 @@ def print_list(lst: List[str]) -> str:
         return '---' 
     return str(lst)
 
+def print_connections(connections: List[str]) -> str: 
+    lst = []
+    users = secretor.get_chars_by_key()
+    for connection in connections: 
+        if connection in users: 
+            name, _ = users[connection]
+            lst.append(name) 
+        else:
+            lst.append(connection) 
+    return '; '.join(lst)
+
 def get_user_from_key(key: str) -> CommUser|None: 
     user = umanger.get_user(key)
     if user is None: 
@@ -83,6 +94,7 @@ def get_user_from_key(key: str) -> CommUser|None:
 
 app = Flask(__name__)
 app.jinja_env.globals.update(print_list=print_list)
+app.jinja_env.globals.update(print_connections=print_connections)
 app.jinja_env.globals.update(get_user_from_key=get_user_from_key)
 
 @app.route("/")
@@ -136,6 +148,7 @@ def secret_file(key: str):
         entries=secretor.secret_files(),
         gms=secretor.gms,
         cbis=secretor.cbis,
+        chars=secretor.get_chars_by_key(),
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
 
@@ -158,7 +171,7 @@ def secret_file_entries(key: str):
         entries=secretor.users_secret_file_entries(key),
         gms=secretor.gms,
         cbis=secretor.cbis,
-        chars=secretor.get_chars(),
+        chars=secretor.get_chars_by_key(),
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
 
@@ -178,12 +191,14 @@ def secret_file_reviews(key: str):
         entries=secretor.secret_files_in_review(me.collective),
         gms=secretor.gms,
         cbis=secretor.cbis,
+        chars=secretor.get_chars_by_key(),
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
 
 @app.route("/secret/<key>/entry/update", methods=["POST"])
 def secret_file_update_entry(key: str):
-    print(request.form.to_dict(flat=False))
+    connections = request.form.get("connections", "").split("; ")
+    connections = secretor.replace_connection_names_with_keys(connections)
     entry = SecretFileEntry(
         key=request.form.get("key") if request.form.get("key", "") != "" else __create_id(),
         name=request.form.get("name", "---"),
@@ -199,7 +214,7 @@ def secret_file_update_entry(key: str):
         estimated_wealth=int(request.form.get("estimated_wealth", "0")),
         crimes=request.form.get("crimes", "0").split("; "),
         employers=request.form.get("employers", "").split("; "),
-        connections=request.form.get("connections", "").split("; "),
+        connections=connections,
         illnesses=request.form.get("illnesses", "").split("; "),
         background=request.form.get("background", "").strip(),
         notes=request.form.get("notes", "").strip(),
@@ -271,7 +286,6 @@ def reservieren():
             return MSG_EMAIL_UNKOWN
         
     if "@" in str(access):
-        print("FORM KEYS: ", request.form.keys())
         if "forgot_key" in request.form.keys(): 
             error_msg = handle_resend_key(access) 
         else: 
@@ -313,7 +327,6 @@ def communicate_send(key: str, me: str, to: str):
         subject = f"[Dost:fb/{feedback_to}] {subject}"
     me_mail = me + MAIL_HOST 
     to_mail = [to + MAIL_HOST]
-    print(request.form)
     if to == "all":
         group = request.form["group"]
         if group == "users": 
