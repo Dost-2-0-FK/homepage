@@ -310,6 +310,16 @@ def update_user(key: str):
     umanger.save_user(user)
     return redirect(url_for("entry", key=key), code=303)
 
+@app.route("/entry/<key>/update/<field>", methods=["POST"])
+def update_user_experience(key: str, field: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
+    user.update_field(field, request.form[field])
+    umanger.save_user(user)
+    return redirect(url_for("entry", key=key), code=303)
+
+
 @app.route("/entry/<key>/delete-me/", methods=["POST"])
 def delete_user(key: str): 
     user = umanger.get_user(key)
