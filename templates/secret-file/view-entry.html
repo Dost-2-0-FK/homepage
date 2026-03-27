@@ -1,6 +1,6 @@
 <table class="table table-bordered border-secondary" style="text-align: left; margin-top: 2em;">
   <tbody>
-    <tr>
+    <tr id="entry_{{entry.key}}">
       <td scope="col">
         {{entry.sirname}}
         <span class="table-hint">name</span>
@@ -107,7 +107,7 @@
 
 {% if allow_feedback %}
   {% if not get_user_from_key(entry._creator) %}
-    <p>User not found! from key: entry._creator</p>
+  <p>User not found! from key: {{entry._creator}}</p>
   {% else %}
     {% set user_creator = get_user_from_key(entry._creator) %}
     <p>Send feedback to: 

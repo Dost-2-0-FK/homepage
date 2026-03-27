@@ -46,7 +46,7 @@ class Abbr:
     _creator: str 
 
 class Secretor: 
-    def __init__(self):
+    def __init__(self, comm, umanager):
         if not os.path.exists(SECRET_FILE_PATH):
             os.makedirs(SECRET_FILE_PATH)
         if not os.path.exists(LIST_PATH):
@@ -54,6 +54,8 @@ class Secretor:
         self.secret_file = self.__load_secret_file()
         self.gms = self.__load_list(GM_PATH)
         self.cbis = self.__load_list(CBI_PATH)
+        self.comm = comm 
+        self.umanager = umanager
 
     def users_secret_file_entries(self, creator: str) -> List[SecretFileEntry]: 
         users_entries = []
@@ -63,10 +65,18 @@ class Secretor:
         return users_entries 
 
     def secret_files_in_review(self, collective: str) -> List[SecretFileEntry]: 
-        block = collective.split("-")[0] if "-" in collective else collective
+        print("review: collective", collective)
+        block = collective.split("-")[1] if "-" in collective else collective
+        print("review: block", collective)
         entries = []
         for _, entry in self.secret_file.items():
-            if entry._review and (not block or block in entry._creator or collective == "orga"): 
+            user = self.umanager.get_user(entry._creator)
+            if user is None: 
+                print("Warn: creator not found: ", entry._creator)
+                continue
+            comm_user = self.comm.get_user(user.email.lower())
+            print("review: ", block, "in", entry._creator, "?", comm_user.collective)
+            if entry._review and (block in comm_user.collective or collective == "orga"): 
                 entries.append(entry) 
         return entries
 

@@ -4,6 +4,7 @@
   <p class="small">Name: {{me.mail}}@dost-2-0-fk.art</p>
 
   <h4>Entries from your Collective</h4>
+  <a href="/secret/{{user.key}}/reviews/graph">graph view (beta)</a>
   {% for entry in entries %} 
     {% set allow_feedback=True %}
     {% include "secret-file/view-entry.html" %}

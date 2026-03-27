@@ -7,6 +7,7 @@ class CommUser:
         self.mail = mail 
         self.collective = collective
         self.hidden = hidden
+        self.alias = alias
 
 class Comm: 
     def __init__(self) -> None:

@@ -1,3 +1,4 @@
+from email.policy import default
 import random
 import os
 import string
@@ -35,7 +36,7 @@ if "SEAFILE_CSV" not in os.environ:
     exit("Missing SEAFILE_CSV!")
 seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
 umanger = UManager(seafiler)
-secretor = Secretor()
+secretor = Secretor(comm, umanger)
 
 SEAFILE_MAIL_DIR = os.getenv("SEAFILE_MAILS", "")
 
@@ -175,8 +176,28 @@ def secret_file_entries(key: str):
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
 
-@app.route("/secret/<key>/reviews")
-def secret_file_reviews(key: str): 
+@app.route("/secret/<key>/reviews/graph")
+def secret_file_reviews_graph(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    return render_template(
+        "secret-file/graph-view.html", 
+        user=user, 
+        has_communicate=comm.get_user(user.email.lower()) is not None,
+        me=me,
+        entries=secretor.secret_files_in_review(me.collective),
+        gms=secretor.gms,
+        cbis=secretor.cbis,
+        chars=secretor.get_chars_by_key(),
+        is_editor= "chars" in me.collective or "orga" in me.collective
+    )
+
+@app.route("/secret/<key>/reviews/", defaults={"view_file_entry": None})
+def secret_file_reviews(key: str, view_file_entry: str): 
     user = umanger.get_user(key)
     if user is None: 
         return redirect(url_for("main", msg=MSG_INVALID), code=303)
@@ -192,8 +213,10 @@ def secret_file_reviews(key: str):
         gms=secretor.gms,
         cbis=secretor.cbis,
         chars=secretor.get_chars_by_key(),
+        view_file_entry=view_file_entry,
         is_editor= "chars" in me.collective or "orga" in me.collective
     )
+
 
 @app.route("/secret/<key>/entry/update", methods=["POST"])
 def secret_file_update_entry(key: str):
