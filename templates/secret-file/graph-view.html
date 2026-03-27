@@ -1,16 +1,22 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class="row g-3">
+        <h2 class="mb-1">Secret File Graph</h2>
+        <a href="/secret/{{user.key}}/reviews">list view</a>
+<div class="row g-3 mt-2">
   <div class="col-12">
     <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
       <div>
-        <h2 class="mb-1">Secret File Graph</h2>
-        <a href="/secret/{{user.key}}/reviews">list view</a>
+        {% set label="Fit Graph" %}
+        {% set type="button" %}
+        {% set id="fit-btn" %}
+        {% include "forms/button.html" %}
       </div>
       <div class="d-flex gap-2">
-        <button id="fit-btn" type="button" class="btn btn-sm graph-btn">Fit graph</button>
-        <button id="toggle-physics-btn" type="button" class="btn btn-sm graph-btn">Toggle physics</button>
+        {% set label="Toggle Physics" %}
+        {% set type="button" %}
+        {% set id="toggle-physics-btn" %}
+        {% include "forms/button.html" %}
       </div>
     </div>
   </div>
@@ -33,6 +39,10 @@
     --secondary-hover: #14524a;
     --text-color: #e5e5e5;
     --muted-text: #b9b9b9;
+    --btn-bg: rgba(0,0,0,0.3);
+    --btn-border: rgba(106,94,43,0.3);
+    --btn-text: rgb(106,94,43);
+
     --font-family: "Fira Code", Consolas, "Courier New", Courier, monospace;
   }
 
@@ -40,55 +50,76 @@
     width: 100%;
     height: 75vh;
     min-height: 520px;
-    border: 1px solid var(--primary-color);
-    border-radius: 0.5rem;
-    background: var(--bg-color);
+    background-color: rgba(0, 0, 0, 0.0);
   }
 
   .card {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    border: 1px solid var(--primary-color);
+    background-color: rgba(0, 0, 0, 0.0);
   }
 
   .text-muted {
     color: var(--muted-text) !important;
   }
 
-  .graph-btn {
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--text-color);
-    font-family: var(--font-family);
-  }
-
-  .graph-btn:hover,
-  .graph-btn:focus,
-  .graph-btn:active {
-    background-color: rgba(14, 61, 55, 0.18);
-    border-color: var(--primary-hover);
-    color: var(--text-color);
-    box-shadow: none;
-  }
-
   .vis-network:focus {
     outline: none;
+    background-color: rgba(0, 0, 0, 0.0);
   }
 
   .vis-button,
   .vis-button:focus,
   .vis-button:hover {
-    background-color: var(--secondary-color) !important;
-    border: 1px solid var(--primary-color) !important;
-    color: var(--text-color) !important;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-text);
     border-radius: 0.375rem !important;
     box-shadow: none !important;
     opacity: 1 !important;
+    background-image: none !important;
+  }
+  
+  .vis-button::before {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    padding-top: 4px;
   }
 
-  .vis-navigation .vis-button::before,
-  .vis-button::before {
-    color: var(--text-color) !important;
+  .vis-up::before {
+    content: "\F286"; /* bi-chevron-up */
+    font-family: "bootstrap-icons";
+  }
+
+  .vis-down::before {
+    content: "\f282"; /* bi-chevron-down */
+    font-family: "bootstrap-icons";
+    padding-top: 8px;
+  }
+
+  .vis-left::before {
+    content: "\f284"; /* bi-chevron-left */
+    font-family: "bootstrap-icons";
+  }
+
+  .vis-right::before {
+    content: "\f285"; /* bi-chevron-right */
+    font-family: "bootstrap-icons";
+  }
+
+  .vis-zoomIn::before {
+    content: "\f4fe"; /* bi-zoom-in */
+    font-family: "bootstrap-icons";
+  }
+
+  .vis-zoomOut::before {
+    content: "\f2ea"; /* bi-zoom-out */
+    font-family: "bootstrap-icons";
+  }
+
+  .vis-zoomExtends::before {
+    content: "\f1c5"; /* bi-arrows-fullscreen */
+    font-family: "bootstrap-icons";
   }
 
   .vis-navigation {
@@ -97,9 +128,9 @@
   }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-network@10.0.2/dist/vis-network.min.js"></script>
 <link
-  href="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/dist/vis-network.min.css"
+  href="https://cdn.jsdelivr.net/npm/vis-network@10.0.2/dist/dist/vis-network.min.css"
   rel="stylesheet"
   type="text/css"
 />
@@ -125,10 +156,13 @@
         margin: 10,
         font: {
           face: "Fira Code, Consolas, Courier New, monospace",
-          size: 16,
-          color: "#e5e5e5",
+          size: 12,
+          // color: "#e5e5e5",
+          color: "#0d0d0d",
           multi: true,
-          strokeWidth: 0
+          strokeWidth: 0,
+          letterSpacing: 0.02,
+          lineHeight: 1.5,
         }
       };
     });
@@ -181,18 +215,19 @@
         }
       },
       interaction: {
-        hover: true,
+        hover: false,
         navigationButtons: true,
         keyboard: true,
         zoomView: true,
         dragView: true
       },
       nodes: {
-        borderWidth: 1,
-        borderWidthSelected: 2,
+        borderWidth: 0.5,
+        borderWidthSelected: 1,
         color: {
           border: "#6a5e2b",
-          background: "#0e3d37",
+          // background: "#e5e5e5#0e3d37",
+          background: "#e5e5e5",
           highlight: {
             border: "#8a7a36",
             background: "#14524a"
