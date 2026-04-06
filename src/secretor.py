@@ -3,6 +3,7 @@ import json
 import os
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple
+import syslog
 
 SECRET_FILE_PATH = "data/file"
 LIST_PATH = "data/lists/"
@@ -65,17 +66,17 @@ class Secretor:
         return users_entries 
 
     def secret_files_in_review(self, collective: str) -> List[SecretFileEntry]: 
-        print("review: collective", collective)
+        syslog.syslog(f"review: collective {collective}")
         block = collective.split("-")[1] if "-" in collective else collective
-        print("review: block", collective)
+        syslog.syslog(f"review: block {collective}")
         entries = []
         for _, entry in self.secret_file.items():
             user = self.umanager.get_user(entry._creator)
             if user is None: 
-                print("Warn: creator not found: ", entry._creator)
+                syslog.syslog(syslog.LOG_WARNING, f"Warn: creator not found: {entry._creator}")
                 continue
             comm_user = self.comm.get_user(user.email.lower())
-            print("review: ", block, "in", entry._creator, "?", comm_user.collective)
+            syslog.syslog(f"review: {block} in {comm_user.collective}? ({entry._review} {comm_user.alias}, {entry.name})")
             if entry._review and (block in comm_user.collective or collective == "orga"): 
                 entries.append(entry) 
         return entries
