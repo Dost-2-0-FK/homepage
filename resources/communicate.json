@@ -32,7 +32,7 @@
       "name": "Hintergrund Setting",
       "hide": ["it", "szenografie", "test"]
     },
-    "kostüm": {
+    "kostuem": {
       "name": "Kostüm",
       "members": ["rot", "blau", "schweiz"],
       "hide": ["it", "szenografie", "test"]
@@ -95,7 +95,7 @@
     "Dennis.heiler@me.com": "cornelius.chars-rot",
     "schrammsv@gmail.com": "hauptmann.orga",
     "maddin.g@hotmail.de": "aristoteles.chars-schweiz",
-    "natascha.kordts@web.de":"schweiz.kostüm",
-    "Lilith@huggle.de":"rot.kostüm"
+    "natascha.kordts@web.de":"schweiz.kostuem",
+    "Lilith@huggle.de":"blau.kostuem"
   }
 }
