@@ -376,7 +376,8 @@ def communicate_send(key: str, me: str, to: str):
                 html_body=None,
                 from_addr=me_mail
             )
-
+    if "communicate/" in request.referrer: 
+        return redirect(url_for("communicate", key=key), code=303)
     return redirect(url_for("secret_file_reviews", key=key), code=303)
 
 def __create_id(): 
