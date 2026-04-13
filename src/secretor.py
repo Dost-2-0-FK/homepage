@@ -28,6 +28,7 @@ class SecretFileEntry:
     # Violence
     violence_potential: int = field(default=0)
     estimated_wealth: int = field(default=0)
+    social_credits: int = field(default=0)
     # Background
     crimes: list[str] = field(default_factory=lambda: [''])
     employers: list[str] = field(default_factory=lambda: [''])

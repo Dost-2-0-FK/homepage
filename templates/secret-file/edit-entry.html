@@ -92,7 +92,7 @@
         Klasse Omega (ω) – Unbändig
       </option>
     </select>
-    <span class="input-group-text" id="basic-addon-gewalt">Geschätzter Wohlstand</span>
+    <span class="input-group-text" id="basic-addon-gewalt">Wohlstand</span>
     <select class="form-select" name="estimated_wealth" id="estimated_wealth">
       <option value=0 {{ "selected" if cur.estimated_wealth == 0 else "" }}>
         Subsistenz-Allokation
@@ -110,6 +110,17 @@
         Kern-Akteur 
       </option>
     </select>
+    {% if "1.A" in cur.zone and "(E)" in cur.zone %}
+      <span 
+        class="input-group-text" 
+        id="basic-addon-gewalt"
+        title="Soziale Bewertung -- nur Zone 1.A (E): 100='sehr gut', 0='sehr schlecht"
+      >Bewertung (nur 1.A)</span>
+      <input class="form-select" type="number" min=0 max=100 step=1 value="cur.social_credits"
+        name="social_credits" id="social_credits"
+        title="Soziale Bewertung -- nur Zone 1.A (E): 100='sehr gut', 0='sehr schlecht"
+      > </input>
+    {% endif %}
   </div>
   <div class="input-group mb-3">
     <input type="text" class="form-control" placeholder="Straftaten" aria-label="crimes" 

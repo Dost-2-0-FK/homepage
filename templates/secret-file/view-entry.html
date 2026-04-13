@@ -35,6 +35,12 @@
         {{entry.violence_potential}} 
         <span class="table-hint">Gewaltpotenzial</span>
       </td>
+      {% if "1.A" in entry.zone and "(E)" in entry.zone %}
+        <td scope="col">
+          {{entry.social_credits}} 
+          <span class="table-hint">Soziale Bewertung</span>
+        </td>
+      {% endif %}
       <td scope="col" colspan="2">
         {% for gm in entry.genetic_augmentations %} 
           {% if loop.index != 1 %} 
