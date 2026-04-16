@@ -7,6 +7,7 @@
   <a href="/secret/{{user.key}}/reviews/graph">graph view (beta)</a>
   {% for entry in entries %} 
     {% set allow_feedback=True %}
+    {% set action="publish" %}
     {% include "secret-file/view-entry.html" %}
   {% endfor %}
 

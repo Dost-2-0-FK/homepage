@@ -73,6 +73,29 @@ function SendInReview(key) {
     });
 }
 
+function publish(key) {
+  fetch("/secret/entry/publish/" + key, { method: "post" }) 
+    .then( (response) => {
+      if (!response.ok) {
+        alert("Key " + key + " not found!");
+      } else {
+        alert("Published!");
+      }
+    });
+}
+
+function un_publish(key) {
+  fetch("/secret/entry/unpublish/" + key, { method: "post" }) 
+    .then( (response) => {
+      if (!response.ok) {
+        alert("Key " + key + " not found!");
+      } else {
+        window.location.reload();
+      }
+    });
+}
+
+
 function DeleteEntry(key) {
   fetch("/secret/entry/delete/" + key, { method: "post" }) 
     .then( (response) => {

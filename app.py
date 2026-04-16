@@ -113,7 +113,7 @@ def entry(key: str):
         user=user, 
         msg=request.args.get("msg"),
         has_communicate=me is not None,
-        is_editor= me is not None and ("chars" in me.collective or "orga" in me.collective)
+        is_editor=__is_editor(me)
     )
 
 @app.route("/communicate/<key>")
@@ -128,7 +128,7 @@ def communicate(key: str):
         "communicate.html", 
         user=user, 
         has_communicate=comm.get_user(user.email.lower()) is not None,
-        is_editor= "chars" in me.collective or "orga" in me.collective,
+        is_editor=__is_editor(me),
         collectives=comm.collectives,
         me=me
     )
@@ -150,7 +150,7 @@ def secret_file(key: str):
         gms=secretor.gms,
         cbis=secretor.cbis,
         chars=secretor.get_chars_by_key(),
-        is_editor= "chars" in me.collective or "orga" in me.collective
+        is_editor=__is_editor(me),
     )
 
 @app.route("/secret/<key>/edit")
@@ -173,7 +173,7 @@ def secret_file_entries(key: str):
         gms=secretor.gms,
         cbis=secretor.cbis,
         chars=secretor.get_chars_by_key(),
-        is_editor= "chars" in me.collective or "orga" in me.collective
+        is_editor=__is_editor(me)
     )
 
 @app.route("/secret/<key>/reviews/graph")
@@ -193,7 +193,7 @@ def secret_file_reviews_graph(key: str):
         gms=secretor.gms,
         cbis=secretor.cbis,
         chars=secretor.get_chars_by_key(),
-        is_editor= "chars" in me.collective or "orga" in me.collective
+        is_editor=__is_editor(me)
     )
 
 @app.route("/secret/<key>/reviews/", defaults={"view_file_entry": None})
@@ -214,7 +214,7 @@ def secret_file_reviews(key: str, view_file_entry: str):
         cbis=secretor.cbis,
         chars=secretor.get_chars_by_key(),
         view_file_entry=view_file_entry,
-        is_editor= "chars" in me.collective or "orga" in me.collective
+        is_editor=__is_editor(me)
     )
 
 
@@ -251,6 +251,18 @@ def secret_file_update_entry(key: str):
 @app.route("/secret/entry/review/<key>", methods=["POST"])
 def secret_file_review_entry(key: str):
     if secretor.review_secret_file_entry(key): 
+        return "", 200 
+    return "", 404
+
+@app.route("/secret/entry/publish/<key>", methods=["POST"])
+def secret_file_publish_entry(key: str):
+    if secretor.publish_secret_file_entry(key, True): 
+        return "", 200 
+    return "", 404
+
+@app.route("/secret/entry/unpublish/<key>", methods=["POST"])
+def secret_file_unpublish_entry(key: str):
+    if secretor.publish_secret_file_entry(key, False): 
         return "", 200 
     return "", 404
 
@@ -386,6 +398,11 @@ def __create_id():
             random.choices(string.ascii_letters + string.digits, k=n)
         )
     return '-'.join([id_part(4) for _ in range(4)])
+
+def __is_editor(me) -> bool:
+    if me is not None: 
+        return "chars" in me.collective or "orga" in me.collective
+    return False
 
 if __name__ == "__main__": 
     app.run(debug=True, port=PORT)

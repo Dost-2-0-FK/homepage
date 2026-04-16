@@ -112,6 +112,12 @@
 </table>
 
 {% if allow_feedback %}
+  {% if me.collective == "orga" %}
+    {% set label=action %}
+    {% set title="Orga only! Pubish to make visible for all editors regardless of block." %}
+    {% set onclick=action + "('" + entry.key + "');" %}
+    {% include "forms/button.html" %}
+  {% endif %}
   {% if not get_user_from_key(entry._creator) %}
   <p>User not found! from key: {{entry._creator}}</p>
   {% else %}
