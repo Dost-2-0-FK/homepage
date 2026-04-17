@@ -401,7 +401,7 @@ def __create_id():
 
 def __is_editor(me) -> bool:
     if me is not None: 
-        return "chars" in me.collective or "orga" in me.collective
+        return "chars" in me.collective or "orga" in me.collective or "weltanschauung" in me.collective
     return False
 
 if __name__ == "__main__": 

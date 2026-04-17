@@ -97,13 +97,13 @@
       </td>
     </tr>
     <tr>
-      <td scope="col" colspan="6">
+      <td scope="col" colspan="6" style="white-space: pre-line;">
         {{ entry.background }}
         <span class="table-hint">Hintergrund</span>
       </td>
     </tr>
     <tr>
-      <td scope="col" colspan="6">
+      <td scope="col" colspan="6" style="white-space: pre-line;">
         {{ entry.notes }}
         <span class="table-hint">Notizen</span>
       </td>
@@ -112,12 +112,19 @@
 </table>
 
 {% if allow_feedback %}
-  {% if me.collective == "orga" %}
-    {% set label=action %}
+
+  {% if me.collective == "orga" and not entry._published %}
+    {% set label="publish" %}
     {% set title="Orga only! Pubish to make visible for all editors regardless of block." %}
-    {% set onclick=action + "('" + entry.key + "');" %}
+    {% set onclick="publish('" + entry.key + "');" %}
+    {% include "forms/button.html" %}
+  {% elif me.collective == "orga" and entry._published %}
+    {% set label="un-publish" %}
+    {% set title="Orga only! Pubish to make visible for all editors regardless of block." %}
+    {% set onclick="un_publish('" + entry.key + "');" %}
     {% include "forms/button.html" %}
   {% endif %}
+
   {% if not get_user_from_key(entry._creator) %}
   <p>User not found! from key: {{entry._creator}}</p>
   {% else %}
@@ -125,10 +132,10 @@
     <p>Send feedback to: 
       <span
         class="small mail" 
-        onclick="ToggleMailSender('{{user_creator.alias}}');"
+        onclick="ToggleMailSender('{{entry.key}}');"
       >{{user_creator.mail}}@dost-2-0-fk.art</p>
     </p>
-    <div id="send-mail-{{mail}}" style="display: none;">
+    <div id="send-mail-{{entry.key}}" style="display: none;">
       <form
         action="/communicate/{{user.key}}/send/{{me.mail}}/{{user_creator.mail}}?feedback_to={{entry.name}}" 
         method="post"

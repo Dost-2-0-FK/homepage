@@ -2,6 +2,14 @@ addEventListener("scroll", (_) => {
   document.getElementById("main").classList.add("main_cleared");
 });
 
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "F4") {
+    document.getElementById("main").style.width = "90%";
+    document.getElementById("main").classList.remove("container");
+  }
+});
+
 document.addEventListener("DOMContentLoaded", (_) => {
   if (location.pathname.indexOf("/entry") == 0) {
     // Add initial scroll on entry page
