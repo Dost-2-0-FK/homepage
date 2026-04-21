@@ -12,7 +12,7 @@
     },
     "chars-rot": {
       "name": "Charakter-Entwicklung roter Block", 
-      "members": [ "calvin", "cassier", "cornelius" ],
+      "members": [ "calvin", "cassier", "cornelius", "cohen", "cervantes" ],
       "hide": ["it", "szenografie", "test"]
     },
     "weltanschauung-schweiz": {
@@ -93,6 +93,8 @@
     "ben.draeger@iesy.net": "weltanschauung-rot",
     "janvandick@gmail.com": "noone.test",
     "Dennis.heiler@me.com": "cornelius.chars-rot",
+    "Sophia.stricker1512@gmail.com": "cervantes.chars-rot",
+    "mloetz@posteo.de": "cohen.chars-rot",
     "schrammsv@gmail.com": "hauptmann.orga",
     "maddin.g@hotmail.de": "aristoteles.chars-schweiz",
     "natascha.kordts@web.de":"schweiz.kostuem",
