@@ -8,6 +8,14 @@
     Name: {{user.name}}
   {% endif %}
   <br>
+  {% if user.address|length > 0 %}
+    Adresse: {{user.address}}
+  {% endif %}
+  <br>
+  {% if user.telefon|length > 0 %}
+    Telefon: {{user.telefon}}
+  {% endif %}
+  <br>
   {% if user.status|length > 0 %}
     Status: {{user.status}}
   {% endif %}
@@ -24,26 +32,40 @@
 </p>
 
 <div id="user_info_container"
-  {% if user.name|length > 0 and user.status|length > 0 and user.arrival|length > 0%}
+  {% if user.name|length > 0 and user.status|length > 0 and user.arrival|length > 0 and user.telefon|length > 0 and user.address|length > 0 %}
     class="d-none"
   {% endif %}
 >
   <form action="/entry/{{user.key}}/update/user" method="post">
-    {% if user.name|length == 0 %}
-      {% set label="Wie heißt du wirklich?" %}
-      {% set field="name" %}
-      {% set type="text" %}
-      {% set title="Ja, wir brauchen hier deinen 'echten' Rufnamen" %}
-      {% include "forms/input.html" %}
-      <br>
-    {% endif %}
+    {% set label="Wie heißt du wirklich?" %}
+    {% set field="name" %}
+    {% set type="text" %}
+    {% set title="Ja, wir brauchen hier deinen 'echten' Rufnamen" %}
+    {% set inp_value=user.name %}
+    {% include "forms/input.html" %}
+    {% set title="" %}
+    <br>
+
+    {% set label="Wo wohnst du aktuell?" %}
+    {% set field="address" %}
+    {% set type="text" %}
+    {% set inp_value=user.address %}
+    {% include "forms/input.html" %}
+    <br>
+
+    {% set label="Telefonnummer..." %}
+    {% set field="telefon" %}
+    {% set type="text" %}
+    {% set inp_value=user.telefon %}
+    {% include "forms/input.html" %}
+    {% set inp_value="" %}
+    <br>
 
     {% set label="Sag uns, ob du dabei bist." %}
     {% set field="status" %}
     {% set option_selected=user.status %}
     {% set options={'Anwesend': 'Anwesend', 'Unsicher': 'Unsicher', 'Account Löschen': 'Account Löschen', 'Nur Support': 'Nur Support' } %}
     {% include "forms/select.html" %}
-
     <br>
 
     <div id="arrival_container" class="d-none">
@@ -53,9 +75,8 @@
       {% set options={'---': '---', '15:00': 'ab 15:00 (Abfahrt Berlin ca. 13:00)', '16:00': 'ab 16:00 (Abfahrt Berlin ab ca. 14:00)', '17:30': 'bis 17:30', 'später': 'später' } %}
       {% include "forms/select.html" %}
     </div>
-
-
     <br>
+
 
     {% set label="update" %}
     {% set type="submit" %}

@@ -105,22 +105,27 @@ def transform(data):
         "bloc": __bloc_from_creator_key(data["_creator"]),
         "president": str(ctx["name"] in CONFIG["presidents"]),
         "secu": str(ctx["name"] in CONFIG["secus"]),
-        "amc_zone": "[]",
+        "amc_online": "0",
         "amc_bloc": "[]",
         "amc_private": "[]",
-        "amc_private": "0",
+        "amc_zone": "[]",
     }
     return ctx.copy()
 
 def add_contacts(chars: List[Dict[str, Any]]) -> None: 
     for char in chars: 
-        print("add_contacts: ", char["name"])
+        print(
+            "add_contacts (zone): ", 
+            char["name"], 
+            f"[{char["attributes"]["president"]}, {char["attributes"]["secu"]}]"
+        )
         char["attributes"]["amc_zone"] = str(
             [c["attributes"]["key_priv"] for c in chars 
             if c["attributes"]["zone"] == char["attributes"]["zone"]]
         )
 
-        if char["attributes"]["president"] or char["attributes"]["secu"]: 
+        if char["attributes"]["president"] == "True" or char["attributes"]["secu"] == "True": 
+            print("add_contacts (bloc): ", char["name"])
             char["attributes"]["amc_bloc"] = str(
                 [c["attributes"]["key_priv"] for c in chars 
                 if c["attributes"]["bloc"] == char["attributes"]["bloc"]]

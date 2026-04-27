@@ -26,6 +26,8 @@ class User:
         self.name = ujson.get("name", "") 
         self.status = ujson.get("status", "") 
         self.arrival = ujson.get("arrival", "") 
+        self.address = ujson.get("address", "") 
+        self.telefon = ujson.get("telefon", "") 
         # Get user memories:
         self.pdream = ujson.get("pdream", "") 
         self.ndream = ujson.get("ndream", "") 
@@ -37,6 +39,10 @@ class User:
     def update_field(self, field: str, value: str) -> None: 
         if field == "name": 
             self.name = value 
+        if field == "telefon": 
+            self.telefon = value 
+        if field == "address": 
+            self.address=value 
         if field == "status": 
             self.status = value
         if field == "arrival": 
@@ -111,6 +117,12 @@ class UManager:
                     # Update name, status or arrival if changed.
                     if row[2].strip() != user.name: 
                         row[2] = user.name 
+                        changed = True
+                    if row[3].strip() != user.address: 
+                        row[3] = user.address
+                        changed = True
+                    if row[4].strip() != user.telefon: 
+                        row[4] = user.telefon
                         changed = True
                     if row[6].strip() != user.status: 
                         row[6] = user.status

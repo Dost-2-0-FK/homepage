@@ -334,6 +334,7 @@ def reservieren():
 @app.route("/entry/<key>/update/user", methods=["POST"])
 def update_user(key: str): 
     user = umanger.get_user(key)
+    print(request.form)
     if user is None: 
         return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
     if "name" in request.form.keys():
@@ -342,6 +343,11 @@ def update_user(key: str):
         user.update_field("status", request.form["status"])
     if "arrival" in request.form.keys():
         user.update_field("arrival", request.form["arrival"])
+    if "address" in request.form.keys():
+        user.update_field("address", request.form["address"])
+    if "telefon" in request.form.keys():
+        user.update_field("telefon", request.form["telefon"])
+
     umanger.save_user(user)
     return redirect(url_for("entry", key=key), code=303)
 
