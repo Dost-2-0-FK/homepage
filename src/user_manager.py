@@ -26,6 +26,8 @@ class User:
         self.name = ujson.get("name", "") 
         self.status = ujson.get("status", "") 
         self.arrival = ujson.get("arrival", "") 
+        self.address = ujson.get("address", "") 
+        self.telefon = ujson.get("telefon", "") 
         # Get user memories:
         self.pdream = ujson.get("pdream", "") 
         self.ndream = ujson.get("ndream", "") 

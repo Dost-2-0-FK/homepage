@@ -24,7 +24,7 @@
 </p>
 
 <div id="user_info_container"
-  {% if user.name|length > 0 and user.status|length > 0 and user.arrival|length > 0%}
+  {% if user.name|length > 0 and user.status|length > 0 and user.arrival|length > 0 and user.telefon|length > 0 and user.address|length > 0 %}
     class="d-none"
   {% endif %}
 >
@@ -34,6 +34,22 @@
       {% set field="name" %}
       {% set type="text" %}
       {% set title="Ja, wir brauchen hier deinen 'echten' Rufnamen" %}
+      {% include "forms/input.html" %}
+      <br>
+    {% endif %}
+
+    {% if user.address|length == 0 %}
+      {% set label="Wo wohnst du aktuell?" %}
+      {% set field="address" %}
+      {% set type="text" %}
+      {% include "forms/input.html" %}
+      <br>
+    {% endif %}
+
+    {% if user.telefon|length == 0 %}
+      {% set label="Wie bist telefonisch erreichbar" %}
+      {% set field="telefon" %}
+      {% set type="text" %}
       {% include "forms/input.html" %}
       <br>
     {% endif %}
