@@ -2,6 +2,14 @@ addEventListener("scroll", (_) => {
   document.getElementById("main").classList.add("main_cleared");
 });
 
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "F4") {
+    document.getElementById("main").style.width = "90%";
+    document.getElementById("main").classList.remove("container");
+  }
+});
+
 document.addEventListener("DOMContentLoaded", (_) => {
   if (location.pathname.indexOf("/entry") == 0) {
     // Add initial scroll on entry page
@@ -72,6 +80,29 @@ function SendInReview(key) {
       }
     });
 }
+
+function publish(key) {
+  fetch("/secret/entry/publish/" + key, { method: "post" }) 
+    .then( (response) => {
+      if (!response.ok) {
+        alert("Key " + key + " not found!");
+      } else {
+        alert("Published!");
+      }
+    });
+}
+
+function un_publish(key) {
+  fetch("/secret/entry/unpublish/" + key, { method: "post" }) 
+    .then( (response) => {
+      if (!response.ok) {
+        alert("Key " + key + " not found!");
+      } else {
+        window.location.reload();
+      }
+    });
+}
+
 
 function DeleteEntry(key) {
   fetch("/secret/entry/delete/" + key, { method: "post" }) 

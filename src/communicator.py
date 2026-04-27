@@ -37,6 +37,5 @@ class Comm:
         else: 
             collective = alias 
             mail = alias
-        print(alias, collective, mail)
         hidden = self.collectives[collective].get("hide") or []
         return CommUser(mail, collective, alias, hidden)

@@ -76,9 +76,9 @@ class Secretor:
             if user is None: 
                 syslog.syslog(syslog.LOG_WARNING, f"Warn: creator not found: {entry._creator}")
                 continue
-            comm_user = self.comm.get_user(user.email.lower())
-            syslog.syslog(f"review: {block} in {comm_user.collective}? ({entry._review} {comm_user.alias}, {entry.name})")
-            if entry._review and (block in comm_user.collective or collective == "orga"): 
+            creator = self.comm.get_user(user.email.lower())
+            syslog.syslog(f"review: {block} in {creator.collective}? ({entry._review} {entry.name})")
+            if entry._review and (block in creator.collective or collective == "orga"): 
                 entries.append(entry) 
         return entries
 
@@ -126,6 +126,13 @@ class Secretor:
     def review_secret_file_entry(self, key: str) -> bool: 
         if key in self.secret_file: 
             self.secret_file[key]._review = True 
+            self.__save_entry(self.secret_file[key]) 
+            return True 
+        return False
+
+    def publish_secret_file_entry(self, key: str, publish: bool) -> bool: 
+        if key in self.secret_file: 
+            self.secret_file[key]._published = publish
             self.__save_entry(self.secret_file[key]) 
             return True 
         return False
