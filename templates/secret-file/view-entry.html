@@ -123,7 +123,7 @@
                   title="{{tag.desc}}"
                   onclick="AddTagToTags('{{entry.key}}', '{{tag.abbr}}');"
                 >
-                  + {{tag.abbr}}</span>
+                  <span>+ {{tag.abbr}}</span>
                 </button>
               </li>
             {% endfor %}
@@ -173,7 +173,7 @@
       <span
         class="small mail" 
         onclick="ToggleMailSender('{{entry.key}}');"
-      >{{user_creator.mail}}@dost-2-0-fk.art</p>
+      >{{user_creator.mail}}@dost-2-0-fk.art</span>
     </p>
     <div id="send-mail-{{entry.key}}" style="display: none;">
       <form
@@ -191,6 +191,7 @@
 
         {% set label="send" %}
         {% set type="submit" %}
+        {% set onclick="" %}
         {% include "forms/button.html" %}
       </form>
       <br><br>
@@ -239,6 +240,7 @@
           {% set label="create" %}
           {% set type="submit" %}
           {% set style="margin-top:1em;" %}
+          {% set onclick="" %}
           {% include "forms/button.html" %}
         </form>
       </div>

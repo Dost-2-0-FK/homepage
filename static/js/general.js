@@ -139,6 +139,8 @@ async function AddTagToTags(char_key, tag) {
 if (document.getElementById("gm_form") !== null && document.getElementById("gm_form") !== undefined) {
   document.getElementById("gm_form").addEventListener("submit", (event) => SubmitLstForm(event, "gm"));
   document.getElementById("cbi_form").addEventListener("submit", (event) => SubmitLstForm(event, "cbi"));
+}
+if (document.getElementById("tag_form") !== null ) {
   document.getElementById("tag_form").addEventListener("submit", (event) => SubmitLstForm(event, "tag"));
 }
 

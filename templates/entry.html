@@ -80,6 +80,7 @@
 
     {% set label="update" %}
     {% set type="submit" %}
+    {% set onclick="" %}
     {% include "forms/button.html" %}
   </form>
 </div>
@@ -171,6 +172,7 @@ sprechen können, nie endende Realität." %}
 <form action="/entry/{{user.key}}/delete-me/" method="post" style="margin-top:2em;">
   {% set label="delete me" %}
   {% set type="submit" %}
+  {% set onclick="" %}
   {% include "forms/button.html" %}
 </form>
 
