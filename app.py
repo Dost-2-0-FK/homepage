@@ -289,8 +289,9 @@ def add_tag_entry():
     secretor.add_tag(tag)
     return "", 200
 
-@app.route("/secret/<key>/add/tag/<tag>", methods=["POST"]) 
-def add_tag_to_char(key: str, tag: str): 
+@app.route("/secret/<key>/add/tag", methods=["POST"]) 
+def add_tag_to_char(key: str): 
+    tag = request.args.get("tag")
     char = secretor.secret_file[key] 
     if char: 
         char._tags.append(tag)

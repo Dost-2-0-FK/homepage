@@ -125,11 +125,12 @@ function AddElementToInp(list, name) {
 }
 
 async function AddTagToTags(char_key, tag) {
-  const response = await fetch("/secret/" + char_key + "/add/tag/" + tag, {
+  const uri = "/secret/" + char_key + "/add/tag?tag=" + tag;
+  const response = await fetch(uri, {
     method: "POST",
   });
   if (!response.ok) {
-    let text = response.text();
+    let text = await response.text();
     alert(text);
   } else {
     window.location.reload();
