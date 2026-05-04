@@ -149,6 +149,7 @@ def secret_file(key: str):
         entries=secretor.secret_files(),
         gms=secretor.gms,
         cbis=secretor.cbis,
+        tags=secretor.tags,
         chars=secretor.get_chars_by_key(),
         is_editor=__is_editor(me),
     )
