@@ -108,6 +108,46 @@
         <span class="table-hint">Notizen</span>
       </td>
     </tr>
+    {% if entry._creator == user.key %} 
+      <tr>
+        <td scope="col" colspan="6">
+
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+            data-bs-toggle="dropdown" aria-expanded="false">+</button>
+          <ul class="dropdown-menu">
+            {% for id, tag in tags.items() %} 
+              <li>
+                <button 
+                  class="dropdown-item" 
+                  type="button" 
+                  title="{{tag.desc}}"
+                  onclick="AddTagToTags('{{entry.key}}', '{{tag.abbr}}');"
+                >
+                  + {{tag.abbr}}</span>
+                </button>
+              </li>
+            {% endfor %}
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
+                data-bs-target="#tagsModal">Create New Tag</button></li>
+          </ul>
+          <span id="tags_{{entry.key}}" style="margin-left: 1em;">
+            {% for tag in entry._tags %} 
+              {%- if loop.index0 > 0 -%},{%- endif -%} 
+              <span title="{{tags[tag].desc}}" 
+                class="tag 
+                  {% if tags[tag].hidden_for_all -%}tag_hidden_all{%- endif -%} 
+                  {% if tags[tag].hidden_for_players -%}tag_hidden{%- endif -%} 
+                  "
+              >
+                {{ tag }}
+              </span>
+            {% endfor %}
+          </span>
+          <span class="table-hint">Tags</span>
+        </td>
+      </tr>
+    {% endif %}
   <tbody>
 </table>
 

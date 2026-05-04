@@ -230,3 +230,51 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="tagsModal" tabindex="-1" aria-labelledby="tagsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tagsModalLabel">Neuen Tag hinzufügen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="tag_form" action="/secret/add/tag/" method="post"> 
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="tag" name="tag" id="tag" >
+          </div>
+          <label 
+            for="desc" 
+            class="form-label"
+            title="Die Beschreibung ist auch für die Spieler*innen sichtbbar"
+          >Beschreibung (Optional)</label>
+          <div class="input-group mb-3">
+             <textarea class="form-control" style="justify-content: left;" aria-label="desc" name="desc" id="desc">
+            </textarea>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" value="" 
+                name="hiddenPlayers" id="hiddenPlayers" >
+            <label class="form-check-label" for="hiddenAll" 
+                title="Tag für Spieler*innen nicht sichtbar.">
+              Hidden for Players only
+            </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" value="" name="hiddenAll" id="hiddenAll">
+            <label class="form-check-label" for="hiddenAll" 
+                title="Nur für dich, den Verteilungsalgorythmus und ggf. die Orga sichtbar">
+              Hidden for Everyone
+            </label>
+          </div>
+          <input hidden type="text" name="_creator" id="_creator" value="{{user.key}}">
+
+          {% set label="create" %}
+          {% set type="submit" %}
+          {% set style="margin-top:1em;" %}
+          {% include "forms/button.html" %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

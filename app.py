@@ -5,7 +5,7 @@ import string
 from typing import List
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
-from src.secretor import Abbr, SecretFileEntry, Secretor
+from src.secretor import Abbr, SecretFileEntry, Secretor, Tag
 from src.communicator import Comm, CommUser
 from src.mailer import Mailer
 from src.user_manager import UManager, User
@@ -172,6 +172,7 @@ def secret_file_entries(key: str):
         entries=secretor.users_secret_file_entries(key),
         gms=secretor.gms,
         cbis=secretor.cbis,
+        tags=secretor.tags,
         chars=secretor.get_chars_by_key(),
         is_editor=__is_editor(me)
     )
@@ -192,6 +193,7 @@ def secret_file_reviews_graph(key: str):
         entries=secretor.secret_files_in_review(me.collective),
         gms=secretor.gms,
         cbis=secretor.cbis,
+        tags=secretor.tags,
         chars=secretor.get_chars_by_key(),
         is_editor=__is_editor(me)
     )
@@ -212,6 +214,7 @@ def secret_file_reviews(key: str, view_file_entry: str):
         entries=secretor.secret_files_in_review(me.collective),
         gms=secretor.gms,
         cbis=secretor.cbis,
+        tags=secretor.tags,
         chars=secretor.get_chars_by_key(),
         view_file_entry=view_file_entry,
         is_editor=__is_editor(me)
@@ -272,18 +275,39 @@ def secret_file_delete_entry(key: str):
         return "", 200 
     return "", 404
 
+@app.route("/secret/add/tag/", methods=["POST"]) 
+def add_tag_entry(): 
+    tag = Tag(
+        abbr=request.form.get("tag"),
+        name="", 
+        desc=request.form.get("desc").strip(),
+        hidden_for_all="hiddenAll" in request.form.keys(),
+        hidden_for_players="hiddenPlayers" in request.form.keys(),
+        _creator=request.form.get("_creator") 
+    )
+    secretor.add_tag(tag)
+    return "", 200
+
+@app.route("/secret/<key>/add/tag/<tag>", methods=["POST"]) 
+def add_tag_to_char(key: str, tag: str): 
+    char = secretor.secret_file[key] 
+    if char: 
+        char._tags.append(tag)
+        return "", 200
+    return f"Char with key {key} not found!", 401
+
 @app.route("/secret/add/<lst_name>/", methods=["POST"]) 
 def add_lst_entry(lst_name: str): 
-    lst = Abbr(
+    entry = Abbr(
         abbr=request.form.get("abbr"),
         name=request.form.get("name"), 
         desc=request.form.get("desc").strip(),
         _creator=request.form.get("_creator") 
     )
     if lst_name == "gm":
-        secretor.add_gm(lst)
+        secretor.add_gm(entry)
     if lst_name == "cbi":
-        secretor.add_cbi(lst)
+        secretor.add_cbi(entry)
     return "", 200
 
 @app.route("/access", methods=["POST"])

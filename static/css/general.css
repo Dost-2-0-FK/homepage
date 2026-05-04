@@ -125,6 +125,13 @@ select {
   font-size: small;
 }
 
+.tag_hidden {
+  color: gray;
+}
+.tag_hidden_all {
+  color: gray;
+}
+
 @media only screen and (max-width: 950px) {
   /* For mobile phones: */ 
   body {

@@ -9,6 +9,7 @@ SECRET_FILE_PATH = "data/file"
 LIST_PATH = "data/lists/"
 CBI_PATH = os.path.join(LIST_PATH, "cbis.json")
 GM_PATH = os.path.join(LIST_PATH, "gms.json")
+TAGS_PATH = os.path.join(LIST_PATH, "tags.json")
 
 @dataclass 
 class SecretFileEntry: 
@@ -39,6 +40,7 @@ class SecretFileEntry:
     _creator: str = field(default="")
     _published: bool = field(default=False)
     _review: bool = field(default=False)
+    _tags: list[str] = field(default_factory=lambda: [])
 
 @dataclass 
 class Abbr: 
@@ -46,6 +48,11 @@ class Abbr:
     name: str
     desc: str 
     _creator: str 
+
+@dataclass 
+class Tag(Abbr): 
+    hidden_for_all: bool 
+    hidden_for_players: bool
 
 class Secretor: 
     def __init__(self, comm, umanager):
@@ -56,6 +63,7 @@ class Secretor:
         self.secret_file = self.__load_secret_file()
         self.gms = self.__load_list(GM_PATH)
         self.cbis = self.__load_list(CBI_PATH)
+        self.tags = self.__load_list(TAGS_PATH)
         self.comm = comm 
         self.umanager = umanager
 
@@ -152,6 +160,10 @@ class Secretor:
         self.cbis[cbi.abbr] = cbi
         self.__save_list(CBI_PATH, self.cbis)
 
+    def add_tag(self, tag: Tag): 
+        self.tags[tag.abbr] = tag
+        self.__save_list(TAGS_PATH, self.tags)
+
     def __save_entry(self, entry: SecretFileEntry): 
         with open(f"{os.path.join(SECRET_FILE_PATH, entry.key)}.json", "w") as f: 
             json.dump(dataclasses.asdict(entry), f)
@@ -173,8 +185,10 @@ class Secretor:
         lst = {}
         with open(path, "r") as f: 
             for abbr, j_lst in json.load(f).items():
-                print(j_lst)
-                lst[abbr] = Abbr(**j_lst)
+                if path == TAGS_PATH:
+                    lst[abbr] = Tag(**j_lst)
+                else:
+                    lst[abbr] = Abbr(**j_lst)
         return lst
 
     def __save_list(self, path, lst): 

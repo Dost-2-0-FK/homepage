@@ -124,9 +124,22 @@ function AddElementToInp(list, name) {
   inp.value += name;
 }
 
+async function AddTagToTags(char_key, tag) {
+  const response = await fetch("/secret/" + char_key + "/add/tag/" + tag, {
+    method: "POST",
+  });
+  if (!response.ok) {
+    let text = response.text();
+    alert(text);
+  } else {
+    window.location.reload();
+  }
+}
+
 if (document.getElementById("gm_form") !== null && document.getElementById("gm_form") !== undefined) {
   document.getElementById("gm_form").addEventListener("submit", (event) => SubmitLstForm(event, "gm"));
   document.getElementById("cbi_form").addEventListener("submit", (event) => SubmitLstForm(event, "cbi"));
+  document.getElementById("tag_form").addEventListener("submit", (event) => SubmitLstForm(event, "tag"));
 }
 
 async function SubmitLstForm(e, lst_name) {
@@ -139,7 +152,9 @@ async function SubmitLstForm(e, lst_name) {
     body: formData
   });
 
-  if (response.ok) {
+  if (response.ok && lst_name === "tag") {
+    window.location.reload();
+  } else if (response.ok) {
     const modalEl = document.getElementById(lst_name + "Modal");
     const modal = bootstrap.Modal.getInstance(modalEl) 
                   || new bootstrap.Modal(modalEl);
