@@ -149,7 +149,7 @@ def secret_file(key: str):
         entries=secretor.secret_files(),
         gms=secretor.gms,
         cbis=secretor.cbis,
-        tags=secretor.tags,
+        tags=secretor.get_tags(key),
         chars=secretor.get_chars_by_key(),
         is_editor=__is_editor(me),
     )
@@ -173,7 +173,7 @@ def secret_file_entries(key: str):
         entries=secretor.users_secret_file_entries(key),
         gms=secretor.gms,
         cbis=secretor.cbis,
-        tags=secretor.tags,
+        tags=secretor.get_tags(key),
         chars=secretor.get_chars_by_key(),
         is_editor=__is_editor(me)
     )
@@ -194,7 +194,7 @@ def secret_file_reviews_graph(key: str):
         entries=secretor.secret_files_in_review(me.collective),
         gms=secretor.gms,
         cbis=secretor.cbis,
-        tags=secretor.tags,
+        tags=secretor.get_tags(key),
         chars=secretor.get_chars_by_key(),
         is_editor=__is_editor(me)
     )
@@ -215,7 +215,7 @@ def secret_file_reviews(key: str, view_file_entry: str):
         entries=secretor.secret_files_in_review(me.collective),
         gms=secretor.gms,
         cbis=secretor.cbis,
-        tags=secretor.tags,
+        tags=secretor.get_tags(key),
         chars=secretor.get_chars_by_key(),
         view_file_entry=view_file_entry,
         is_editor=__is_editor(me)

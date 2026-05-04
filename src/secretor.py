@@ -164,6 +164,11 @@ class Secretor:
         self.tags[tag.abbr] = tag
         self.__save_list(TAGS_PATH, self.tags)
 
+    def get_tags(self, key: str) -> Dict[str, Tag]: 
+        return {
+            k:v for k, v in self.tags.items() if v._creator == key or not v.hidden_for_all 
+        }
+
     def __save_entry(self, entry: SecretFileEntry): 
         with open(f"{os.path.join(SECRET_FILE_PATH, entry.key)}.json", "w") as f: 
             json.dump(dataclasses.asdict(entry), f)
