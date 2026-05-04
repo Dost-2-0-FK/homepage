@@ -164,10 +164,19 @@ class Secretor:
         self.tags[tag.abbr] = tag
         self.__save_list(TAGS_PATH, self.tags)
 
+    def add_tag_to_char(self, key: str, tag: str) -> Tuple[str, int]:
+        char = self.secret_file[key] 
+        if char: 
+            char._tags.append(tag)
+            self.__save_entry(char)
+            return "", 200
+        return f"Char with key {key} not found!", 401
+
     def get_tags(self, key: str) -> Dict[str, Tag]: 
         return {
             k:v for k, v in self.tags.items() if v._creator == key or not v.hidden_for_all 
         }
+
 
     def __save_entry(self, entry: SecretFileEntry): 
         with open(f"{os.path.join(SECRET_FILE_PATH, entry.key)}.json", "w") as f: 

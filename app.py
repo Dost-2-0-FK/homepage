@@ -292,11 +292,7 @@ def add_tag_entry():
 @app.route("/secret/<key>/add/tag", methods=["POST"]) 
 def add_tag_to_char(key: str): 
     tag = request.args.get("tag")
-    char = secretor.secret_file[key] 
-    if char: 
-        char._tags.append(tag)
-        return "", 200
-    return f"Char with key {key} not found!", 401
+    return secretor.add_tag_to_char(key, tag)
 
 @app.route("/secret/add/<lst_name>/", methods=["POST"]) 
 def add_lst_entry(lst_name: str): 
