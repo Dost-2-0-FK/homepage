@@ -18,13 +18,13 @@ class SeafBytes:
     @classmethod 
     def from_csv(cls, rows): 
         out = io.StringIO()
-        w = csv.writer(out, lineterminator="\n")
+        w = csv.writer(out, delimiter=";", lineterminator="\n")
         w.writerows(rows)
         return cls(out.getvalue().encode("utf-8"))
 
     def csv(self) -> List[List[str]]:
         text = self.bytes.decode("utf-8", errors="replace")
-        return list(csv.reader(io.StringIO(text)))
+        return list(csv.reader(io.StringIO(text), delimiter=";"))
 
     def text(self) -> str: 
         return self.bytes.decode("utf-8", errors="replace")
