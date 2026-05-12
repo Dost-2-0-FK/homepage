@@ -118,7 +118,10 @@
             {% for id, tag in tags.items() %} 
               <li>
                 <button 
-                  class="dropdown-item" 
+                  class="dropdown-item
+                    {% if tag.hidden_for_all -%}tag_hidden_all{%- endif -%} 
+                    {% if tag.hidden_for_players -%}tag_hidden{%- endif -%} 
+                    "
                   type="button" 
                   title="{{tag.desc}}"
                   onclick="AddTagToTags('{{entry.key}}', '{{tag.abbr}}');"
