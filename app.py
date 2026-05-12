@@ -152,6 +152,7 @@ def secret_file(key: str):
         tags=secretor.get_tags(key),
         chars=secretor.get_chars_by_key(),
         is_editor=__is_editor(me),
+        per_bloc=secretor.per_bloc()
     )
 
 @app.route("/secret/<key>/edit")

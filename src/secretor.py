@@ -80,15 +80,35 @@ class Secretor:
         syslog.syslog(f"review: block {collective}")
         entries = []
         for _, entry in self.secret_file.items():
-            user = self.umanager.get_user(entry._creator)
-            if user is None: 
-                syslog.syslog(syslog.LOG_WARNING, f"Warn: creator not found: {entry._creator}")
+            creator = self.__get_comm_creator(entry._creator)
+            if not creator: 
                 continue
-            creator = self.comm.get_user(user.email.lower())
             syslog.syslog(f"review: {block} in {creator.collective}? ({entry._review} {entry.name})")
             if entry._review and (block in creator.collective or collective == "orga"): 
                 entries.append(entry) 
         return entries
+
+    def per_bloc(self) -> Dict[str, Tuple[int, int]]: 
+        per_bloc = {
+            "west": (0, 0),
+            "parca": (0, 0),
+            "ikac": (0, 0),
+        }
+        for _, entry in self.secret_file.items(): 
+            creator = self.__get_comm_creator(entry._creator)
+            if not creator: 
+                continue
+            inc_hidden = len([t for t in entry._tags if "hidden" in t])
+            if "west" in entry._tags or "blau" in creator.collective: 
+                num, hidden = per_bloc["west"]
+                per_bloc["west"] = (num + 1, hidden + inc_hidden)
+            elif "parca" in entry._tags or "rot" in creator.collective: 
+                num, hidden = per_bloc["parca"]
+                per_bloc["parca"] = (num + 1, hidden + inc_hidden)
+            elif "ikac" in entry._tags or "schweiz" in creator.collective: 
+                num, hidden = per_bloc["ikac"]
+                per_bloc["ikac"] = ( num + 1, hidden + inc_hidden)
+        return per_bloc
 
     def secret_files(self) -> List[SecretFileEntry]: 
         entries = [] 
@@ -209,3 +229,11 @@ class Secretor:
         json_ready = {k: dataclasses.asdict(v) for k, v in lst.items()}
         with open(path, "w") as f: 
             json.dump(json_ready, f)
+
+    def __get_comm_creator(self, creator: str) -> CommUser | None:
+        user = self.umanager.get_user(creator)
+        if user is None: 
+            syslog.syslog(syslog.LOG_WARNING, f"Warn: creator not found: {creator}")
+            return None
+        return self.comm.get_user(user.email.lower())
+
