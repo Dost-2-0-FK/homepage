@@ -152,7 +152,8 @@ def secret_file(key: str):
         tags=secretor.get_tags(key),
         chars=secretor.get_chars_by_key(),
         is_editor=__is_editor(me),
-        per_bloc=secretor.per_bloc()
+        per_bloc_all=secretor.per_bloc(secretor.secret_file.values()),
+        per_bloc_published=secretor.per_bloc(secretor.secret_files()),
     )
 
 @app.route("/secret/<key>/edit")
@@ -280,7 +281,7 @@ def secret_file_delete_entry(key: str):
 @app.route("/secret/add/tag/", methods=["POST"]) 
 def add_tag_entry(): 
     tag = Tag(
-        abbr=request.form.get("tag"),
+        abbr=request.form.get("tag").strip(),
         name="", 
         desc=request.form.get("desc").strip(),
         hidden_for_all="hiddenAll" in request.form.keys(),

@@ -88,26 +88,26 @@ class Secretor:
                 entries.append(entry) 
         return entries
 
-    def per_bloc(self) -> Dict[str, Tuple[int, int]]: 
+    def per_bloc(self, files) -> Dict[str, Tuple[int, int]]: 
         per_bloc = {
             "west": (0, 0),
             "parca": (0, 0),
             "ikac": (0, 0),
         }
-        for _, entry in self.secret_file.items(): 
+        for entry in files: 
             creator = self.__get_comm_creator(entry._creator)
             if not creator: 
                 continue
             inc_hidden = len([t for t in entry._tags if "hidden" in t])
             if "west" in entry._tags or "blau" in creator.collective: 
                 num, hidden = per_bloc["west"]
-                per_bloc["west"] = (num + 1, hidden + inc_hidden)
+                per_bloc["west"] = (num + 1-inc_hidden, hidden + inc_hidden)
             elif "parca" in entry._tags or "rot" in creator.collective: 
                 num, hidden = per_bloc["parca"]
-                per_bloc["parca"] = (num + 1, hidden + inc_hidden)
+                per_bloc["parca"] = (num + 1-inc_hidden, hidden + inc_hidden)
             elif "ikac" in entry._tags or "schweiz" in creator.collective: 
                 num, hidden = per_bloc["ikac"]
-                per_bloc["ikac"] = ( num + 1, hidden + inc_hidden)
+                per_bloc["ikac"] = ( num + 1-inc_hidden, hidden + inc_hidden)
         return per_bloc
 
     def secret_files(self) -> List[SecretFileEntry]: 
