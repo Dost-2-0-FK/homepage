@@ -28,6 +28,7 @@ class Comm:
                         self.collectives[mail]["members"].append(member)
 
     def get_user(self, email: str) -> CommUser | None: 
+        email = email.lower()
         if email not in self.users: 
             return None
         alias = self.users[email]

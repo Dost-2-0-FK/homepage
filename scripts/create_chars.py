@@ -8,10 +8,16 @@ from src.communicator import Comm
 from src.seafiler import Seafile
 from src.user_manager import UManager
 
-PATH_TO_TXTAD_CHARS = Path(
-    "/home/fux/Documents/programming/txtad/data/games/dost/game_files/Characters/"
-)
-PATH_TO_DOST_CHARS = Path("data/file/")
+TAG_HIDDEN = "hidden: "
+TAG_PRESIDENT = "Präsident"
+TAG_SECU = "Security"
+
+TXTAD_PATH = "/srv/txtad-data/"
+# TXTAD_PATH = "/home/fux/homepage/test/"
+DOST_PATH = "/usr/bin/dost/homepage/"
+
+PATH_TO_TXTAD_CHARS = Path(TXTAD_PATH, "dost/game_files/Characters/")
+PATH_TO_DOST_CHARS = Path(DOST_PATH, "data/file/")
 
 JSON_CTX_TEMPLATE = {
     "attributes": {
@@ -30,11 +36,6 @@ JSON_CTX_TEMPLATE = {
     "priority": 0,
     "re_entrycondition": "",
     "shared": True
-}
-
-CONFIG = {
-    "presidents": ["Bronec, Anna"],
-    "secus": [],
 }
 
 comm = Comm()
@@ -86,9 +87,17 @@ def __bloc_from_creator_key(key: str) -> str:
             block = "schweiz" if block == "orga" else block
             key_bloc_mapping[key] = block
             return block
-    exit(f"Can't get bloc from given creator key: {key}")
+        else: 
+            exit(f"GET BLOC: no comm-user found for key: {key}, user: {user.email}")
+    else: 
+        exit(f"GET BLOC: no user found for key: {key}")
 
-def transform(data): 
+def __tags(data: Dict[str, Any]) -> List[str]: 
+    if "_tags" in data: 
+        return data["_tags"] 
+    return []
+
+def transform(data, hidden): 
     ctx = JSON_CTX_TEMPLATE 
     key = data["key"]
     ctx["id"] = key
@@ -103,13 +112,16 @@ def transform(data):
         "gen_diff": str(__calc_gen_diff(data)),
         "zone": data["zone"],
         "bloc": __bloc_from_creator_key(data["_creator"]),
-        "president": str(ctx["name"] in CONFIG["presidents"]),
-        "secu": str(ctx["name"] in CONFIG["secus"]),
+        "president": str(len([TAG_PRESIDENT in tag for tag in __tags(data)]) > 0),
+        "secu": str(len([TAG_SECU in tag for tag in __tags(data)]) > 0),
         "amc_online": "0",
         "amc_bloc": "[]",
         "amc_private": "[]",
         "amc_zone": "[]",
     }
+    for tag in __tags(data): 
+        if TAG_HIDDEN in tag: 
+            hidden.append(tag[len(TAG_HIDDEN):])
     return ctx.copy()
 
 def add_contacts(chars: List[Dict[str, Any]]) -> None: 
@@ -132,15 +144,20 @@ def add_contacts(chars: List[Dict[str, Any]]) -> None:
             )
         
 
-def safe_all(chars: List[Dict[str, Any]]) -> None: 
+def safe_all(chars: List[Dict[str, Any]], hidden: List[str]) -> None: 
+    print("CURRENT HIDDEN: ", hidden)
     for char in chars: 
         with open(PATH_TO_TXTAD_CHARS.joinpath(f"{char['id']}.ctx"), 'w') as f:
+            if char["name"] in hidden: 
+                print(f"Skippen {char['name']} because part of hidden")
+                continue
             json.dump(char, f)
 
 if __name__ == "__main__": 
     chars = []
+    hidden = []
     for file in PATH_TO_DOST_CHARS.glob("*.json"):
         with open(file, "r") as f:
-            chars.append(transform(json.load(f)))
+            chars.append(transform(json.load(f), hidden))
     add_contacts(chars) 
-    safe_all(chars)
+    safe_all(chars, hidden)
