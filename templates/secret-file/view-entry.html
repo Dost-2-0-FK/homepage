@@ -143,8 +143,13 @@
                   {% if tags[tag].hidden_for_players -%}tag_hidden{%- endif -%} 
                   "
               >
-                {{ tag }}
+                {{ tag }} 
               </span>
+              <button 
+                class="tag_delete" 
+                onclick="RemoveTag('{{entry.key}}', '{{tag}}');"
+                title="delete tag '{{tag}}' for character: '{{entry.sirname}}, {{entry.name}}'."
+              >X</button>
             {% endfor %}
           </span>
           <span class="table-hint">Tags</span>

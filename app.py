@@ -296,6 +296,12 @@ def add_tag_to_char(key: str):
     tag = request.args.get("tag")
     return secretor.add_tag_to_char(key, tag)
 
+@app.route("/secret/<key>/remove/tag", methods=["POST"]) 
+def remove_tag_from_char(key: str): 
+    tag = request.args.get("tag")
+    return secretor.remove_tag_from_char(key, tag)
+
+
 @app.route("/secret/add/<lst_name>/", methods=["POST"]) 
 def add_lst_entry(lst_name: str): 
     entry = Abbr(

@@ -137,6 +137,19 @@ async function AddTagToTags(char_key, tag) {
   }
 }
 
+async function RemoveTag(char_key, tag) {
+  const uri = "/secret/" + char_key + "/remove/tag?tag=" + tag;
+  const response = await fetch(uri, {
+    method: "POST",
+  });
+  if (!response.ok) {
+    let text = await response.text();
+    alert(text);
+  } else {
+    window.location.reload();
+  }
+}
+
 if (document.getElementById("gm_form") !== null && document.getElementById("gm_form") !== undefined) {
   document.getElementById("gm_form").addEventListener("submit", (event) => SubmitLstForm(event, "gm"));
   document.getElementById("cbi_form").addEventListener("submit", (event) => SubmitLstForm(event, "cbi"));

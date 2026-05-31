@@ -3,6 +3,7 @@ import json
 import os
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple
+from src.communicator import CommUser
 import syslog
 
 SECRET_FILE_PATH = "data/file"
@@ -191,7 +192,17 @@ class Secretor:
             self.__save_entry(char)
             return "", 200
         return f"Char with key {key} not found!", 401
-
+    def remove_tag_from_char(self, key: str, tag: str) -> Tuple[str, int]: 
+        char = self.secret_file[key] 
+        if char: 
+            try: 
+                char._tags.remove(tag)
+            except: 
+                return f"Char with key {key} Tag not found: {tag}", 401
+            self.__save_entry(char)
+            return "", 200
+        return f"Char with key {key} not found!", 401
+        
     def get_tags(self, key: str) -> Dict[str, Tag]: 
         return {
             k:v for k, v in self.tags.items() if v._creator == key or not v.hidden_for_all 

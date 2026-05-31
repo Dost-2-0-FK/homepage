@@ -125,6 +125,10 @@ select {
   font-size: small;
 }
 
+.tag_delete {
+  border: none;
+  
+}
 .tag_hidden {
   color: gray;
 }
@@ -143,3 +147,4 @@ select {
     width: 95%;
   }
 }
+
