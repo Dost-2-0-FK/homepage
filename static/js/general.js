@@ -88,6 +88,7 @@ function publish(key) {
         alert("Key " + key + " not found!");
       } else {
         alert("Published!");
+        window.location.reload();
       }
     });
 }
