@@ -163,6 +163,7 @@
   <input hidden type="text" name="_creator" id="_creator" value="{{user.key}}">
   <input hidden type="text" name="_published" id="_published" value="{{cur._published}}">
   <input hidden type="text" name="_review" id="_review" value="{{cur._review}}">
+  <input hidden type="text" name="_tags" id="_tags" value="{{';'.join(cur._tags)}}">
 
   {% set label="create // update" %}
   {% set type="submit" %}

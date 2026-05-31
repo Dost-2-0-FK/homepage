@@ -249,7 +249,8 @@ def secret_file_update_entry(key: str):
         notes=request.form.get("notes", "").strip(),
         _creator=request.form.get("_creator", ""),
         _published=bool(request.form.get("_published", "") == "True"),
-        _review=bool(request.form.get("_review", "") == "True")
+        _review=bool(request.form.get("_review", "") == "True"),
+        _tags=request.form.get("_tags", "").split(";")
     )
     secretor.add_secret_file_entry(entry)
     return redirect(f"/secret/{key}/edit")
