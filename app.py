@@ -228,6 +228,7 @@ def secret_file_reviews(key: str, view_file_entry: str):
 def secret_file_update_entry(key: str):
     connections = request.form.get("connections", "").split("; ")
     connections = secretor.replace_connection_names_with_keys(connections)
+    tags = request.form.get("_tags", "")
     entry = SecretFileEntry(
         key=request.form.get("key") if request.form.get("key", "") != "" else __create_id(),
         name=request.form.get("name", "---"),
@@ -250,7 +251,7 @@ def secret_file_update_entry(key: str):
         _creator=request.form.get("_creator", ""),
         _published=bool(request.form.get("_published", "") == "True"),
         _review=bool(request.form.get("_review", "") == "True"),
-        _tags=request.form.get("_tags", "").split(";")
+        _tags=tags.split(";") if tags != "" else []
     )
     secretor.add_secret_file_entry(entry)
     return redirect(f"/secret/{key}/edit")
