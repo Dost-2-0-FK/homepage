@@ -120,6 +120,14 @@ class UManager:
                     mails.append(row[1].strip().lower())
         return mails
 
+    def users(self) -> List[User]: 
+        users = []
+        for file in self.data_dir.glob("*.json"):
+            users.append(
+                User(json.loads(file.read_text(encoding="utf-8")))
+            )
+        return users
+
     def all_users(self) -> Dict[str, str]: 
         users = {}
         for file in self.data_dir.glob("*.json"):

@@ -1,0 +1,39 @@
+{% extends "layout.html" %} 
+{% block body %}
+
+<table class="table"> 
+  <thead>
+    <tr>
+      <th scope="col">E-Mail</th>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Anwesend</th>
+      <th scope="col">Fragen</th>
+      <th scope="col">Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %} 
+      <tr>
+        <td>{{u.email}}</td>
+        <td>{{u.name}}</td>
+        <td>{{u.status}}</td>
+        <td>{{u.arrival}}</td>
+        <td>{{u.pdream != None}}</td>
+        <td>{{u.positive_tags != None}}</td>
+        <td>
+          {% if u.status == "Account Löschen" or u.status == "" %}
+            <form action="/entry/{{u.key}}/delete-me/" method="post" style="margin-top:2em;">
+              {% set label="delete" %}
+              {% set type="submit" %}
+              {% set onclick="" %}
+              {% include "forms/button.html" %}
+            </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -122,6 +122,7 @@ def entry(key: str):
         users=umanger.all_users(),
         msg=request.args.get("msg"),
         has_communicate=me is not None,
+        is_orga=__is_orga(me),
         is_editor=__is_editor(me)
     )
 
@@ -137,10 +138,33 @@ def communicate(key: str):
         "communicate.html", 
         user=user, 
         has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
         is_editor=__is_editor(me),
         collectives=comm.collectives,
         me=me
     )
+
+@app.route("/users/<key>")
+def users(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    if "orga" not in me.collective: 
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    return render_template(
+        "users.html", 
+        user=user, 
+        users=umanger.users(), 
+        has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
+        is_editor=__is_editor(me),
+        collectives=comm.collectives,
+        me=me
+    )
+
 
 @app.route("/secret/<key>")
 def secret_file(key: str): 
@@ -154,6 +178,7 @@ def secret_file(key: str):
         "secret-file.html", 
         user=user, 
         has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
         me=me,
         entries=secretor.secret_files(),
         gms=secretor.gms,
@@ -181,6 +206,7 @@ def secret_file_entries(key: str):
         me=me,
         cur=cur,
         has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
         entries=secretor.users_secret_file_entries(key),
         gms=secretor.gms,
         cbis=secretor.cbis,
@@ -201,6 +227,7 @@ def secret_file_reviews_graph(key: str):
         "secret-file/graph-view.html", 
         user=user, 
         has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
         me=me,
         entries=secretor.secret_files_in_review(me.collective),
         gms=secretor.gms,
@@ -222,6 +249,7 @@ def secret_file_reviews(key: str, view_file_entry: str):
         "secret-file/review.html", 
         user=user, 
         has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
         me=me,
         entries=secretor.secret_files_in_review(me.collective),
         gms=secretor.gms,
@@ -480,6 +508,11 @@ def __create_id():
 def __is_editor(me) -> bool:
     if me is not None: 
         return "chars" in me.collective or "orga" in me.collective or "weltanschauung" in me.collective
+    return False
+
+def __is_orga(me) -> bool:
+    if me is not None: 
+        return "orga" in me.collective 
     return False
 
 def __get_str_list(str_list: str) -> List[str]: 

@@ -45,6 +45,13 @@
             secret-file
           </a>
         {% endif %}
+
+        {% if is_orga %} 
+          <a style="{{ 'color: #6b402b' if 'users' in request.endpoint else ''}}"
+            href="/users/{{user.key}}">
+            users
+          </a>
+        {% endif %}
       </div>
 
       <h1>DOST 2.0 FK</h1>
