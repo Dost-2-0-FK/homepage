@@ -26,7 +26,10 @@
         <td>{{u.tags}}</td>
         <td>
           {% if u.status == "Account Löschen" or u.status == "" %}
-            <form action="/entry/{{u.key}}/delete-me/" method="post" style="margin-top:2em;">
+            <form 
+              style="margin-top:2em;display: inline;"
+              action="/users/{{user.key}}/delete/{{u.key}}" 
+              method="post">
               {% set label="delete" %}
               {% set type="submit" %}
               {% set onclick="" %}

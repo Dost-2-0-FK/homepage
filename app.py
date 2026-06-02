@@ -466,12 +466,21 @@ def update_user_experience(key: str, field: str):
 
 
 @app.route("/entry/<key>/delete-me/", methods=["POST"])
-def delete_user(key: str): 
+def delete_me(key: str): 
     user = umanger.get_user(key)
     if user is None: 
         return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
     umanger.delete_user(user)
     return redirect(url_for("main", msg=f"{key}, {MSG_DELETED}"), code=303)
+
+@app.route("/users/<key>/delete/<user_key>", methods=["POST"])
+def delete_user(key: str, user_key: str): 
+    user = umanger.get_user(user_key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
+    email=user.email
+    umanger.delete_user(user)
+    return redirect(url_for("users", key=key, msg=f"{email}, {MSG_DELETED}"), code=303)
 
 @app.route("/communicate/<key>/send/<me>/<to>", methods=["POST"]) 
 def communicate_send(key: str, me: str, to: str): 
