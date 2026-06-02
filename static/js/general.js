@@ -117,12 +117,23 @@ function DeleteEntry(key) {
     });
 }
 
-function AddElementToInp(list, name) {
+function AddElementToInp(list, name, key=undefined) {
   let inp = document.getElementById(list);
   if (inp.value != "") {
     inp.value += "; ";
   }
   inp.value += name;
+
+  if (key !== undefined) {
+    AddElementToInp(list + "_keys", key);
+  }
+}
+
+function ClearInput(list) {
+  document.getElementById(list).value = "";
+  if (document.getElementById(list + "_keys") !== undefined) {
+    document.getElementById(list + "_keys").value = "";
+  }
 }
 
 async function AddTagToTags(char_key, tag) {

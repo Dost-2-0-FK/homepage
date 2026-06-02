@@ -1,0 +1,166 @@
+<h2>Fragebogen</h2>
+<p>Dieser Fragebogen dient der automatischen Charakterverteilung. Er besteht aus
+zwei großen Kategorie: A) TAGS, B) BEZIEHUNGEN. Jedem Charakter sind einige Tags
+zugeordnet, außerdem hat jeder Charakter Beziehungen. Du kannst unten angeben,
+mit wem du gerne oder weniger gerne zusammenspielen würdest und auf welche Tags
+du mehr oder weniger Lust hast. Zusätzlich kannst du harte No-Gos angeben, die
+auf jeden Fall eingehalten werden! 
+<i>Trag bitte bis zum 14.06. deine Präferenzen ein. Dein Charakter wird dir
+voraussichtlich am 15.06. zugeteilt.</i>
+</p>
+
+<h4>Tags</h4>
+<p>Hier kannst du in drei Kategorien aus einer Liste von "Tags" wählen: 1. Hätte ich
+Lust zu spielen ("Jaaa!"), 2. Hätte ich <i>nicht</i> so Lust zu spiele ("Eher
+nicht!") und 3. absolutes No-Go ("No Go!"). Wir werden versuchen, eure
+Präferenzen so gut wie möglich zu berücksichtigen. Garantieren können wir aber nur,
+dass du einen Charakter erhältst, bei dem <i>keiner</i> deiner No-Gos zutrifft.</p>
+
+<form action="/entry/{{user.key}}/update/user/tags" method="post">
+  <div class="input-group mb-3">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+      data-bs-toggle="dropdown" aria-expanded="false">1. Jaaa!</button>
+    <ul class="dropdown-menu">
+      {% for id, tag in tags.items() %} 
+        <li>
+          <button 
+            class="dropdown-item" 
+            type="button" 
+            title="{{tag.desc}}"
+            onclick="AddElementToInp('positive_tags', '{{tag.abbr}}');"
+          >
+            + {{tag.abbr}}
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <input type="text" class="form-control" placeholder="Positive Tags" 
+        aria-label="positive_tags" name="positive_tags" id="positive_tags"
+        value="{{'; '.join(user.positive_tags)}}">
+  </div>
+
+  <div class="input-group mb-3">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+      data-bs-toggle="dropdown" aria-expanded="false">2. Eher nicht!</button>
+    <ul class="dropdown-menu">
+      {% for id, tag in tags.items() %} 
+        <li>
+          <button 
+            class="dropdown-item" 
+            type="button" 
+            title="{{tag.desc}}"
+            onclick="AddElementToInp('negative_tags', '{{tag.abbr}}');"
+          >
+            + {{tag.abbr}}
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <input type="text" class="form-control" placeholder="Negative Tags" 
+        aria-label="negative_tags" name="negative_tags" id="negative_tags"
+        value="{{'; '.join(user.negative_tags)}}">
+  </div>
+
+  <div class="input-group mb-3">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+      data-bs-toggle="dropdown" aria-expanded="false">3. No Go!</button>
+    <ul class="dropdown-menu">
+      {% for id, tag in tags.items() %} 
+        <li>
+          <button 
+            class="dropdown-item" 
+            type="button" 
+            title="{{tag.desc}}"
+            onclick="AddElementToInp('nogo_tags', '{{tag.abbr}}');"
+          >
+            + {{tag.abbr}}
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <input type="text" class="form-control" placeholder="No-Go Tags" 
+        aria-label="nogo_tags" name="nogo_tags" id="nogo_tags"
+        value="{{'; '.join(user.nogo_tags)}}">
+  </div>
+
+  {% set label="Submit" %}
+  {% set type="submit" %}
+  {% set onclick="" %}
+  {% include "forms/button.html" %}
+</form>
+
+<h4>Beziehungen</h4>
+<p>Hier kannst du aus der Liste der anwesenden Personen
+Menschen angeben, mit denen du 1. Lust hättest, gemeinsam zu spielen ("gerne")
+und 2. auf gar keinen Fall enger zusammenspielen möchtest ("No Go!"). 
+Wir werden versuchen, eure Präferenzen so gut wie möglich zu berücksichtigen.
+Garantieren können wir aber nur, dass du in keiner (engeren) Beziehung zu deinen
+No-Go-Angaben stehst. 
+<i>Anmerkung: Offensichtlich bleiben deine Angaben geheim. Wir speichern keine
+Teilnehmer*innen Namen, sondern nur deren IDs. Wir -- Alex und Jan -- können 
+<i>theoretisch</i> die zugehörigen Namen nachschlagen, da sie nicht verschlüsselt 
+abgespeichert werden, arbeiten aber ausschließlich mit Scripts, um die Daten zu 
+verarbeiten und werden uns die Rohdaten (also auch nicht die IDs, oder welche
+Angeben wer gemacht hat) ohnehin nicht ansehen)</i></p>
+
+<form action="/entry/{{user.key}}/update/user/contacts" method="post">
+  <div class="input-group mb-3">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+      data-bs-toggle="dropdown" aria-expanded="false">1. Gerne!</button>
+    <ul class="dropdown-menu">
+      {% for key, name in users.items() %} 
+        <li>
+          <button 
+            class="dropdown-item" 
+            type="button" 
+            onclick="AddElementToInp('positive_contacts', '{{name}}', '{{key}}');"
+          >
+            + {{name}}
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <input type="text" class="form-control" placeholder="Lieblings Beziehungen" 
+        aria-label="positive_contacts" name="positive_contacts" id="positive_contacts"
+        value="{{user.positive_contacts | lookup(users) | join(';')}}">
+
+    <input hidden type="text" class="form-control" name="positive_contacts_keys" 
+        id="positive_contacts_keys" value="{{'; '.join(user.positive_contacts)}}">
+    <button class="btn" type="button" onclick="ClearInput('positive_contacts')">empty</button>
+  </div>
+
+  <div class="input-group mb-3">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+      data-bs-toggle="dropdown" aria-expanded="false">2. No Go!</button>
+    <ul class="dropdown-menu">
+      {% for key, name in users.items() %} 
+        <li>
+          <button 
+            class="dropdown-item" 
+            type="button" 
+            onclick="AddElementToInp('nogo_contacts', '{{name}}', '{{key}}');"
+          >
+            + {{name}}
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <input type="text" class="form-control" placeholder="No-Go Beziehungen" 
+        aria-label="nogo_contacts" name="nogo_contacts" id="nogo_contacts"
+        value="{{user.nogo_contacts | lookup(users) | join(';') }}">
+
+    <input hidden type="text" class="form-control" name="nogo_contacts_keys" 
+      id="nogo_contacts_keys" value="{{'; '.join(user.nogo_contacts)}}">
+    <button class="btn" type="button" onclick="ClearInput('nogo_contacts')">empty</button>
+  </div>
+
+  {% set label="Submit" %}
+  {% set type="submit" %}
+  {% set onclick="" %}
+  {% include "forms/button.html" %}
+</form>

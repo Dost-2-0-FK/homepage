@@ -35,8 +35,14 @@ class User:
         self.nnature = ujson.get("nnature", "") 
         self.pspirit = ujson.get("pspirit", "") 
         self.nspirit = ujson.get("nspirit", "") 
+        # Get user questionaire: 
+        self.positive_tags = ujson.get("positive_tags", [])
+        self.negative_tags = ujson.get("negative_tags", [])
+        self.nogo_tags = ujson.get("nogo_tags", [])
+        self.positive_contacts = ujson.get("positive_contacts", [])
+        self.nogo_contacts = ujson.get("nogo_contacts", [])
 
-    def update_field(self, field: str, value: str) -> None: 
+    def update_field(self, field: str, value: str|List[str]) -> None:
         if field == "name": 
             self.name = value 
         if field == "telefon": 
@@ -59,6 +65,18 @@ class User:
             self.pdream = value 
         if field == "ndream": 
             self.ndream = value 
+        if field == "positive_tags": 
+            self.positive_tags = value
+        if field == "negative_tags": 
+            self.negative_tags = value
+        if field == "nogo_tags": 
+            self.nogo_tags = value
+        if field == "positive_contacts": 
+            self.positive_contacts = value
+        if field == "negative_contacts": 
+            self.negative_contacts = value
+        if field == "nogo_contacts": 
+            self.nogo_contacts = value
 
 class UManager: 
     def __init__(self, seafiler: Seafile):
@@ -101,6 +119,14 @@ class UManager:
                 if "@" in row[1]:
                     mails.append(row[1].strip().lower())
         return mails
+
+    def all_users(self) -> Dict[str, str]: 
+        users = {}
+        for file in self.data_dir.glob("*.json"):
+            user = User(json.loads(file.read_text(encoding="utf-8")))
+            if "Anwesend" in user.status or "Unsicher" in user.status:
+                users[user.key] = user.name if user.name != "" else "???"
+        return users
 
     def save_user(self, user: User): 
         with open(self.__make_user_path(user.key), "w") as fp: 

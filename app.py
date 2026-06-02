@@ -5,6 +5,7 @@ import string
 from typing import List
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
+from src import user_manager
 from src.secretor import Abbr, SecretFileEntry, Secretor, Tag
 from src.communicator import Comm, CommUser
 from src.mailer import Mailer
@@ -98,6 +99,12 @@ app.jinja_env.globals.update(print_list=print_list)
 app.jinja_env.globals.update(print_connections=print_connections)
 app.jinja_env.globals.update(get_user_from_key=get_user_from_key)
 
+# Register the custom filter using a decorator
+@app.template_filter('lookup')
+def lookup_filter(keys, mapping):
+    """Takes a list of keys and a dictionary, returns a list of mapped values."""
+    return [mapping.get(key, key) for key in keys]
+
 @app.route("/")
 def main(): 
     return render_template("index.html", msg=request.args.get("msg"))
@@ -111,6 +118,8 @@ def entry(key: str):
     return render_template(
         "entry.html", 
         user=user, 
+        tags=secretor.get_ptags(),
+        users=umanger.all_users(),
         msg=request.args.get("msg"),
         has_communicate=me is not None,
         is_editor=__is_editor(me)
@@ -383,6 +392,37 @@ def update_user(key: str):
     umanger.save_user(user)
     return redirect(url_for("entry", key=key), code=303)
 
+@app.route("/entry/<key>/update/user/tags", methods=["POST"])
+def update_user_tag_prefs(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
+    user.update_field(
+        "positive_tags", __get_str_list(request.form["positive_tags"])
+    )
+    user.update_field(
+        "negative_tags", __get_str_list(request.form["negative_tags"])
+    )
+    user.update_field(
+        "nogo_tags", __get_str_list(request.form["nogo_tags"])
+    )
+    umanger.save_user(user)
+    return redirect(url_for("entry", key=key), code=303)
+
+@app.route("/entry/<key>/update/user/contacts", methods=["POST"])
+def update_user_contact_prefs(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_UNKNOWN), code=303)
+    user.update_field(
+        "positive_contacts", __get_str_list(request.form["positive_contacts_keys"])
+    )
+    user.update_field(
+        "nogo_contacts", __get_str_list(request.form["nogo_contacts_keys"])
+    )
+    umanger.save_user(user)
+    return redirect(url_for("entry", key=key), code=303)
+
 @app.route("/entry/<key>/update/<field>", methods=["POST"])
 def update_user_experience(key: str, field: str): 
     user = umanger.get_user(key)
@@ -441,6 +481,12 @@ def __is_editor(me) -> bool:
     if me is not None: 
         return "chars" in me.collective or "orga" in me.collective or "weltanschauung" in me.collective
     return False
+
+def __get_str_list(str_list: str) -> List[str]: 
+    xs = [] 
+    for x in str_list.split(";"): 
+        xs.append(x.strip())
+    return xs
 
 if __name__ == "__main__": 
     app.run(debug=True, port=PORT)

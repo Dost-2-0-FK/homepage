@@ -89,9 +89,11 @@
   {{msg}}
 {% endif %}</p>
 
-<p>Hier werden demnächst noch mehr Fragen auftauchen, insbesondere einige
-Monate vor dem Spiel der Fragebogen zur Charakterverteilung. Über alle
-Änderungen wirst du per E-Mail informiert.</p>
+{% if has_communicate %} 
+  {% include "forms/questionaire.html" %}
+  <br>
+  <br>
+{% endif %}
 
 <h2>Erfahrungen</h2> 
 <p>Wir möchten dich gerne nach ein paar Erfahrungen fragen. Lass dir Zeit beim Schreiben,
@@ -164,10 +166,6 @@ sprechen können, nie endende Realität." %}
 <br>
 <br>
 <br>
-
-<h2>Fragebogen</h2>
-<p>Wir informieren dich, sobald der Fragebogen hochgeladen ist.</p>
-
 
 <form action="/entry/{{user.key}}/delete-me/" method="post" style="margin-top:2em;">
   {% set label="delete me" %}

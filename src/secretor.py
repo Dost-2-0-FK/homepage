@@ -208,6 +208,10 @@ class Secretor:
             k:v for k, v in self.tags.items() if v._creator == key or not v.hidden_for_all 
         }
 
+    def get_ptags(self) -> Dict[str, Tag]: 
+        return {
+            k:v for k, v in self.tags.items() if not v.hidden_for_all and not v.hidden_for_players
+        }
 
     def __save_entry(self, entry: SecretFileEntry): 
         with open(f"{os.path.join(SECRET_FILE_PATH, entry.key)}.json", "w") as f: 
