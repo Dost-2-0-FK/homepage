@@ -8,8 +8,8 @@
       <th scope="col">Name</th>
       <th scope="col">Status</th>
       <th scope="col">Anwesend</th>
-      <th scope="col">Fragen</th>
-      <th scope="col">Tags</th>
+      <th scope="col">Erfahrungen</th>
+      <th scope="col">Fragebogen</th>
     </tr>
   </thead>
   <tbody>
@@ -19,8 +19,8 @@
         <td>{{u.name}}</td>
         <td>{{u.status}}</td>
         <td>{{u.arrival}}</td>
-        <td>{{u.pdream != None}}</td>
-        <td>{{u.positive_tags != None}}</td>
+        <td>{{u.fragen}}</td>
+        <td>{{u.tags}}</td>
         <td>
           {% if u.status == "Account Löschen" or u.status == "" %}
             <form action="/entry/{{u.key}}/delete-me/" method="post" style="margin-top:2em;">
@@ -35,5 +35,9 @@
     {% endfor %}
   </tbody>
 </table>
+
+Anwesend: {{num_anwesend}}/{{users|length}}<br>
+Erfahrungen: {{num_anwesend}}/{{users|length}}<br>
+Fragebogen: {{num_anwesend}}/{{users|length}}
 
 {% endblock %}

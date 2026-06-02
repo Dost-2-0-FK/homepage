@@ -35,12 +35,19 @@ class User:
         self.nnature = ujson.get("nnature", "") 
         self.pspirit = ujson.get("pspirit", "") 
         self.nspirit = ujson.get("nspirit", "") 
+        self.fragen = (self.pdream != "" and self.ndream != "" 
+            and self.pnature != "" and self.nnature != "" 
+            and self.pspirit != "" and self.nspirit != "")
+
         # Get user questionaire: 
         self.positive_tags = ujson.get("positive_tags", [])
         self.negative_tags = ujson.get("negative_tags", [])
         self.nogo_tags = ujson.get("nogo_tags", [])
         self.positive_contacts = ujson.get("positive_contacts", [])
         self.nogo_contacts = ujson.get("nogo_contacts", [])
+        self.tags = (len(self.positive_contacts) > 0 or len(self.nogo_contacts) > 0
+            or len(self.negative_tags) > 0 or len(self.positive_tags) > 0 
+            or len(self.nogo_tags) > 0)
 
     def update_field(self, field: str, value: str|List[str]) -> None:
         if field == "name": 

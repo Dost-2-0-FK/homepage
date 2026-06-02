@@ -154,10 +154,14 @@ def users(key: str):
         return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
     if "orga" not in me.collective: 
         return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    users = umanger.users()
     return render_template(
         "users.html", 
         user=user, 
-        users=umanger.users(), 
+        users=users, 
+        num_anwesend=len([u for u in users if u.status == "Anwesend"]), 
+        num_experiences=len([u for u in users if u.fragen]),
+        num_tags=len([u for u in users if u.tags]),
         has_communicate=comm.get_user(user.email.lower()) is not None,
         is_orga=__is_orga(me),
         is_editor=__is_editor(me),
