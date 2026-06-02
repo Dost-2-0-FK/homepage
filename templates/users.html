@@ -1,6 +1,8 @@
 {% extends "layout.html" %} 
 {% block body %}
 
+<i>Press F4 for wider page view.</i>
+
 <table class="table"> 
   <thead>
     <tr>
@@ -10,15 +12,16 @@
       <th scope="col">Anwesend</th>
       <th scope="col">Erfahrungen</th>
       <th scope="col">Fragebogen</th>
+      <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
     {% for u in users %} 
       <tr>
         <td>{{u.email}}</td>
-        <td>{{u.name}}</td>
-        <td>{{u.status}}</td>
-        <td>{{u.arrival}}</td>
+        <td>{{u.name if u.name != "" else "???"}}</td>
+        <td>{{u.status if u.status != "" else "---"}}</td>
+        <td>{{u.arrival if u.arrival != "" else "---"}}</td>
         <td>{{u.fragen}}</td>
         <td>{{u.tags}}</td>
         <td>
@@ -37,7 +40,7 @@
 </table>
 
 Anwesend: {{num_anwesend}}/{{users|length}}<br>
-Erfahrungen: {{num_anwesend}}/{{users|length}}<br>
-Fragebogen: {{num_anwesend}}/{{users|length}}
+Erfahrungen: {{num_experiences}}/{{users|length}}<br>
+Fragebogen: {{num_tags}}/{{users|length}}
 
 {% endblock %}
