@@ -1,52 +1,108 @@
 import json
 import sys
+from pathlib import Path
+from typing import List
 
-DEFAULT_PATH = "data/lists/tags.json"
+DEFAULT_TAGS_PATH = "data/lists/tags.json"
+DEFAULT_ENTRIES_PATH = "data/file/"
 SERVER_PREFIX = "/usr/bin/dost/homepage"
 
 
-def get_path(path_arg: str | None) -> str:
+def resolve_base_path(path_arg: str | None) -> str:
     if path_arg is None or path_arg == "local":
-        return DEFAULT_PATH
+        return Path(".")
     elif path_arg == "server":
-        return f"{SERVER_PREFIX}/{DEFAULT_PATH}"
+        return Path(SERVER_PREFIX)
     else:
-        return path_arg
+        return Path(path_arg)
 
-def remove_tag(tag: str, path: str) -> bool:
-    """
-    Remove a tag from tags.json and overwrite the file.
+def load_json(path: Path): 
+    with open(path, "r", encoding="utf-8") as f: 
+        return json.load(f)
 
-    Returns:
-        True if the tag was found and removed,
-        False if the tag did not exist.
-    """
-    with open(path, "r", encoding="utf-8") as f:
-        tags = json.load(f)
+def write_json(path: Path, data): 
+    with open(path, "w", encoding="utf-8") as f: 
+        json.dump(data, f, ensure_ascii=False, indent=4)
 
-    if tag not in tags:
+def delete_or_rename_tag(
+    tags_path: List[str], old_tag: str, new_tag: str|None
+) -> bool:
+    tags = load_json(tags_path)
+
+    if old_tag not in tags:
         return False
 
-    del tags[tag]
+    if new_tag is None: 
+        del tags[old_tag]
+    else: 
+        tag_data = tags.pop(old_tag) 
+        tag_data["abbr"] = new_tag 
+        tags[new_tag] = tag_data
 
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(tags, f, ensure_ascii=False, indent=4)
-
+    write_json(tags_path, tags)
     return True
 
+def delete_or_rename_tag_in_entries(
+    entries_path: List[str], old_tag:str, new_tag: str|None
+) -> int: 
+    changed_files = 0 
+
+    for json_path in entries_path.glob("**.json"): 
+        data = load_json(json_path)
+
+        if "_tags" not in data or not isinstance(data["_tags"], list):
+            print(f"No tags found in {data['key']}")
+            continue
+        
+        old_tags = data["_tags"] 
+
+        if old_tag not in old_tags: 
+            continue 
+
+        if new_tag is None: 
+            data["_tags"] = [tag for tag in old_tags if tag != old_tag] 
+        else: 
+            data["_tags"] = [
+                new_tag if tag == old_tag else tag 
+                for tag in old_tags
+            ]
+             # remove duplicates, preserving order
+            data["_tags"] = list(dict.fromkeys(data["_tags"]))
+        
+        write_json(json_path, data)
+        changed_files += 1
+
+    return changed_files
 
 def main():
-    if len(sys.argv) < 2 or len(sys.argv) > 3:
+    if len(sys.argv) not in (2, 3, 5):
         print(
-            f"Usage: {sys.argv[0]} <tag> [local|server|custom_path]"
+            f"Usage:\n"
+            f"  {sys.argv[0]} <tag> [local|server|custom_base_path]\n"
+            f"  {sys.argv[0]} <old_tag> [local|server|custom_base_path] rename <new_tag>"
         )
         sys.exit(1)
 
-    tag = sys.argv[1]
-    path = get_path(sys.argv[2] if len(sys.argv) == 3 else None)
+    old_tag = sys.argv[1]
+    path_arg = sys.argv[2] if len(sys.argv) >= 3 else None
+    new_tag = None
 
-    if remove_tag(tag, path):
-        print(f"Removed tag '{tag}'")
+    if len(sys.argv) == 5:
+        if sys.argv[3] != "rename":
+            print("Error: third parameter must be 'rename'")
+            sys.exit(1)
+        new_tag = sys.argv[4]
+
+    base_path = resolve_base_path(path_arg)
+    tags_path = base_path / DEFAULT_TAGS_PATH
+    entries_path = base_path / DEFAULT_ENTRIES_PATH
+
+    action = "Deleted" if new_tag is None else "Renamed"
+
+    if delete_or_rename_tag(tags_path, old_tag, new_tag):
+        print(f"{action} tag '{old_tag}'")
+        changed_entries = delete_or_rename_tag_in_entries(entries_path, old_tag, new_tag)
+        print(f"Updated entry files: '{changed_entries}'")
     else:
         print(f"Tag '{tag}' not found")
         sys.exit(1)
