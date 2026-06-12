@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
 from src import user_manager
 from src.secretor import Abbr, SecretFileEntry, Secretor, Tag
+from src.diaryer import Diaryer
 from src.communicator import Comm, CommUser
 from src.mailer import Mailer
 from src.user_manager import UManager, User
@@ -38,6 +39,7 @@ if "SEAFILE_CSV" not in os.environ:
 seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
 umanger = UManager(seafiler)
 secretor = Secretor(comm, umanger)
+diaryer = Diaryer(comm, umanger)
 
 SEAFILE_MAIL_DIR = os.getenv("SEAFILE_MAILS", "")
 
@@ -167,6 +169,30 @@ def users(key: str):
         is_editor=__is_editor(me),
         collectives=comm.collectives,
         me=me
+    )
+
+@app.route("/diary/<key>")
+def diary(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    return render_template(
+        "diary.html", 
+        user=user, 
+        has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
+        me=me,
+        diaries=dia.secret_files(),
+        gms=secretor.gms,
+        cbis=secretor.cbis,
+        tags=secretor.get_tags(key),
+        chars=secretor.get_chars_by_key(),
+        is_editor=__is_editor(me),
+        per_bloc_all=secretor.per_bloc(secretor.secret_file.values()),
+        per_bloc_published=secretor.per_bloc(secretor.secret_files()),
     )
 
 
