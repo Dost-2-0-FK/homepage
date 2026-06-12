@@ -89,7 +89,7 @@
   {{msg}}
 {% endif %}</p>
 
-{% if has_communicate %} 
+{% if user.status == "Anwesend" %} 
   {% include "forms/questionaire.html" %}
   <br>
   <br>
