@@ -1,0 +1,50 @@
+{% extends "layout.html" %} 
+{% block body %}
+
+{% if error_msg != "" %}
+  <p><span class="text-decoration-underline">{{error_msg|safe}}</span></p>
+{% else %}
+  <h2>{{diary.name}} ({{diary.entries|length}})</h2>
+
+  <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+    {% for entry in diary.entries %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-heading{{loop.index}}">
+          <button 
+            class="accordion-button {{'collapsed' if loop.index != 1 else ''}}" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#panelsStayOpen-collapse{{loop.index}}" 
+            aria-expanded="{{'true' if loop.index == 1 else 'false'}}" 
+            aria-controls="panelsStayOpen-collapse{{loop.index}}"
+          >
+            {{entry.date}}
+          </button>
+        </h2>
+        <div 
+          id="panelsStayOpen-collapse{{loop.index}}" 
+          class="accordion-collapse collapse {{'show' if loop.index == 1 else ''}} text-start" 
+          aria-labelledby="panelsStayOpen-heading{{loop.index}}"
+        >
+          <div class="accordion-body">
+            <p><span class="text-decoration-underline">{{entry.date}}:</span>
+            {{entry.entry|markup|safe}}</p>
+
+            {% for chat in entry.chats %} 
+              <h5>
+                CHAT <span style="font-size: 80%;">[{{"; ".join(chat.people)}}]</span>
+              </h5>
+              <p>
+                {% for message in chat.messages %} 
+                  {{message.name|upper}}: <i>{{message.message}}</i><br>
+                {% endfor %}
+              </p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% endblock %}

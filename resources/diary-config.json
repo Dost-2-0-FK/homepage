@@ -1,12 +1,20 @@
 {
-  {"von Wiesenburg zu Falkenstein, Ruth": [
-    "replace_hint": [
-      "[name]": "Tim"
+  "von Wiesenburg zu Falkenstein, Ruth": {
+    "2046-08-01": [
+      {
+        "cmd": "replace_hint",
+        "from": "[name]",
+        "to": "Tim"
+      }
     ]
-  ]},
-  {"Viksna, Adrian": [
-    "replace_hint": [
-      "[Kindergeschichte]": "Kindergeschichten von Heidi mit ihrem Alpöhli, Jim Knopf, Robin Hund, Peter Pan, Tim Taler. Manchmal laß seine Mutter uns aus russischen Büchern vor, die Geschichten von dem Fürst Lev Nikolayevich Myshkin gefielen mir am besten."
+  },
+  "Viksna, Adrian": {
+    "YYYY-MM-DD": [
+      {
+        "cmd": "replace_hint",
+        "from": "[Kindergeschichte]",
+        "to": "Kindergeschichten von Heidi mit ihrem Alpöhli, Jim Knopf, Robin Hund, Peter Pan, Tim Taler. Manchmal laß seine Mutter uns aus russischen Büchern vor, die Geschichten von dem Fürst Lev Nikolayevich Myshkin gefielen mir am besten."
+      }
     ]
-  ]}
+  }
 }

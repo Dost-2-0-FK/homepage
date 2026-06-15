@@ -136,6 +136,14 @@ select {
   color: gray;
 }
 
+.code {
+  font-family: Consolas,"courier new";
+  color: crimson;
+  padding: 2px;
+  font-size:80%;
+  text-align: left;
+}
+
 @media only screen and (max-width: 950px) {
   /* For mobile phones: */ 
   body {
@@ -147,4 +155,3 @@ select {
     width: 95%;
   }
 }
-
