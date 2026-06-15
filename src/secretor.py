@@ -68,6 +68,13 @@ class Secretor:
         self.comm = comm 
         self.umanager = umanager
 
+    def get_entry_key_by_name(self, name: str) -> str|None: 
+        for _, entry in self.secret_file.items():
+            print("comparing: ", name, f"{entry.sirname}, {entry.name}")
+            if f"{entry.sirname}, {entry.name}" == name: 
+                return entry.key 
+        return None
+
     def users_secret_file_entries(self, creator: str) -> List[SecretFileEntry]: 
         users_entries = []
         for _, entry in self.secret_file.items():

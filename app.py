@@ -1,12 +1,14 @@
 from email.policy import default
 import random
 import os
+import re
 import string
 from typing import List
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
 from src import user_manager
 from src.secretor import Abbr, SecretFileEntry, Secretor, Tag
+from src.diaryer import Diaryer, ParseError
 from src.communicator import Comm, CommUser
 from src.mailer import Mailer
 from src.user_manager import UManager, User
@@ -38,6 +40,7 @@ if "SEAFILE_CSV" not in os.environ:
 seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
 umanger = UManager(seafiler)
 secretor = Secretor(comm, umanger)
+diaryer = Diaryer(comm, umanger, secretor)
 
 SEAFILE_MAIL_DIR = os.getenv("SEAFILE_MAILS", "")
 
@@ -105,6 +108,26 @@ def lookup_filter(keys, mapping):
     """Takes a list of keys and a dictionary, returns a list of mapped values."""
     return [mapping.get(key, key) for key in keys]
 
+@app.template_filter('markup')
+def format_underscore_markup(text):
+    """
+    Replaces:
+    - _text_ with <i>text</i>
+    - __text__ with <span class="text-decoration-underline">text</span>
+    """
+    if not isinstance(text, str):
+        return text
+    
+    # Pattern for double underscores (non-greedy)
+    double_pattern = r'__(.*?)__'
+    text = re.sub(double_pattern, r'<span class="text-decoration-underline">\1</span>', text)
+    
+    # Pattern for single underscores (non-greedy)
+    single_pattern = r'_(.*?)_'
+    text = re.sub(single_pattern, r'<i>\1</i>', text)
+    
+    return text
+
 @app.route("/")
 def main(): 
     return render_template("index.html", msg=request.args.get("msg"))
@@ -168,6 +191,76 @@ def users(key: str):
         collectives=comm.collectives,
         me=me
     )
+
+@app.route("/diary/<key>")
+def diary(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    return render_template(
+        "diary.html", 
+        msg=request.args.get("msg"),
+        user=user, 
+        has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
+        me=me,
+        diaries=diaryer.get_diaries(key),
+        is_editor=__is_editor(me),
+    )
+
+@app.route("/diary/<key>/view")
+def view_diary(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+
+
+    name = request.args.get('name', '')
+    char_key = secretor.get_entry_key_by_name(name)
+
+    # get diary 
+    error_msg = ""
+    diary = diaryer.get_diary(char_key) 
+    if not diary: 
+        error_msg = f"No diary for Character: <i>{name}</i> found!"
+    else: 
+        # Check if creator, otherwise access is restricted
+        file = secretor.secret_file.get(diary.key)
+        if file is not None and key != file._creator: 
+            error_msg = f"You have no right to see this Character you fool!"
+
+    return render_template(
+        "view-diary.html", 
+        msg=request.args.get("msg"),
+        user=user, 
+        has_communicate=comm.get_user(user.email.lower()) is not None,
+        is_orga=__is_orga(me),
+        me=me,
+        diary=diary,
+        error_msg=error_msg,
+        is_editor=__is_editor(me),
+    )
+
+@app.route("/<key>/diary/add", methods=["POST"]) 
+def add_diary(key: str): 
+    diary = request.form.get("diary", "")
+    try:
+        name = diaryer.parse_diary(diary)
+        return redirect(url_for("view_diary", key=key, name=name), code=303)
+    except ParseError as ex: 
+        return redirect(
+            url_for("diary", key=key, msg=ex.message), code=303
+        )
+    except Exception as ex: 
+        return redirect(
+            url_for("diary", key=key, msg=repr(ex)), code=303
+        )
 
 
 @app.route("/secret/<key>")

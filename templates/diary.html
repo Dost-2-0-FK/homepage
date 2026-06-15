@@ -1,0 +1,136 @@
+{% extends "layout.html" %} 
+{% block body %}
+
+<h2>You Characters ({{diaries|length}})</h2>
+<ul class="list-unstyled">
+{% for diary in diaries %} 
+  <li><a href="/diary/{{user.key}}/view?name={{diary.name}}">{{diary.name}}</a></li>
+  {% endfor %}
+</ul>
+
+<button class="button btn" type="button" data-bs-toggle="modal"
+          data-bs-target="#diaryModal">upload diary</button>
+
+<div 
+  class="modal fade" id="diaryModal" tabindex="-1" aria-labelledby="diaryModalLabel" 
+  {% if msg == "" %} 
+    aria-hidden="true"
+  {% else %}
+    aria-hidden="false"
+  {% endif %}
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="diaryModalLabel">
+          Neues Tagebuch hinzufügen/ Tagebuch aktualisieren
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Bitte kopiere <i>das ganze Tagebuch</i> (in den meisten Editoren
+          <span class="code">STRG-a</span> um alles auszuwählen, dann <span
+          class="code">STRG+c</span> um alles zu kopieren) und füge es in das
+          unter stehenden Text-Feld ein.
+        </p>
+        <p>Ihr könnt bis zum 19.06 00:00 ein Tagebuch jederzeit neu Hochladen,
+          es wird immer das <i>gesamte</i> Tagebuch ersetzt.
+        </p>
+        <p>Es gab eine Änderung im <span class="code">CHAT</span>-Format: Da
+          auch Chats datiert sein sollten (von wann ist die Nachricht?) und am
+          gleichen Tag ein CHAT <i>und</i> TAGEBUCHEINTRAG stattgefunden haben
+          können, markiert <span class="code">[YYYY-MM-DD]</span> nun einen Tag
+          an dem ein Tagebucheintrag <i>und/oder</i> ein Chat stehen. 
+          Falls Tagebucheintrag UND Chat zum gleichen Datum stattfinden,
+          <i>sollte immer ZUERST der Tagebucheintrag und DANN der Chat
+          folgen.</i>
+          Ein Chat findet ggf. als Gruppenchat statt, wenn mehr als eine weitere
+          Person vorkommt. Ein Datum kann mehrere Chats enthalten. (Siehe
+          BEISPIEL unten).
+        </p>
+        <br>
+        <form id="diary_form" action="/{{user.key}}/diary/add" method="post"> 
+          <label for="diary" class="form-label">Tagebuch</label>
+          <div class="input-group mb-3">
+             <textarea class="form-control" style="justify-content: left;"
+               aria-label="diary" name="diary" id="diary">
+            </textarea>
+          </div>
+
+          {% set label="create" %}
+          {% set type="submit" %}
+          {% set onclick="" %}
+          {% include "forms/button.html" %}
+        </form>
+        <br>
+        <p style="color: #452101">{% if msg %} 
+          {{msg|safe}}
+        {% endif %}</p>
+        <br>
+        <p>BEISPIEL:<p>
+        <div class="code">
+          [Haffmans, Peter] <span class="text-secondary" style="font-size: 80%"><i> 
+              (Auch wenn nur Vor- oder Nachname, MUSS da Komma enthalten
+              sein!)</i></span><br><br>
+          [2045-03-12]<br>
+          Lorem ipsum dolor sit amet, consetetur sadipscing _elitr_, sed diam
+          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+          sed diam voluptua. Stet clita kasd gubergren, no sea takimata sanctus
+          est Lorem ipsum dolor sit amet. At __vero__ eos et accusam et justo duo
+          dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+          est Lorem ipsum dolor sit amet.<br>
+
+          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+          eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+          voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+          clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+          amet.<br><br>
+
+          [CHAT] <span class="text-secondary" style="font-size: 80%;"><i>
+              (Kommentar: Dieser Chat hat auch am 12. März II NnZ stattgefunden)
+              </i></span><br>
+          [Haffmans, Peter:] Lorem ipsum dolor sit amet.<br>
+          [Hauptman, Jane:] Sed diam voluptua?<br>
+          [Haffmans, Peter:] Sed diam voluptua!<br><br>
+
+          [2049-06-17]<br>
+          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+          eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+          voluptua. At vero eos et accusam et justo duo dolores et ea rebum. At
+          vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+          gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+          amet.<br><br>
+
+          [2049-07-11] <span class="text-secondary" style="font-size: 80%;"><i>
+              (Kommentar: Es können auch mehrere Chats an einem Tag stattfinden)
+            </i></span><br>
+          [CHAT] <span class="text-secondary" style="font-size: 80%;"><i>
+              (Kommentar: Haffmans und Hauptman)</i></span><br>
+          [Haffmans, Peter:] Lorem ipsum dolor sit amet.<br>
+          [Hauptman, Jane:] Sed diam voluptua?<br>
+          [Haffmans, Peter:] Sed diam voluptua!<br><br>
+
+          [CHAT] <span class="text-secondary" style="font-size: 80%;"><i>
+              (Kommentar: Haffmans, Hauptman und Hebel)</i></span><br>
+          [Haffmans, Peter:] Lorem ipsum dolor sit amet.<br>
+          [Hebel, Susie:] Sed diam nonumy eirmod tempor invidunt ut labore et
+          dolore magna aliquyam erat.<br>
+          [Hauptman, Jane:] Sed diam voluptua?<br>
+          [Haffmans, Peter:] Sed diam voluptua!<br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript at end of body -->
+{% if msg and msg != "" %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var myModal = new bootstrap.Modal(document.getElementById('diaryModal'));
+    myModal.show();
+  });
+</script>
+{% endif %}
+
+{% endblock %}
