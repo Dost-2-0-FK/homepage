@@ -1,7 +1,7 @@
 {% extends "layout.html" %} 
 {% block body %}
 
-<h2>You Characters ({{diaries|length}})</h2>
+<h2>Your Characters ({{diaries|length}})</h2>
 <ul class="list-unstyled">
 {% for diary in diaries %} 
   <li><a href="/diary/{{user.key}}/view?name={{diary.name}}">{{diary.name}}</a></li>
