@@ -50,7 +50,8 @@ def create_public_key(key: str) -> str:
     return "pub_" + reorder_key(key)
 
 def create_priv_key(key: str) -> str: 
-    return "priv_" + reorder_key(key)
+    base = reorder_key(key)
+    return base.split("-")[0]
 
 def reorder_key(key: str) -> str: 
     blocks = key.split("-")
@@ -75,9 +76,16 @@ def __calc_gen_diff(data) -> int:
 def __calc_entropie(pos_a: int, pos_b: int, neg: int) -> int:
     return min(max(-3, pos_a + pos_b - neg - random.randint(0,2)), 3)
 
-def __bloc_from_creator_key(key: str) -> str: 
+def __bloc_from_tags_or_creator(tags: List[str], key: str) -> str: 
+    if "west" in tags: 
+        return "west" 
+    if "parca" in tags: 
+        return "parca" 
+    if "ikac" in tags: 
+        return "ikac" 
     if key in key_bloc_mapping: 
         return key_bloc_mapping[key]
+    print(f"{key}: missing block tag!")
     user = umanger.get_user(key) 
     if user: 
         comm_user = comm.get_user(user.email)
@@ -106,12 +114,12 @@ def transform(data, hidden):
     ctx["attributes"] = {
         "name": ctx["name"],
         "key": key,
-        "key_pub": create_public_key(key),
-        "key_priv": create_priv_key(key),
+        "pub_key": create_public_key(key),
+        "priv": create_priv_key(key),
         "entropie": str(__calc_aitropie(data)),
         "gen_diff": str(__calc_gen_diff(data)),
         "zone": data["zone"],
-        "bloc": __bloc_from_creator_key(data["_creator"]),
+        "bloc": __bloc_from_tags_or_creator(data["_creator"]),
         "president": str(len([TAG_PRESIDENT in tag for tag in __tags(data)]) > 0),
         "secu": str(len([TAG_SECU in tag for tag in __tags(data)]) > 0),
         "amc_online": "0",
@@ -156,7 +164,7 @@ def safe_all(chars: List[Dict[str, Any]], hidden: List[str]) -> None:
 if __name__ == "__main__": 
     chars = []
     hidden = []
-    for file in PATH_TO_DOST_CHARS.glob("*.json"):
+    for gile in PATH_TO_DOST_CHARS.glob("*.json"):
         with open(file, "r") as f:
             chars.append(transform(json.load(f), hidden))
     add_contacts(chars) 
