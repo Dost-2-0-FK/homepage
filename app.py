@@ -252,7 +252,6 @@ def add_diary(key: str):
     diary = request.form.get("diary", "")
     try:
         name = diaryer.parse_diary(diary)
-        return redirect(url_for("view_diary", key=key, name=name), code=303)
     except ParseError as ex: 
         return redirect(
             url_for("diary", key=key, msg=ex.message), code=303
@@ -261,6 +260,7 @@ def add_diary(key: str):
         return redirect(
             url_for("diary", key=key, msg=repr(ex)), code=303
         )
+    return redirect(url_for("view_diary", key=key, name=name), code=303)
 
 
 @app.route("/secret/<key>")

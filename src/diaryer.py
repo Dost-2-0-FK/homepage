@@ -217,7 +217,7 @@ class Diaryer:
             if existing.key == new_diary.key:
                 self.diaries[i] = new_diary
                 return True
-        self.diaries.append(diary)
+        self.diaries.append(new_diary)
 
     def __save_diary(self, diary: Diary): 
         with open(f"{os.path.join(DIARY_PATH, diary.key)}.json", "w") as f: 
