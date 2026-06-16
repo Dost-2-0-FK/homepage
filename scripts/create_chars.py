@@ -2,6 +2,8 @@ from pathlib import Path
 import json
 import os
 import random
+import re
+import unicodedata
 from typing import Any, Dict, List
 
 from src.communicator import Comm
@@ -11,6 +13,7 @@ from src.user_manager import UManager
 TAG_HIDDEN = "hidden: "
 TAG_PRESIDENT = "Präsident"
 TAG_SECU = "Security"
+TAG_INACTIVE = "inactive"
 
 TXTAD_PATH = "/srv/txtad-data/"
 # TXTAD_PATH = "/home/fux/homepage/test/"
@@ -44,7 +47,46 @@ umanger = UManager(seafiler)
 
 key_bloc_mapping = {}
 
-
+def create_username(name, surname, max_length=30, separator='_'):
+    # Convert to lowercase
+    name = name.lower().strip()
+    surname = surname.lower().strip()
+    
+    # Remove diacritics (umlauts, accents, etc.)
+    name = unicodedata.normalize('NFKD', name).encode('ASCII', 'ignore').decode('utf-8')
+    surname = unicodedata.normalize('NFKD', surname).encode('ASCII', 'ignore').decode('utf-8')
+    
+    # Remove any remaining non-allowed characters
+    # Allowed: a-z, 0-9, underscore (_)
+    name = re.sub(r'[^a-z0-9_]', '', name)
+    surname = re.sub(r'[^a-z0-9_]', '', surname)
+    
+    # Remove leading/trailing underscores
+    name = name.strip('_')
+    surname = surname.strip('_')
+    
+    # Combine name and surname
+    if separator == '_':
+        username = f"{name}_{surname}"
+    elif separator == '-':
+        username = f"{name}-{surname}"
+    else:  # no separator
+        username = f"{name}{surname}"
+    
+    # Remove multiple consecutive separators
+    username = re.sub(r'[_\-]+', separator, username)
+    
+    # Truncate to max length
+    if len(username) > max_length:
+        username = username[:max_length]
+        # Remove trailing separator if exists
+        username = username.rstrip('_-')
+    
+    # Ensure username isn't empty
+    if not username:
+        username = "user"
+    
+    return username
 
 def create_public_key(key: str) -> str: 
     return "pub_" + reorder_key(key)
@@ -105,7 +147,7 @@ def __tags(data: Dict[str, Any]) -> List[str]:
         return data["_tags"] 
     return []
 
-def transform(data, hidden): 
+def transform(data): 
     ctx = JSON_CTX_TEMPLATE 
     key = data["key"]
     ctx["id"] = key
@@ -113,23 +155,25 @@ def transform(data, hidden):
     print("transform: ", ctx["name"])
     ctx["attributes"] = {
         "name": ctx["name"],
+        "username": create_username(data["name"], data["sirname"]),
         "key": key,
         "pub_key": create_public_key(key),
         "priv": create_priv_key(key),
         "entropie": str(__calc_aitropie(data)),
         "gen_diff": str(__calc_gen_diff(data)),
         "zone": data["zone"],
-        "bloc": __bloc_from_tags_or_creator(data["_creator"]),
-        "president": str(len([TAG_PRESIDENT in tag for tag in __tags(data)]) > 0),
-        "secu": str(len([TAG_SECU in tag for tag in __tags(data)]) > 0),
+        "bloc": __bloc_from_tags_or_creator(data["_tags"], data["_creator"]),
+        "president": str(TAG_PRESIDENT in __tags(data)),
+        "secu": str(TAG_SECU in __tags(data)),
         "amc_online": "0",
         "amc_bloc": "[]",
         "amc_private": "[]",
         "amc_zone": "[]",
+        "inactive": str(TAG_INACTIVE in __tags(data)),
     }
     for tag in __tags(data): 
         if TAG_HIDDEN in tag: 
-            hidden.append(tag[len(TAG_HIDDEN):])
+            ctx["attributes"]["inactive"] = "True"
     return ctx.copy()
 
 def add_contacts(chars: List[Dict[str, Any]]) -> None: 
@@ -140,32 +184,27 @@ def add_contacts(chars: List[Dict[str, Any]]) -> None:
             f"[{char["attributes"]["president"]}, {char["attributes"]["secu"]}]"
         )
         char["attributes"]["amc_zone"] = str(
-            [c["attributes"]["key_priv"] for c in chars 
+            [c["attributes"]["key"] for c in chars 
             if c["attributes"]["zone"] == char["attributes"]["zone"]]
         )
 
         if char["attributes"]["president"] == "True" or char["attributes"]["secu"] == "True": 
             print("add_contacts (bloc): ", char["name"])
             char["attributes"]["amc_bloc"] = str(
-                [c["attributes"]["key_priv"] for c in chars 
+                [c["attributes"]["key"] for c in chars 
                 if c["attributes"]["bloc"] == char["attributes"]["bloc"]]
             )
         
 
-def safe_all(chars: List[Dict[str, Any]], hidden: List[str]) -> None: 
-    print("CURRENT HIDDEN: ", hidden)
+def safe_all(chars: List[Dict[str, Any]]) -> None: 
     for char in chars: 
         with open(PATH_TO_TXTAD_CHARS.joinpath(f"{char['id']}.ctx"), 'w') as f:
-            if char["name"] in hidden: 
-                print(f"Skippen {char['name']} because part of hidden")
-                continue
             json.dump(char, f)
 
 if __name__ == "__main__": 
     chars = []
-    hidden = []
-    for gile in PATH_TO_DOST_CHARS.glob("*.json"):
+    for file in PATH_TO_DOST_CHARS.glob("*.json"):
         with open(file, "r") as f:
-            chars.append(transform(json.load(f), hidden))
+            chars.append(transform(json.load(f)))
     add_contacts(chars) 
-    safe_all(chars, hidden)
+    safe_all(chars)
