@@ -140,7 +140,11 @@ class UManager:
         for file in self.data_dir.glob("*.json"):
             user = User(json.loads(file.read_text(encoding="utf-8")))
             if "Anwesend" in user.status or "Unsicher" in user.status:
-                users[user.key] = user.name if user.name != "" else "???"
+                username = user.name if user.name != "" else "???"
+                email = user.email if user.email != "" else "???"
+                if "@" in email: 
+                    email = email[:email.find("@")]
+                users[user.key] = (username, email)
         return users
 
     def save_user(self, user: User): 

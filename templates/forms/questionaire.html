@@ -119,11 +119,12 @@ neu (über das Dropdown!) wieder hinzufügen.</i></p>
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
       data-bs-toggle="dropdown" aria-expanded="false">1. Gerne!</button>
     <ul class="dropdown-menu">
-      {% for key, name in users.items() %} 
+      {% for key, (name, email) in users.items() %} 
         <li>
           <button 
             class="dropdown-item" 
             type="button" 
+            title="{{email}}" 
             onclick="AddElementToInp('positive_contacts', '{{name}}', '{{key}}');"
           >
             + {{name}}
@@ -145,11 +146,12 @@ neu (über das Dropdown!) wieder hinzufügen.</i></p>
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
       data-bs-toggle="dropdown" aria-expanded="false">2. No Go!</button>
     <ul class="dropdown-menu">
-      {% for key, name in users.items() %} 
+      {% for key, (name, email) in users.items() %} 
         <li>
           <button 
             class="dropdown-item" 
             type="button" 
+            type="{{email}}" 
             onclick="AddElementToInp('nogo_contacts', '{{name}}', '{{key}}');"
           >
             + {{name}}
