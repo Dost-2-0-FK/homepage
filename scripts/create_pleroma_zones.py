@@ -1,13 +1,16 @@
 from pathlib import Path
 import json
 import os
+import random
+import re
+import string
 from typing import Any, Dict, List
 
 TXTAD_PATH = "/srv/txtad-data/"
 DOST_PATH = "/usr/bin/dost/homepage/"
 
-PATH_TO_TXTAD_CHARS = Path(TXTAD_PATH, "dost/game_files/Characters/")
-PATH_TO_USER_JSONS = "pleroma/accounts.json"
+PATH_TO_TXTAD_ZONES = Path(TXTAD_PATH, "dost/game_files/Zones/")
+PATH_TO_USER_JSONS = "pleroma/zone_accounts.json"
 
 JSON_ACCOUNT_TEMPLATE = {
     "username": "bob",
@@ -21,20 +24,17 @@ def transform(data):
     account = JSON_ACCOUNT_TEMPLATE 
     account["username"] = data["attributes"]["username"] 
     account["email"] = data["attributes"]["username"] + "@dost-2-0-fk.at"
-    account["password"] = data["attributes"]["pub_key"] 
+    account["password"] = data["attributes"]["key"] 
     account["fullname"] = data["name"]
-    account["bio"] = f"{data['name']} | {data['attributes']['zone']}"
+    account["bio"] = f"{data['attributes']['block']} | {data['name']}"
     return account.copy()
 
 if __name__ == "__main__": 
-    chars = []
-    for file in PATH_TO_TXTAD_CHARS.glob("*.ctx"):
+    zones = [] 
+    for file in PATH_TO_TXTAD_ZONES.glob("*.ctx"):
         with open(file, "r") as f:
             data = json.load(f)
-            if "attributes" not in data or "priv" not in data["attributes"]:
-                print("Skipping ", data["id"])
-                continue 
-            chars.append(transform(data))
+            zones.append(transform(data))
 
     with open(PATH_TO_USER_JSONS, 'w') as f:
-        json.dump(chars, f)
+        json.dump(zones, f)
