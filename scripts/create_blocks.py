@@ -3,21 +3,34 @@ import json
 import os
 import random
 import re
-import unicodedata
+import string
 from typing import Any, Dict, List
 
 TXTAD_PATH = "/srv/txtad-data/"
+# TXTAD_PATH = "/home/fux/homepage/test/"
 DOST_PATH = "/usr/bin/dost/homepage/"
 
-PATH_TO_TXTAD_CHARS = Path(TXTAD_PATH, "dost/game_files/Characters/")
+PATH_TO_TXTAD_ZONES = Path(TXTAD_PATH, "dost/game_files/Zones/")
 PATH_TO_DOST_CHARS = Path(DOST_PATH, "data/file/")
 
-PATH_TO_FOLLOWER_JSONS = "pleroma/followers.json"
-
-def __tags(data: Dict[str, Any]) -> List[str]: 
-    if "_tags" in data: 
-        return data["_tags"] 
-    return []
+JSON_CTX_TEMPLATE = {
+    "attributes": {
+    },
+    "description": {
+        "logic": "",
+        "one_time_events": "",
+        "permanent_events": "",
+        "shared": False,
+        "txt": "."
+    },
+    "id": "",
+    "listeners": [],
+    "name": "",
+    "permeable": True,
+    "priority": 0,
+    "re_entrycondition": "",
+    "shared": True
+}
 
 def create_zone(zone_input):
     """
@@ -90,62 +103,50 @@ def create_zone(zone_input):
         'valid': True
     }
 
+def create_key(): 
+    def id_part(n): 
+        return ''.join(
+            random.choices(string.ascii_letters + string.digits, k=n)
+        )
+    return '-'.join([id_part(4) for _ in range(4)])
 
-def create_followers(char, ctx): 
-    followers = [] 
-    if ctx["attributes"]["block"] == "NEUTRAL": 
-        followers.append("IKAC")
-        followers.append("FSB")
-        if ctx["attributes"]["username"] not in ["kim_sokolow", "anja_markova", "mara_kessler", "mika_sorin"]:
-            followers.append("metabolic_infrastructure")
 
-    if ctx["attributes"]["block"] == "PARCA": 
-        followers.append("free_gazette")
-        followers.append("morgenlinie")
-        followers.append("erscheinungsbilder_ost")
-        followers.append("parca")
-        followers.append("zone00e")
-
-    if ctx["attributes"]["block"] == "WEST": 
-        followers.append("transatlantic_genetic_meritocratic_society_tgms")
-        followers.append("stiftung_wissenschaft_politik_swp")
-        followers.append("ODeM")
-
-    if ctx["attributes"]["block"] == "PARCA" and ctx["attributes"]["zone"].startswith("1.A."): 
-        followers.append("secondarydamage")
-
-    if "Parca:Dogmatiker" in __tags(char): 
-        followers.append("huaxia")
-    if "Parca:Pragmatiker" in __tags(char): 
-        followers.append("synergie")
-
-    if "West:Fundamentalisten" in __tags(char): 
-        followers.append("soldatendesherren")
-    if "West:Gemäßigte" in __tags(char): 
-        followers.append("marienotriemere")
-    if "West:Atheisten" in __tags(char): 
-        followers.append("theCOLDroom")
-    if "West:Paradisten" in __tags(char): 
-        followers.append("aiinparadise")
-
-    zone_infos = create_zone(ctx["attributes"]["zone"])
-    if zone_infos["valid"]: 
-        followers.append(zone_infos["username"])
-
-    return {
-        "username": ctx["attributes"]["username"],
-        "follows": followers 
+def transform_to_ctx(zone_id: str): 
+    ctx = JSON_CTX_TEMPLATE 
+    key = create_key()
+    zone = create_zone(zone_id)
+    if not zone["valid"]: 
+        print("Skipped zone: ", zone_id)
+        return None
+    ctx["id"] = key
+    ctx["name"] = zone["name"]
+    ctx["attributes"] = {
+        "key": key,
+        "name": zone["name"],
+        "username": zone["username"],
+        "block": zone["block"],
+        "zone": zone["zone"]
     }
+    return ctx.copy()
+
+def safe_all(zones: List[Dict[str, Any]]) -> None: 
+    for zone in zones: 
+        with open(PATH_TO_TXTAD_ZONES.joinpath(f"{zone['id']}.ctx"), 'w') as f:
+            json.dump(zone, f)
+
 
 if __name__ == "__main__": 
-    chars = []
+    zones = [] 
     for file in PATH_TO_DOST_CHARS.glob("*.json"):
-        char = None 
         with open(file, "r") as f:
-            char = json.load(f)
-        with open(PATH_TO_TXTAD_CHARS.joinpath(f"{char['key']}.ctx"), 'r') as f:
-            ctx = json.load(f)
-        chars.append(create_followers(char, ctx))
-    
-    with open(PATH_TO_FOLLOWER_JSONS, 'w') as f:
-        json.dump(chars, f)
+            data = json.load(f)
+            if data["zone"] not in zones: 
+                zones.append(data["zone"])
+    contexts = []
+    for zone in zones: 
+        print(zone)
+        ctx = transform_to_ctx(zone)
+        if ctx: 
+            print(ctx["name"], ctx["attributes"]["username"])
+            contexts.append(ctx.copy()) 
+    safe_all(contexts)

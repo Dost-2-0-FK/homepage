@@ -71,7 +71,7 @@ class Secretor:
     def get_entry_key_by_name(self, name: str) -> str|None: 
         for _, entry in self.secret_file.items():
             print("comparing: ", name, f"{entry.sirname}, {entry.name}")
-            if f"{entry.sirname}, {entry.name}" == name: 
+            if f"{entry.sirname.strip()}, {entry.name.strip()}" == name.strip(): 
                 return entry.key 
         return None
 

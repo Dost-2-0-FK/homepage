@@ -1,0 +1,19 @@
+[
+    {
+        "username": "IKAC",
+        "text": "Unser Zusatzprotokoll zum Grundsatzpapier, II NnZ",
+        "mentions": {
+            "attributes": {
+                "block": "NEUTRAL"
+            },
+            "tags": []
+        },
+        "media": [
+            {
+                "path": "/home/fux/homepage/resources/media/Zusatzprotokoll.pdf",
+                "description": "IKAC Zusatzprotokoll, II NnZ"
+            }
+        ],
+        "posted": true
+    }
+]
