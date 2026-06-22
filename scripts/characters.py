@@ -91,7 +91,21 @@ if __name__ == "__main__":
         with open(file, "r") as f:
             char = transform(json.load(f))
             if "Chernobylmann" in char["name"]: 
+                print("Skipped Chernobylmann")
                 continue
+            if "Nierendorf" in char["name"]: 
+                print("Skipped Nierendorf")
+                continue
+            if "Vogelvrai" in char["name"]: 
+                print("Skipped Vogelvrai")
+                continue
+            if "Sommerheim" in char["name"]: 
+                print("Skipped Sommerheim (hidden: Sokolow)")
+                continue
+            if "Sokolow" in char["name"]: 
+                print("Skipped Sokolow (connected: Sommerheim)")
+                continue
+
             if "connected" in char: 
                 hidden[char["connected"]] = char
             else: 
