@@ -1,210 +1,224 @@
 from pathlib import Path
-import json
-import os
-import random
+from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
 import re
 import unicodedata
-from typing import Any, Dict, List
 
-from src.communicator import Comm
-from src.seafiler import Seafile
-from src.user_manager import UManager
+INPUT_HTML = "input.html"
+OUTPUT_DIR = Path("table_pdfs")
+OUTPUT_DIR.mkdir(exist_ok=True)
 
-TAG_HIDDEN = "hidden: "
-TAG_PRESIDENT = "Präsident"
-TAG_SECU = "Security"
-TAG_INACTIVE = "inactive"
 
-TXTAD_PATH = "/srv/txtad-data/"
-# TXTAD_PATH = "/home/fux/homepage/test/"
-DOST_PATH = "/usr/bin/dost/homepage/"
-
-PATH_TO_TXTAD_CHARS = Path(TXTAD_PATH, "dost/game_files/Characters/")
-PATH_TO_DOST_CHARS = Path(DOST_PATH, "data/file/")
-
-JSON_CTX_TEMPLATE = {
-    "attributes": {
-    },
-    "description": {
-        "logic": "",
-        "one_time_events": "",
-        "permanent_events": "",
-        "shared": False,
-        "txt": "."
-    },
-    "id": "",
-    "listeners": [],
-    "name": "",
-    "permeable": True,
-    "priority": 0,
-    "re_entrycondition": "",
-    "shared": True
-}
-
-comm = Comm()
-seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
-umanger = UManager(seafiler)
-
-key_bloc_mapping = {}
-
-def create_username(name, surname, max_length=30, separator='_'):
-    # Convert to lowercase
+def create_username(name, surname, max_length=30, separator="_"):
     name = name.lower().strip()
     surname = surname.lower().strip()
-    
-    # Remove diacritics (umlauts, accents, etc.)
-    name = unicodedata.normalize('NFKD', name).encode('ASCII', 'ignore').decode('utf-8')
-    surname = unicodedata.normalize('NFKD', surname).encode('ASCII', 'ignore').decode('utf-8')
-    
-    # Remove any remaining non-allowed characters
-    # Allowed: a-z, 0-9, underscore (_)
-    name = re.sub(r'[^a-z0-9_]', '', name)
-    surname = re.sub(r'[^a-z0-9_]', '', surname)
-    
-    # Remove leading/trailing underscores
-    name = name.strip('_')
-    surname = surname.strip('_')
-    
-    # Combine name and surname
-    if separator == '_':
+
+    name = unicodedata.normalize("NFKD", name).encode("ASCII", "ignore").decode("utf-8")
+    surname = unicodedata.normalize("NFKD", surname).encode("ASCII", "ignore").decode("utf-8")
+
+    name = re.sub(r"[^a-z0-9_]", "", name)
+    surname = re.sub(r"[^a-z0-9_]", "", surname)
+
+    name = name.strip("_")
+    surname = surname.strip("_")
+
+    if separator == "_":
         username = f"{name}_{surname}"
-    elif separator == '-':
+    elif separator == "-":
         username = f"{name}-{surname}"
-    else:  # no separator
+    else:
         username = f"{name}{surname}"
-    
-    # Remove multiple consecutive separators
-    username = re.sub(r'[_\-]+', separator, username)
-    
-    # Truncate to max length
+
+    username = re.sub(r"[_\-]+", separator, username)
+
     if len(username) > max_length:
         username = username[:max_length]
-        # Remove trailing separator if exists
-        username = username.rstrip('_-')
-    
-    # Ensure username isn't empty
+        username = username.rstrip("_-")
+
     if not username:
         username = "user"
-    
+
     return username
 
-def create_public_key(key: str) -> str: 
-    return "pub_" + reorder_key(key)
 
-def create_priv_key(key: str) -> str: 
-    base = reorder_key(key)
-    return base.split("-")[0]
+def get_cell_text_without_hint(cell):
+    clone = BeautifulSoup(str(cell), "html.parser")
 
-def reorder_key(key: str) -> str: 
-    blocks = key.split("-")
-    shuffled_blocks = [
-        ''.join(random.sample(block, len(block)))
-        for block in blocks
-    ]
-    return "-".join(shuffled_blocks)
+    for hint in clone.select(".table-hint"):
+        hint.decompose()
 
-def __calc_aitropie(data) -> int: 
-    violence = data["violence_potential"] 
-    illnesses = len(data["illnesses"])
-    cbis = len(data["computer_brain_interfaces"])
-    return __calc_entropie(violence, illnesses, cbis)
+    return clone.get_text("\n", strip=True)
 
-def __calc_gen_diff(data) -> int: 
-    wealth = -1 * (data["violence_potential"]-5)
-    illnesses = len(data["illnesses"])
-    gms = len(data["genetic_augmentations"])
-    return __calc_entropie(wealth, illnesses, gms)
 
-def __calc_entropie(pos_a: int, pos_b: int, neg: int) -> int:
-    return min(max(-3, pos_a + pos_b - neg - random.randint(0,2)), 3)
+def markdownish_paragraphs(text):
+    """
+    Single line break: treated like a space.
+    Empty line: treated like a paragraph break.
+    """
+    text = text.strip()
 
-def __bloc_from_tags_or_creator(tags: List[str], key: str) -> str: 
-    if "west" in tags: 
-        return "west" 
-    if "parca" in tags: 
-        return "parca" 
-    if "ikac" in tags: 
-        return "ikac" 
-    if key in key_bloc_mapping: 
-        return key_bloc_mapping[key]
-    print(f"{key}: missing block tag!")
-    user = umanger.get_user(key) 
-    if user: 
-        comm_user = comm.get_user(user.email)
-        if comm_user: 
-            collective = comm_user.collective 
-            block = collective.split("-")[1] if "-" in collective else collective
-            block = "schweiz" if block == "orga" else block
-            key_bloc_mapping[key] = block
-            return block
-        else: 
-            exit(f"GET BLOC: no comm-user found for key: {key}, user: {user.email}")
-    else: 
-        exit(f"GET BLOC: no user found for key: {key}")
+    paragraphs = re.split(r"\n\s*\n+", text)
 
-def __tags(data: Dict[str, Any]) -> List[str]: 
-    if "_tags" in data: 
-        return data["_tags"] 
-    return []
+    cleaned = []
+    for paragraph in paragraphs:
+        paragraph = re.sub(r"[ \t]*\n[ \t]*", " ", paragraph)
+        paragraph = re.sub(r" {2,}", " ", paragraph)
+        paragraph = paragraph.strip()
 
-def transform(data): 
-    ctx = JSON_CTX_TEMPLATE 
-    key = data["key"]
-    ctx["id"] = key
-    ctx["name"] = data["sirname"] + ", " + data["name"]
-    print("transform: ", ctx["name"])
-    ctx["attributes"] = {
-        "name": ctx["name"],
-        "username": create_username(data["name"], data["sirname"]),
-        "key": key,
-        "pub_key": create_public_key(key),
-        "priv": create_priv_key(key),
-        "entropie": str(__calc_aitropie(data)),
-        "gen_diff": str(__calc_gen_diff(data)),
-        "zone": data["zone"],
-        "bloc": __bloc_from_tags_or_creator(data["_tags"], data["_creator"]),
-        "president": str(TAG_PRESIDENT in __tags(data)),
-        "secu": str(TAG_SECU in __tags(data)),
-        "amc_online": "0",
-        "amc_bloc": "[]",
-        "amc_private": "[]",
-        "amc_zone": "[]",
-        "inactive": str(TAG_INACTIVE in __tags(data)),
-    }
-    for tag in __tags(data): 
-        if TAG_HIDDEN in tag: 
-            ctx["attributes"]["inactive"] = "True"
-    return ctx.copy()
+        if paragraph:
+            cleaned.append(paragraph)
 
-def add_contacts(chars: List[Dict[str, Any]]) -> None: 
-    for char in chars: 
-        print(
-            "add_contacts (zone): ", 
-            char["name"], 
-            f"[{char["attributes"]["president"]}, {char["attributes"]["secu"]}]"
+    return cleaned
+
+
+def normalize_large_text_cells(soup, table):
+    """
+    Handles cells like Hintergrund / Notizen.
+
+    Removes inline white-space: pre-line behavior and converts the text into
+    paragraph blocks, so single line breaks do not create hard visual breaks.
+    """
+    for cell in table.find_all("td"):
+        style = cell.get("style", "")
+
+        if "white-space" not in style:
+            continue
+
+        hint = cell.select_one(".table-hint")
+        hint_text = hint.get_text(" ", strip=True) if hint else None
+
+        text = get_cell_text_without_hint(cell)
+        paragraphs = markdownish_paragraphs(text)
+
+        cell.clear()
+
+        for paragraph in paragraphs:
+            p = soup.new_tag("p")
+            p.string = paragraph
+            cell.append(p)
+
+        if hint_text:
+            hint_span = soup.new_tag("span")
+            hint_span["class"] = "table-hint"
+            hint_span.string = hint_text
+            cell.append(hint_span)
+
+        # Remove inline white-space: pre-line
+        del cell["style"]
+
+
+def filename_from_table(table, index):
+    first_row = table.find("tr")
+    if not first_row:
+        return f"table_{index:03d}"
+
+    cells = first_row.find_all("td")
+
+    if len(cells) < 2:
+        return f"table_{index:03d}"
+
+    surname = get_cell_text_without_hint(cells[0])
+    name = get_cell_text_without_hint(cells[1])
+
+    return create_username(name=name, surname=surname)
+
+
+html = Path(INPUT_HTML).read_text(encoding="utf-8")
+soup = BeautifulSoup(html, "html.parser")
+
+tables = soup.find_all("table")
+
+used_filenames = {}
+
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page()
+
+    for i, original_table in enumerate(tables, start=1):
+        # Work on a copy, so the original parsed document remains untouched
+        table_soup = BeautifulSoup(str(original_table), "html.parser")
+        table = table_soup.find("table")
+
+        normalize_large_text_cells(table_soup, table)
+
+        base_filename = filename_from_table(table, i)
+
+        # Avoid overwriting files if two people produce the same username
+        count = used_filenames.get(base_filename, 0) + 1
+        used_filenames[base_filename] = count
+
+        if count == 1:
+            output_filename = f"{base_filename}.pdf"
+        else:
+            output_filename = f"{base_filename}_{count}.pdf"
+
+        table_html = f"""
+        <!doctype html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body {{
+              font-family: Arial, sans-serif;
+              font-size: 11px;
+              margin: 20px;
+            }}
+
+            table {{
+              width: 100%;
+              border-collapse: collapse;
+              text-align: left;
+            }}
+
+            td, th {{
+              border: 1px solid #666;
+              padding: 6px;
+              vertical-align: top;
+            }}
+
+            tr {{
+              break-inside: avoid;
+              page-break-inside: avoid;
+            }}
+
+            p {{
+              margin: 0 0 0.8em 0;
+            }}
+
+            p:last-child {{
+              margin-bottom: 0;
+            }}
+
+            .table-hint {{
+              display: block;
+              margin-top: 4px;
+              font-size: 8px;
+              color: #666;
+              text-transform: uppercase;
+            }}
+
+            td[style*="white-space"] {{
+              white-space: normal !important;
+            }}
+          </style>
+        </head>
+        <body>
+          {str(table)}
+        </body>
+        </html>
+        """
+
+        page.set_content(table_html, wait_until="networkidle")
+        page.pdf(
+            path=str(OUTPUT_DIR / output_filename),
+            format="A4",
+            print_background=True,
+            margin={
+                "top": "15mm",
+                "right": "12mm",
+                "bottom": "15mm",
+                "left": "12mm",
+            },
         )
-        char["attributes"]["amc_zone"] = str(
-            [c["attributes"]["key"] for c in chars 
-            if c["attributes"]["zone"] == char["attributes"]["zone"]]
-        )
 
-        if char["attributes"]["president"] == "True" or char["attributes"]["secu"] == "True": 
-            print("add_contacts (bloc): ", char["name"])
-            char["attributes"]["amc_bloc"] = str(
-                [c["attributes"]["key"] for c in chars 
-                if c["attributes"]["bloc"] == char["attributes"]["bloc"]]
-            )
-        
-
-def safe_all(chars: List[Dict[str, Any]]) -> None: 
-    for char in chars: 
-        with open(PATH_TO_TXTAD_CHARS.joinpath(f"{char['id']}.ctx"), 'w') as f:
-            json.dump(char, f)
-
-if __name__ == "__main__": 
-    chars = []
-    for file in PATH_TO_DOST_CHARS.glob("*.json"):
-        with open(file, "r") as f:
-            chars.append(transform(json.load(f)))
-    add_contacts(chars) 
-    safe_all(chars)
+    browser.close()
