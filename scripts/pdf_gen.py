@@ -1,5 +1,6 @@
 from pathlib import Path
 import subprocess
+import shutil
 import tempfile
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
@@ -34,6 +35,11 @@ def render_pdf(template_name: str, context: dict, output_pdf: Path) -> Path:
 
     with tempfile.TemporaryDirectory() as tmp:
         tmpdir = Path(tmp)
+
+        # Copy local LaTeX dependencies next to document.tex
+        for path in TEMPLATE_DIR.glob("*.sty"):
+            shutil.copy2(path, tmpdir / path.name)
+
         tex_file = tmpdir / "document.tex"
         tex_file.write_text(tex_source, encoding="utf-8")
 
