@@ -41,6 +41,7 @@ class Mailer:
         text_body: str, 
         html_body: str | None = None, 
         from_addr: str | None = None,
+        attachments: List[str | Path] | None = None,
         timeout: float = 20.0,
     ):
         if not to_addr:
@@ -63,6 +64,9 @@ class Mailer:
             msg.add_alternative(html_body, subtype="html")
         else:
             msg.set_content(text_body or "")
+
+        for attachment in attachments or []: 
+            self._attach_file(msg, attachment)
 
         # Envelope MAIL FROM matches header From (good for SPF/DMARC)
         env_from = self.from_addr
@@ -88,3 +92,28 @@ class Mailer:
         with smtplib.SMTP("localhost", 25, timeout=timeout) as s:
             if self.debug: s.set_debuglevel(1)
             s.send_message(msg, from_addr=env_from, to_addrs=[to_addr])
+
+    @staticmethod
+    def _attach_file(msg: EmailMessage, file_path: str | Path):
+        path = Path(file_path)
+
+        if not path.exists():
+            raise FileNotFoundError(f"Attachment does not exist: {path}")
+
+        if not path.is_file():
+            raise ValueError(f"Attachment is not a file: {path}")
+
+        content_type, encoding = mimetypes.guess_type(path.name)
+
+        if content_type is None or encoding is not None:
+            content_type = "application/octet-stream"
+
+        maintype, subtype = content_type.split("/", 1)
+
+        with path.open("rb") as f:
+            msg.add_attachment(
+                f.read(),
+                maintype=maintype,
+                subtype=subtype,
+                filename=path.name,
+            )

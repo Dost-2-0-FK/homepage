@@ -56,9 +56,13 @@
 
 % INTRO
 \section{\textsc{INTRO}}
-\input{character_verteilung/west_setting.tex}
-% \input{character_verteilung/parca_setting.tex}
-% \input{character_verteilung/ikac_setting.tex}
+((% if char["block"] == "WEST" %))
+  \input{west_setting.tex}
+((% elif char["block"] == "PARCA" %))
+  \input{parca_setting.tex}
+((% elif char["block"] == "NEUTRAL" %))
+  \input{ikac_setting.tex}
+((% endif %))
 
 % INFO
 \section{Dein Charakter}
@@ -70,10 +74,17 @@ dürfen. Ganz viel Spaß beim Einarbeiten, wir sind gespannt auf das Spiel!
 
 % IDEOLOGIE
 \section*{Fraktion und Weltanschauung}
-\input{character_verteilung/west_weltanschauung.tex}
-% \input{character_verteilung/parca_weltanschauung.tex}
-% \input{character_verteilung/ikac_weltanschauung.tex}
-% \input{character_verteilung/lilie_weltanschauung.tex}
+((% if char["block"] == "WEST" %))
+  \input{west_weltanschauung.tex}
+((% elif char["block"] == "PARCA" %))
+  \input{parca_weltanschauung.tex}
+((% elif char["block"] == "NEUTRAL" %))
+  ((% if char["fraction"].primary == "lilie" %))
+    \input{lilie_weltanschauung.tex}
+  ((% else %))
+    \input{ikac_weltanschauung.tex}
+  ((% endif %))
+((% endif %))
 
 % TIMELINE 
 \section{Timeline}

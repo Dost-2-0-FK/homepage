@@ -1,5 +1,7 @@
 import json
 import os
+import os
+from scripts.pdf_gen import render_pdf
 from dataclasses import dataclass
 from typing import Any, Dict, List
 from pathlib import Path
@@ -7,6 +9,7 @@ from pathlib import Path
 from src.communicator import Comm
 from src.seafiler import Seafile
 from src.user_manager import UManager
+from src.mailer import Mailer
 
 TXTAD_PATH = "/srv/txtad-data/"
 DOST_PATH = "/usr/bin/dost/homepage/"
@@ -20,6 +23,7 @@ PATH_TO_DISTRIBUTION = Path("resources/character_zuteilung.json")
 comm = Comm()
 seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
 umanger = UManager(seafiler)
+mailer = Mailer()
 
 
 @dataclass 
@@ -36,7 +40,8 @@ def get_player(key: str) -> Dict[str, str]:
 
     return {
         "key": key, 
-        "email": player["email"] 
+        "email": player["email"],
+        "name": player["name"] 
     }
 
 
@@ -114,14 +119,59 @@ def get_char_and_creator(key: str) -> Tuple[Dict[str, str], Dict[str, str]]:
 
     return (char, creator)
 
+def send_pdf(
+    to_addr: str,
+    pdf_path: str | Path,
+    subject: str = "Your PDF",
+    text_body: str = "Please find the PDF attached.",
+    html_body: str | None = None,
+):
+    pdf_path = Path(pdf_path)
+
+    if pdf_path.suffix.lower() != ".pdf":
+        raise ValueError(f"Expected a .pdf file, got: {pdf_path}")
+
+    mailer.send(
+        to_addr=to_addr,
+        subject=subject,
+        text_body=text_body,
+        html_body=html_body,
+        attachments=[pdf_path],
+    )
 
 def do_distribution(distribution: List[Dict[str, str]]) -> None: 
     for dist in distribution: 
-        player = get_player(dist["player"]) 
-        char, creator = get_char_and_creator(dist["character"])
+        player_key = dist["player"]
+        char_key = dist["character"]
+        player = get_player(player_key) 
+        char, creator = get_char_and_creator(char_key)
         print("PLAYER:  ", player)
         print("CHAR:    ", char)
         print("CREATOR: ", creator)
+        data = {
+            "player": player, 
+            "char": char, 
+            "creator": creator
+        }
+        pdf_path = render_pdf(
+            "dost.tex", data, Path(f"/tmp/{player_key}.pdf")
+        )
+
+        send_pdf(
+            to_addr=player["email"], 
+            pdf_path=pdf_path, 
+            subject="[DOST 2.0 FK] Dein Charakter!",
+            text_body=(
+                f"Liebe*r {player['name']}, \n"
+                "\n"
+                "mit großer Freude senden wir dir mit einiger Verzögerung deinen Charakter! \n"
+                "Weitere Spielmaterialien werden dich IT über Pleroma erreichen.\n"
+                "Die finalen Spielregeln senden wir dir in den nächsten Wochen per Mail zu.\n"
+                "\n\n"
+                "Liebe Grüße\n"
+                "Alex, fux, Hauptmann\n"
+            )
+        )
 
 if __name__ == "__main__": 
     chars = []

@@ -3,9 +3,15 @@ insbesondere die Artikel von
 @free\_gazette, @morgenlinie und @secondarydamage sowie die offiziellen Kanäle
 deiner Zone und deines Blocks (@parca) relevant.\absatz
 %
-\input{character_verteilung/parca_pragmatiker.tex}\absatz
-\input{character_verteilung/parca_pragmatiker_secret.tex}\absatz
-\input{character_verteilung/parca_dogmatiker.tex}\absatz
+((% if char['fraction'].primary == "pragmatiker" %))
+  ((% if char['fraction'].secondary == "ultras" %))
+    \input{parca_pragmatiker_secret.tex}\absatz
+  ((% else %))
+    \input{parca_pragmatiker.tex}\absatz
+  ((% endif %))
+((% if char['fraction'].primary == "dogmatiker" %))
+  \input{parca_dogmatiker.tex}\absatz
+((% endif %))
 %
 Unabhängig von der Fraktion deines Charakters orientierst du dich an den
 modischen Vorschlägen der @erscheinungsbilder\_ost. 
