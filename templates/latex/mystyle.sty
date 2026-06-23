@@ -1,0 +1,82 @@
+\ProvidesPackage{mystyle}[2020/05/21 FUX's custom LaTeX style]
+
+%Custom preamble
+\usepackage{secdot} % Dots in Section Numbers
+\usepackage[utf8]{inputenc}
+\usepackage{courier}
+% \renewcommand*\familydefault{\ttdefault} %% Only if the base font of the document is to be typewriter style
+\usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc}
+\usepackage[ukrainian, ngerman]{babel}
+\usepackage{graphicx}
+\usepackage{microtype}
+\graphicspath{ {../images/} }
+
+\usepackage[usenames,dvipsnames]{color}
+
+\usepackage{soul}
+\usepackage{comment}
+\usepackage[x11names, table]{xcolor}
+
+\usepackage{fancyhdr}
+\usepackage[textwidth=90, backgroundcolor=blue]{todonotes}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{}{0pt}{\Huge\bfseries}
+
+\newcommand{\squote}[1]{\begin{itemize}\item[]{\small #1}\end{itemize}}
+\newcommand{\secquote}[2]{
+	\hfill\begin{minipage}{0.5\linewidth}
+		\begin{flushright}
+      { \small \footnotesize \emph{>>#1<<} \\
+      -- #2 }
+			\bigskip
+		\end{flushright}
+	\end{minipage}\\
+}
+\newcommand{\secquotecite}[3]{
+  \secquote{#1}{\footnotesize \cite[][#3]{#2}}
+}
+
+
+\newcommand{\qdots}{$[\dots]$}
+\newcommand{\qcert}[1]{$[$#1$]$}
+
+
+\newcommand{\qq}[1]{\glqq #1\grqq}
+\newcommand{\q}[1]{\glq #1\glq}
+
+\usepackage[autostyle]{csquotes}
+\usepackage[
+    backend=biber,
+    style=authortitle-ibid,
+    sortlocale=de_DE,
+    natbib=true,
+    url=false,
+    doi=true,
+    eprint=false
+    ]{biblatex}
+\addbibresource{literatur.bib}
+
+\usepackage{csquotes}
+\usepackage{acronym}
+\usepackage{nameref}
+\PassOptionsToPackage{hyphens}{url}\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{setspace}
+\usepackage[hang]{footmisc}
+\setlength{\footnotemargin}{0.8em}
+
+\newcommand{\note}[1]{{\setstretch{0.8}\marginnote{{\footnotesize \color{gray} #1}}}}
+\renewcommand{\baselinestretch}{1.3}
+
+\usepackage{tikz}
+\def\ch{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+\newcommand{\cx}{%
+\tikz[scale=0.23] {
+    \draw[line width=0.7,line cap=round] (0,0) to [bend left=6] (1,1);
+    \draw[line width=0.7,line cap=round] (0.2,0.95) to [bend right=3] (0.8,0.05);
+}}
+
+\endinput
