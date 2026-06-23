@@ -69,20 +69,20 @@
 Endlich ist es so weit! Wir freuen uns, dir endlich deinen Charakter zuteilen zu
 dürfen. Ganz viel Spaß beim Einarbeiten, wir sind gespannt auf das Spiel!
 \begin{center}
-  \input{character_verteilung/intro.tex}
+  ((% include "intro.tex" %))
 \end{center}
 
 % IDEOLOGIE
 \section*{Fraktion und Weltanschauung}
 ((% if char["block"] == "WEST" %))
-  \input{west_weltanschauung.tex}
+  ((% include "west_weltanschauung.tex" %))
 ((% elif char["block"] == "PARCA" %))
-  \input{parca_weltanschauung.tex}
+  ((% include "parca_weltanschauung.tex" %))
 ((% elif char["block"] == "NEUTRAL" %))
   ((% if char["fraction"].primary == "lilie" %))
-    \input{lilie_weltanschauung.tex}
+    ((% include "lilie_weltanschauung.tex" %))
   ((% else %))
-    \input{ikac_weltanschauung.tex}
+    ((% include "ikac_weltanschauung.tex" %))
   ((% endif %))
 ((% endif %))
 

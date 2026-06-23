@@ -1,8 +1,10 @@
 import os
 import smtplib
 import ssl
+import mimetypes
 from email.message import EmailMessage
 from email.utils import make_msgid
+from pathlib import Path
 
 try:
     from dotenv import load_dotenv

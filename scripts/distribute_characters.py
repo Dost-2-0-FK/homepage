@@ -25,7 +25,6 @@ seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
 umanger = UManager(seafiler)
 mailer = Mailer()
 
-
 @dataclass 
 class Fraction: 
     primary: str 
@@ -119,26 +118,6 @@ def get_char_and_creator(key: str) -> Tuple[Dict[str, str], Dict[str, str]]:
 
     return (char, creator)
 
-def send_pdf(
-    to_addr: str,
-    pdf_path: str | Path,
-    subject: str = "Your PDF",
-    text_body: str = "Please find the PDF attached.",
-    html_body: str | None = None,
-):
-    pdf_path = Path(pdf_path)
-
-    if pdf_path.suffix.lower() != ".pdf":
-        raise ValueError(f"Expected a .pdf file, got: {pdf_path}")
-
-    mailer.send(
-        to_addr=to_addr,
-        subject=subject,
-        text_body=text_body,
-        html_body=html_body,
-        attachments=[pdf_path],
-    )
-
 def do_distribution(distribution: List[Dict[str, str]]) -> None: 
     for dist in distribution: 
         player_key = dist["player"]
@@ -153,23 +132,24 @@ def do_distribution(distribution: List[Dict[str, str]]) -> None:
             "char": char, 
             "creator": creator
         }
-        pdf_path = render_pdf(
-            "dost.tex", data, Path(f"/tmp/{player_key}.pdf")
-        )
 
-        send_pdf(
+        render_pdf(
+            "dost.tex", 
+            data, 
+            f"{player_key}.pdf",
+            mailer=mailer,
             to_addr=player["email"], 
-            pdf_path=pdf_path, 
             subject="[DOST 2.0 FK] Dein Charakter!",
             text_body=(
                 f"Liebe*r {player['name']}, \n"
                 "\n"
                 "mit großer Freude senden wir dir mit einiger Verzögerung deinen Charakter! \n"
+                "Die angehängte PDF enthält einen Tagebucheintrag von unbekannt, der als grobe Beschreibung des Settings dient, die Pleroma-Zugangsdaten deines Charakters (mit diesen erhälst du auf Pleroma deine weitere Charakterbeschreibung) und eine kleine Einordnung der Weltanschauung!\n"
                 "Weitere Spielmaterialien werden dich IT über Pleroma erreichen.\n"
                 "Die finalen Spielregeln senden wir dir in den nächsten Wochen per Mail zu.\n"
                 "\n\n"
                 "Liebe Grüße\n"
-                "Alex, fux, Hauptmann\n"
+                "Alex, fux, Hauptmann und das gesammte Dost 2.0 FK Team <3 \n"
             )
         )
 
