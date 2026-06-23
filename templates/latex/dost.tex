@@ -1,0 +1,90 @@
+\documentclass[12pt, a4paper, openany]{article}
+\usepackage{marginnote}
+\usepackage[left=2cm,top=3cm, bottom=2cm, right=2cm, marginparwidth=3cm,marginparsep=0.4cm]{geometry}
+
+
+% my custom stlye and functions stuff
+\usepackage{mystyle}
+\usepackage{nameref}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdfpages}
+\usepackage{multicol}
+\usepackage{array, booktabs, longtable}
+\newcommand{\foo}{\makebox[0pt]{\tiny\textbullet}\hskip-0.5pt\vrule width 1pt\hspace{\labelsep}}
+
+\newcommand{\game}{\emph{Dost.-2.0 FK}}
+\newcommand{\creators}{\emph{alex \& fux}}
+\newcommand{\absatz}{\par\medskip\noindent}
+
+\usepackage{titlesec}
+\titleformat{\section}[block]{\Large\bfseries\filcenter}{}{1em}{}
+\titleformat{\subsection}[hang]{\bfseries}{}{1em}{}
+\setcounter{secnumdepth}{0}
+
+\makeatletter
+
+\newcommand\frontmatter{%
+    \cleardoublepage
+  %\@mainmatterfalse
+  \pagenumbering{gobble}}
+
+\newcommand\mainmatter{%
+    \cleardoublepage
+ % \@mainmattertrue
+  \pagenumbering{arabic}}
+
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{kawa-i}
+\chead{>>\game{}<<}
+\rhead{\thepage}
+
+
+\input{includes/title.tex}
+
+\begin{document}
+
+
+% TITLE
+\frontmatter
+\maketitle
+\newpage
+\mainmatter
+
+% INTRO
+\section{\textsc{INTRO}}
+\input{character_verteilung/west_setting.tex}
+% \input{character_verteilung/parca_setting.tex}
+% \input{character_verteilung/ikac_setting.tex}
+
+% INFO
+\section{Dein Charakter}
+Endlich ist es so weit! Wir freuen uns, dir endlich deinen Charakter zuteilen zu
+dürfen. Ganz viel Spaß beim Einarbeiten, wir sind gespannt auf das Spiel!
+\begin{center}
+  \input{character_verteilung/intro.tex}
+\end{center}
+
+% IDEOLOGIE
+\section*{Fraktion und Weltanschauung}
+\input{character_verteilung/west_weltanschauung.tex}
+% \input{character_verteilung/parca_weltanschauung.tex}
+% \input{character_verteilung/ikac_weltanschauung.tex}
+% \input{character_verteilung/lilie_weltanschauung.tex}
+
+% TIMELINE 
+\section{Timeline}
+\input{chapters/setting/timeline}
+
+% Abkürzungsverzeichnis
+\section{Abkürzungsverzeichnis}
+\section*{Acronyms}
+
+\begin{multicols}{2}
+\end{multicols}
+\input{includes/acronym}
+
+\end{document}
