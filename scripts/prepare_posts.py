@@ -36,6 +36,10 @@ def prepare_posts(post_template, chars):
             if tag in __tags(char): 
                 mentioned_usernames.append(ctx["attributes"]["username"]) 
 
+    # Direct
+    for account in mentions["accounts"]: 
+        mentioned_usernames.append(account) 
+
     # Add mentions to mentions field 
     post["mentions"] = mentioned_usernames
     # Add mentions to text 

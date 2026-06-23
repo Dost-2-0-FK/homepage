@@ -24,6 +24,7 @@ def transform(data):
     player["nogo_tags"] = get("nogo_tags", data)
     player["positive_contacts"] = get("positive_contacts", data)
     player["nogo_contacts"] = get("nogo_contacts", data)
+    player["arrival"] = get("arrival", data)
     return player
 
 if __name__ == "__main__": 
@@ -31,6 +32,15 @@ if __name__ == "__main__":
     for file in PATH_TO_DOST_PLAYERS.glob("*.json"):
         with open(file, "r") as f:
             data = json.load(f)
+            if "Tidian" in data["name"]: 
+                print("Skipped: ", data["name"])
+                continue
+            if "Jenni" in data["name"]: 
+                print("Skipped: ", data["name"])
+                continue
+            if "Felix" in data["name"]:
+                print("Skipped: ", data["name"])
+                continue
             if "status" not in data or data["status"] != "Anwesend": 
                 continue
             else: 

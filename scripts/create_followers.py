@@ -93,6 +93,11 @@ def create_zone(zone_input):
 
 def create_followers(char, ctx): 
     followers = [] 
+    followers.append("parca")
+    followers.append("ikac")
+    followers.append("west_aeterna")
+    followers.append("ai_leaks")
+
     if ctx["attributes"]["block"] == "NEUTRAL": 
         followers.append("IKAC")
         followers.append("FSB")
