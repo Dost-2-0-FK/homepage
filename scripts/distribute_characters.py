@@ -11,6 +11,8 @@ from src.seafiler import Seafile
 from src.user_manager import UManager
 from src.mailer import Mailer
 
+TAG_HIDDEN = "hidden: "
+
 TXTAD_PATH = "/srv/txtad-data/"
 DOST_PATH = "/usr/bin/dost/homepage/"
 
@@ -24,6 +26,8 @@ comm = Comm()
 seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
 umanger = UManager(seafiler)
 mailer = Mailer()
+
+num_graeber = 0
 
 @dataclass 
 class Fraction: 
@@ -43,13 +47,14 @@ def get_player(key: str) -> Dict[str, str]:
         "name": player["name"] 
     }
 
-
 def get_fraktion_from_tags(username: str, block: str, tags: List[str]) -> Fraction: 
     if block == "NEUTRAL": 
         if username == "paul_nierendorf":
-            return Fraction("", "gräber") 
+            return Fraction("", "") 
         primary = "lilie" 
-        if "gräber" in tags:
+        if "Gräber" in tags:
+            global num_graeber
+            num_graeber += 1
             return Fraction(primary, "gräber") 
         return Fraction(primary, "") 
 
@@ -76,7 +81,7 @@ def get_fraktion_from_tags(username: str, block: str, tags: List[str]) -> Fracti
     print(f"{key} has no block!")
     return Fraction("", "")
 
-def get_char_and_creator(key: str) -> Tuple[Dict[str, str], Dict[str, str]]: 
+def get_char_and_creator(key: str, hidden) -> Tuple[Dict[str, str], Dict[str, str]]: 
     with open(PATH_TO_DOST_CHARS.joinpath(f"{key}.json"), "r") as f:
         char_json = json.load(f)
     with open(PATH_TO_TXTAD_CHARS.joinpath(f"{key}.ctx"), "r") as f:
@@ -88,17 +93,21 @@ def get_char_and_creator(key: str) -> Tuple[Dict[str, str], Dict[str, str]]:
         exit(f"Failed getting ctx-json with key: {key}")
 
     # Build char
+    name = ctx_json["attributes"]["name"]
     username = ctx_json["attributes"]["username"]
     block = ctx_json["attributes"]["block"]
     tags = char_json["_tags"] if "_tags" in char_json else []
     char = {
         "key": key, 
         "pub_key": ctx_json["attributes"]["pub_key"], 
-        "name": ctx_json["attributes"]["name"], 
+        "name": name, 
         "username": username, 
         "block": block, 
         "fraction": get_fraktion_from_tags(username, block, tags)
     }
+
+    if name in hidden: 
+        char["connected"] = hidden[name]
 
     # Build creator
     creator_key = char_json["_creator"]
@@ -118,12 +127,35 @@ def get_char_and_creator(key: str) -> Tuple[Dict[str, str], Dict[str, str]]:
 
     return (char, creator)
 
+def find_hidden(data: Dict[str, Any], hidden): 
+    tags = data["_tags"] if "_tags" in data else []
+    for tag in tags: 
+        if TAG_HIDDEN in tag: 
+            char_key = data["key"]
+            char_hidden = tag[len(TAG_HIDDEN):]
+            with open(PATH_TO_TXTAD_CHARS.joinpath(f"{char_key}.ctx"), "r") as f:
+                ctx_json = json.load(f)
+                hidden[char_hidden] = {
+                    "key": char_key, 
+                    "pub_key": ctx_json["attributes"]["pub_key"], 
+                    "name": ctx_json["attributes"]["name"], 
+                    "username": ctx_json["attributes"]["username"]
+                }
+
 def do_distribution(distribution: List[Dict[str, str]]) -> None: 
+    hidden = {}
+    for file in PATH_TO_DOST_CHARS.glob("*.json"):
+        with open(file, "r") as f:
+            find_hidden(json.load(f), hidden)
+
+    print("num hidden: ", len(hidden), hidden.keys())
+    print("num gräber: ", num_graeber)
+
     for dist in distribution: 
         player_key = dist["player"]
         char_key = dist["character"]
         player = get_player(player_key) 
-        char, creator = get_char_and_creator(char_key)
+        char, creator = get_char_and_creator(char_key, hidden)
         print("PLAYER:  ", player)
         print("CHAR:    ", char)
         print("CREATOR: ", creator)

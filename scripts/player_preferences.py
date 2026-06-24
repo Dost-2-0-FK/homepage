@@ -32,6 +32,8 @@ if __name__ == "__main__":
     for file in PATH_TO_DOST_PLAYERS.glob("*.json"):
         with open(file, "r") as f:
             data = json.load(f)
+            if "name" not in data: 
+                continue
             if "Tidian" in data["name"]: 
                 print("Skipped: ", data["name"])
                 continue

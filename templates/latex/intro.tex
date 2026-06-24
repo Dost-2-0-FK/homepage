@@ -9,7 +9,17 @@ Zugangsdaten:\absatz
 \textbf{Gebe diese Zugangsdaten niemals weiter}, gebe auch den
 \textbf{secret-key} deines Charakters nicht weiter:\\
 %
-\texttt{((* char.key *))}\absatz\absatz
+\texttt{((* char.key *))}\absatz
+((% if 'connected' in char %))
+  Dein Character hat außerdem \textbf{Zugriff auf einen weiteren character}, ist mit ihm
+  verbunden oder hat seine Identität übernommen:\\
+  ((* char['connected']['key'] *))\\
+  ((* char['connected']['name'] *))\\
+  Pleroma Zugangsdaten:\\
+  User: ((* char['connected']['username'] | latex_escape *))
+  | Passwort: ((* char['connected']['pub_key']  | latex_escape *))
+((% endif %))
+\absatz
 % 
 %
 Alle weiter Informationen über deinen Charakter, sein Tagebuch, sowie den
