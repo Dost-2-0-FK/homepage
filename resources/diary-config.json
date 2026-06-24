@@ -16,5 +16,125 @@
         "to": "Kindergeschichten von Heidi mit ihrem Alpöhli, Jim Knopf, Robin Hund, Peter Pan, Tim Taler. Manchmal laß seine Mutter uns aus russischen Büchern vor, die Geschichten von dem Fürst Lev Nikolayevich Myshkin gefielen mir am besten."
       }
     ]
+  }, 
+  "Weber, Paul": {
+    "2044-02-11": [
+      {
+        "cmd": "add",
+        "content": "0x7fffb625d2e0"
+      }
+    ] 
+  },
+  "Markova, Anja": {
+    "2044-09-17": [
+      {
+        "cmd": "add",
+        "content": "0x7fffb625d2e4"
+      }
+    ] 
+  },
+  "Anders, Gregor": {
+    "2045-02-22": [
+      {
+        "cmd": "add",
+        "content": "0x560a14c7b020"
+      }
+    ] 
+  },
+  "Yiapeng, Hulu": {
+    "2045-09-17": [
+      {
+        "cmd": "add",
+        "content": "0x560a14c7b040"
+      }
+    ] 
+  },
+  "Okabe, Rintaro": {
+    "2045-09-12": [
+      {
+        "cmd": "add",
+        "content": "0x560a14c7b080"
+      }
+    ] 
+  },
+  "Prof. Dr. Wen, Li": {
+    "2045-07-19": [
+      {
+        "cmd": "add",
+        "content": "0x7fffb625d310"
+      }
+    ] 
+  },
+  "8, X": {
+    "2044-03-17": [
+      {
+        "cmd": "add",
+        "content": "0x560a14c7b060"
+      }
+    ] 
+  },
+  "Vintergaard, Niels": {
+    "2047-09-15": [
+      {
+        "cmd": "add",
+        "content": "0x5609f36f8080"
+      }
+    ] 
+  },
+  "Anders, Cara": {
+    "2048-06-12": [
+      {
+        "cmd": "add",
+        "content": "0x5609f36f8084"
+      }
+    ] 
+  },
+  "Zhou, Zhang": {
+    "2048-03-14": [
+      {
+        "cmd": "add",
+        "content": "0x5609f36f8088"
+      }
+    ] 
+  },
+  "Nierendorf, Paul": {
+    "2049-06-20": [
+      {
+        "cmd": "add",
+        "content": "0x5609f36f6041"
+      }
+    ] 
+  },
+  "Sorin, Mika": {
+    "2049-01-02": [
+      {
+        "cmd": "add",
+        "content": "0x5609f36f4209"
+      }
+    ] 
+  },
+  "Sokolow, Kim": {
+    "2049-09-14": [
+      {
+        "cmd": "add",
+        "content": "0x7fff342b4f30"
+      }
+    ] 
+  },
+  "Williams, Ladina": {
+    "2049-09-14": [
+      {
+        "cmd": "add",
+        "content": "0x557cc500b020"
+      }
+    ] 
+  },
+  "Dr. Vukovic, Anastasia": {
+    "2051-03-03": [
+      {
+        "cmd": "add",
+        "content": "0x7fff342b4f60"
+      }
+    ] 
   }
 }
