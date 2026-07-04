@@ -1,6 +1,5 @@
 import json
 import os
-import os
 from scripts.pdf_gen import render_pdf
 from dataclasses import dataclass
 from typing import Any, Dict, List
@@ -65,7 +64,7 @@ def get_fraktion_from_tags(username: str, block: str, tags: List[str]) -> Fracti
             return Fraction("gemäßigte", "")
         if "West:Atheisten" in tags: 
             return Fraction("atheisten", "")
-        print(f"{key} ist part of WEST but has no fraction: {tags}")
+        print(f"{username} ist part of WEST but has no fraction: {tags}")
         return Fraction("", "")
 
     if block == "PARCA": 
@@ -76,9 +75,9 @@ def get_fraktion_from_tags(username: str, block: str, tags: List[str]) -> Fracti
             if "Parca:Pragmatiker-ULTRAS" in tags:
                 return Fraction(primary, "ultras")
             return Fraction(primary, "")
-        print(f"{key} ist part of PARCA but has no fraction: {tags}")
+        print(f"{username} ist part of PARCA but has no fraction: {tags}")
 
-    print(f"{key} has no block!")
+    print(f"{username} has no block!")
     return Fraction("", "")
 
 def get_char_and_creator(key: str, hidden) -> Tuple[Dict[str, str], Dict[str, str]]: 
@@ -154,6 +153,11 @@ def do_distribution(distribution: List[Dict[str, str]]) -> None:
     for dist in distribution: 
         player_key = dist["player"]
         char_key = dist["character"]
+
+        if dist["distributed"] == True: 
+            print(f"Character \"{char_key}\" for player \"{player_key}\" already distributed.")
+            continue
+
         player = get_player(player_key) 
         char, creator = get_char_and_creator(char_key, hidden)
         print("PLAYER:  ", player)
@@ -164,6 +168,10 @@ def do_distribution(distribution: List[Dict[str, str]]) -> None:
             "char": char, 
             "creator": creator
         }
+
+        inp = input("Send Charakter (y/n): ") 
+        if inp != "y": 
+            exit("Aborted.")
 
         render_pdf(
             "dost.tex", 
@@ -181,7 +189,8 @@ def do_distribution(distribution: List[Dict[str, str]]) -> None:
                 "Die finalen Spielregeln senden wir dir in den nächsten Wochen per Mail zu.\n"
                 "\n\n"
                 "Liebe Grüße\n"
-                "Alex, fux, Hauptmann und das gesammte Dost 2.0 FK Team <3 \n"
+                "Alex, fux, Hauptmann und das gesamte Dost 2.0 FK Team <3 \n\n\n"
+                "PS: Aufgrund von Zeitknappheit und der unglaublichen Fülle an wahnsinnig tollen Beiträgen von ganz vielen von euch, hat das Aufbereiten und Veröffentlichen der Texte, Ideen, Bildbeiträge und vielem mehr deutlich länger gedauert als erwartet. Daher konnte noch nicht alles veröffentlicht werden. Einige Beiträge fehlen also noch und erreichen euch in den nächsten Tagen und Wochen. Wir bitten darum, zur Strafe nicht unseren Citizen-Score zu senken ;) Hab euch alle ganz doll lieb <3 Ganz großes Dankeschön!"
             )
         )
 

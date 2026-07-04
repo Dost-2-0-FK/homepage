@@ -17,6 +17,8 @@ DOST_PATH = "/usr/bin/dost/homepage/"
 PATH_TO_DOST_CHARS = Path(DOST_PATH, "data/file")
 PATH_TO_CHAR_DIST = Path("/home/fux/homepage/character_verteilung/characters.json")
 
+PATH_TO_DISTRIBUTION = Path("resources/character_zuteilung.json")
+
 comm = Comm()
 seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
 umanger = UManager(seafiler)
@@ -85,6 +87,13 @@ def refine(chars, hidden):
     return chars
 
 if __name__ == "__main__": 
+    distributed = []
+    with open(PATH_TO_DISTRIBUTION, "r") as f:
+        distributed = json.load(f)
+
+    def is_distributed(key: str) -> bool: 
+        return len([d for d in distributed if d["character"] == key])
+
     chars = []
     hidden = {}
     for file in PATH_TO_DOST_CHARS.glob("*.json"):
@@ -93,19 +102,9 @@ if __name__ == "__main__":
             if "Chernobylmann" in char["name"]: 
                 print("Skipped Chernobylmann")
                 continue
-            if "Nierendorf" in char["name"]: 
-                print("Skipped Nierendorf")
+            if is_distributed(char["key"]): 
+                print(f"Already distributed: {char['key']}")
                 continue
-            if "Vogelvrai" in char["name"]: 
-                print("Skipped Vogelvrai")
-                continue
-            if "Sommerheim" in char["name"]: 
-                print("Skipped Sommerheim (hidden: Sokolow)")
-                continue
-            if "Sokolow" in char["name"]: 
-                print("Skipped Sokolow (connected: Sommerheim)")
-                continue
-
             if "connected" in char: 
                 hidden[char["connected"]] = char
             else: 

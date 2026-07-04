@@ -90,6 +90,13 @@ def create_zone(zone_input):
         'valid': True
     }
 
+def get_connection_username(connection: str) -> str: 
+    try: 
+        with open(PATH_TO_TXTAD_CHARS.joinpath(f"{connection}.ctx"), 'r') as f:
+            ctx = json.load(f)
+            return ctx["attributes"]["username"]
+    except: 
+        return None
 
 def create_followers(char, ctx): 
     followers = [] 
@@ -136,6 +143,11 @@ def create_followers(char, ctx):
     zone_infos = create_zone(ctx["attributes"]["zone"])
     if zone_infos["valid"]: 
         followers.append(zone_infos["username"])
+
+    for connection in char["connections"]: 
+        connection_username = get_connection_username(connection)
+        if connection_username:
+            followers.append(connection_username)
 
     return {
         "username": ctx["attributes"]["username"],

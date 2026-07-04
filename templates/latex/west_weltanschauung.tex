@@ -5,10 +5,10 @@ deiner Zone und deines Blocks (@west\_aeterna) relevant.\absatz
 %
 ((% if char['fraction'].primary == 'fundamentalisten' %))
   \input{west_fundamentalisten.tex}
-((% if char['fraction'].primary == 'gemäßigte' %))
+((% elif char['fraction'].primary == 'gemäßigte' %))
   \input{west_gemäßigte.tex}
-((% if char['fraction'].primary == 'atheisten' %))
-  \input{west_.tex}
+((% elif char['fraction'].primary == 'atheisten' %))
+  \input{west_atheisten.tex}
 ((% endif %))
 \absatz
 %

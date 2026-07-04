@@ -28,7 +28,7 @@ class Chat:
 class DiaryEntry: 
     date: str 
     entry: str
-    chats: list
+    chats: list[Char] = field(default_factory=list)
 
 @dataclass 
 class Diary: 
@@ -64,7 +64,7 @@ class Diaryer:
                 return diary 
         return None
 
-    def find_diary_entry_by_date(self, date: str, diary: Diary) -> Optional[Diary]:
+    def find_diary_entry_by_date(self, date: str, diary: Diary) -> Optional[DiaryEntry]:
         return next((e for e in diary.entries if e.date == date), None)
 
     def parse_diary(self, text: str) -> str:
@@ -123,7 +123,7 @@ class Diaryer:
     def parse_diary_entry(self, lines: List[str]) -> DiaryEntry: 
         date = lines[0].strip()[1:-1] 
         if "." in date: 
-            date.replace(".", "-")
+            date = date.replace(".", "-")
         entry = ""
         chats = []
 
@@ -202,8 +202,13 @@ class Diaryer:
                             raise ParseError(
                                 f"run_config: for \"{diary.name}\" at \"{date}\" hint \"{src}\" not found!"
                             )
-                        entry.entry.replace(src, to)
+                        entry.entry = entry.entry.replace(src, to)
                         executed += 1 
+                    if action['cmd'] == "add": 
+                        entry.entry += "\n" 
+                        entry.entry += action["content"] 
+                        executed += 1 
+
             else: 
                 raise ParseError(
                     f"run_config: for \"{diary.name}\" date \"{date}\" not found!"
@@ -226,9 +231,40 @@ class Diaryer:
     def __load_diaries(self) -> List[Diary]: 
         """ Loads secret service files """
         diaries = []
-        for filename in os.listdir(DIARY_PATH): 
+
+        for filename in os.listdir(DIARY_PATH):
             json_data = self.__load_data(os.path.join(DIARY_PATH, filename))
-            diaries.append(Diary(**json_data))
+
+            entries = []
+            for entry_data in json_data.get("entries", []):
+                chats = []
+
+                for chat_data in entry_data.get("chats", []):
+                    messages = [
+                        Message(**message_data)
+                        for message_data in chat_data.get("messages", [])
+                    ]
+
+                    chats.append(Chat(
+                        messages=messages,
+                        people=chat_data.get("people", [])
+                    ))
+
+                date=entry_data["date"]
+                if "." in date: 
+                    date = date.replace(".", "-")
+                entries.append(DiaryEntry(
+                    date=date,
+                    entry=entry_data["entry"],
+                    chats=chats
+                ))
+
+            diaries.append(Diary(
+                key=json_data["key"],
+                name=json_data["name"],
+                entries=entries
+            ))
+
         return diaries
 
     def __load_data(self, path: str):  

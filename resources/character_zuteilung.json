@@ -1,202 +1,275 @@
 [
     {
         "player": "WJKh-Zk4m-p0WX-q4rr",
-        "character": "CzCh-jnoo-sxew-K9qp"
-    },
-    {
-        "player": "hMe3-LQp0-zvfi-K757",
-        "character": "dRBH-9hys-VTbV-tyhj"
+        "character": "CzCh-jnoo-sxew-K9qp",
+        "distributed": true
     },
     {
         "player": "MdPw-fVi3-uOK8-NPsX",
-        "character": "I9MO-9QcS-o9NW-jNCf"
+        "character": "I9MO-9QcS-o9NW-jNCf",
+        "distributed": true
     },
     {
         "player": "go2J-6xKi-D9F0-Hxyi",
-        "character": "gMIK-3WqP-8bKC-SaYd"
+        "character": "0VgW-Q0xK-PKK8-tNKt",
+        "distributed": true
     },
     {
         "player": "AuRu-k0rf-bZWL-XMnC",
-        "character": "UEKq-sdBK-ngHo-uws6"
+        "character": "UEKq-sdBK-ngHo-uws6",
+        "distributed": true
     },
     {
         "player": "xCfm-uTuG-B5OL-b0vJ",
-        "character": "ZpTE-CJfb-gGsQ-C39u"
+        "character": "ZpTE-CJfb-gGsQ-C39u",
+        "distributed": true
     },
     {
         "player": "34K1-goj0-pcRY-mySN",
-        "character": "lwSK-XvmF-pMMi-vV0Q"
-    },
-    {
-        "player": "2H1s-7KdC-P8b9-VV1G",
-        "character": "4o6s-1RWb-Et4U-sKsV"
+        "character": "lwSK-XvmF-pMMi-vV0Q",
+        "distributed": true
     },
     {
         "player": "wOQR-VkGJ-eljJ-DNZk",
-        "character": "L5XT-Xpnp-ROVT-bpFh"
-    },
-    {
-        "player": "RHve-3RxS-mksQ-rxLx",
-        "character": "5CFs-HWZD-jiBf-7D43"
-    },
-    {
-        "player": "xViu-Re1o-zl5o-ScCB",
-        "character": "kzHI-8jN6-CLpy-hktP"
-    },
-    {
-        "player": "FjU3-ziJN-uB39-FhnS",
-        "character": "zP3j-RPzK-ouKI-CG3w"
-    },
-    {
-        "player": "zSsa-Hsvx-W8xI-UdZD",
-        "character": "UCeN-9NVh-fxjR-UI7r"
-    },
-    {
-        "player": "eE6g-g8ml-4Vsl-PqJ1",
-        "character": "k36L-Tj3n-FUJU-aPw4"
-    },
-    {
-        "player": "nb5H-wI6M-tsGV-z5eY",
-        "character": "7kYc-WgGX-Iafe-TLju"
-    },
-    {
-        "player": "2HvV-gXLh-ie0u-3B99",
-        "character": "W5Jf-SSbX-GlLS-q0wz"
-    },
-    {
-        "player": "ozgc-RDBt-kNli-BFrk",
-        "character": "WTLW-mfQg-QFqb-NpzX"
-    },
-    {
-        "player": "W3LA-0d5a-VlCP-YCGG",
-        "character": "br3f-wIDf-gHqo-VhTa"
-    },
-    {
-        "player": "qlpt-1sId-Juci-r8uP",
-        "character": "DS5Q-jb9H-6ncE-WSHO"
-    },
-    {
-        "player": "h5ze-CoDC-yTAw-ROOk",
-        "character": "RvlM-C3zD-Rlmk-N76G"
-    },
-    {
-        "player": "8UCy-MHss-368T-Ftmr",
-        "character": "U28f-pogA-HZSP-4v6u"
-    },
-    {
-        "player": "5yW2-TPbW-iU4E-XCDy",
-        "character": "AM2s-4ZxJ-I4vC-pZ24"
-    },
-    {
-        "player": "3f7V-hTcH-nZmc-XxpS",
-        "character": "1txX-Elq4-oUDm-a1oe"
-    },
-    {
-        "player": "csec-pEyq-Q9pL-XgvD",
-        "character": "srK6-byGQ-rjjP-r2Vb"
-    },
-    {
-        "player": "mRzn-NxW1-Te17-OSsj",
-        "character": "U4OC-sm7S-VATO-6rSc"
-    },
-    {
-        "player": "fLSD-0HOg-x5Sq-11EF",
-        "character": "XtEl-eZVv-SX64-wYIj"
+        "character": "L5XT-Xpnp-ROVT-bpFh",
+        "distributed": true
     },
     {
         "player": "yxGv-bgdY-2k08-RRAx",
-        "character": "KKS6-A62j-i0FH-g1Q4"
+        "character": "kzHI-8jN6-CLpy-hktP",
+        "distributed": true
+    },
+    {
+        "player": "FjU3-ziJN-uB39-FhnS",
+        "character": "zP3j-RPzK-ouKI-CG3w",
+        "distributed": true
+    },
+    {
+        "player": "zSsa-Hsvx-W8xI-UdZD",
+        "character": "UCeN-9NVh-fxjR-UI7r",
+        "distributed": true
+    },
+    {
+        "player": "eE6g-g8ml-4Vsl-PqJ1",
+        "character": "k36L-Tj3n-FUJU-aPw4",
+        "distributed": true
+    },
+    {
+        "player": "nb5H-wI6M-tsGV-z5eY",
+        "character": "7kYc-WgGX-Iafe-TLju",
+        "distributed": true
+    },
+    {
+        "player": "2HvV-gXLh-ie0u-3B99",
+        "character": "W5Jf-SSbX-GlLS-q0wz",
+        "distributed": true
+    },
+    {
+        "player": "W3LA-0d5a-VlCP-YCGG",
+        "character": "dRBH-9hys-VTbV-tyhj",
+        "distributed": true
+    },
+    {
+        "player": "qlpt-1sId-Juci-r8uP",
+        "character": "DS5Q-jb9H-6ncE-WSHO",
+        "distributed": true
+    },
+    {
+        "player": "h5ze-CoDC-yTAw-ROOk",
+        "character": "RvlM-C3zD-Rlmk-N76G",
+        "distributed": true
+    },
+    {
+        "player": "8UCy-MHss-368T-Ftmr",
+        "character": "U28f-pogA-HZSP-4v6u",
+        "distributed": true
+    },
+    {
+        "player": "5yW2-TPbW-iU4E-XCDy",
+        "character": "AM2s-4ZxJ-I4vC-pZ24",
+        "distributed": true
+    },
+    {
+        "player": "3f7V-hTcH-nZmc-XxpS",
+        "character": "Bi9M-slAN-hC1r-trTF",
+        "distributed": true
+    },
+    {
+        "player": "csec-pEyq-Q9pL-XgvD",
+        "character": "srK6-byGQ-rjjP-r2Vb",
+        "distributed": true
+    },
+    {
+        "player": "mRzn-NxW1-Te17-OSsj",
+        "character": "U4OC-sm7S-VATO-6rSc",
+        "distributed": true
+    },
+    {
+        "player": "fLSD-0HOg-x5Sq-11EF",
+        "character": "XtEl-eZVv-SX64-wYIj",
+        "distributed": true
+    },
+    {
+        "player": "xViu-Re1o-zl5o-ScCB",
+        "character": "KKS6-A62j-i0FH-g1Q4",
+        "distributed": true
     },
     {
         "player": "K67G-Jzjo-81zm-tlV1",
-        "character": "k551-bD14-0Ydj-LUcu"
+        "character": "k551-bD14-0Ydj-LUcu",
+        "distributed": true
     },
     {
         "player": "4w8C-eQ1F-K4Qu-mQwr",
-        "character": "RI7Q-gBYl-9ao0-xvHt"
+        "character": "RI7Q-gBYl-9ao0-xvHt",
+        "distributed": true
     },
     {
         "player": "vh2y-74qK-Ejtw-MYlB",
-        "character": "GRzH-KrHC-5SUL-yzb5"
-    },
-    {
-        "player": "kMGE-LeOI-XxcA-ApMV",
-        "character": "au2n-q5ev-t0zl-iNHP"
+        "character": "GRzH-KrHC-5SUL-yzb5",
+        "distributed": true
     },
     {
         "player": "csFE-OR2Z-Y8P2-kZCW",
-        "character": "3HgN-BHhu-1oU4-hqHZ"
+        "character": "3HgN-BHhu-1oU4-hqHZ",
+        "distributed": true
     },
     {
         "player": "Hx07-SCau-bwbo-264x",
-        "character": "N7E5-ac08-ekbx-9z4z"
+        "character": "N7E5-ac08-ekbx-9z4z",
+        "distributed": true
     },
     {
         "player": "XDSK-JJS8-6WHC-Ampc",
-        "character": "aTQh-8QG2-9uJr-qR2m"
+        "character": "aTQh-8QG2-9uJr-qR2m",
+        "distributed": true
     },
     {
         "player": "VPyJ-iBuL-YPHV-1OTP",
-        "character": "OhY0-4fxe-Nqp6-L8hf"
+        "character": "OhY0-4fxe-Nqp6-L8hf",
+        "distributed": true
     },
     {
         "player": "IOl9-r1oE-249v-K7gv",
-        "character": "KQsf-b00z-I210-GGWL"
+        "character": "KQsf-b00z-I210-GGWL",
+        "distributed": true
     },
     {
         "player": "tkqx-C8ie-jjXR-PBES",
-        "character": "o2tX-HIFw-O8oD-P8ZQ"
+        "character": "o2tX-HIFw-O8oD-P8ZQ",
+        "distributed": true
     },
     {
         "player": "5XWn-K1cY-65Yu-brBI",
-        "character": "zjIB-GwXQ-vIXA-rmqH"
+        "character": "zjIB-GwXQ-vIXA-rmqH",
+        "distributed": true
     },
     {
         "player": "jRBM-cTg6-NUwl-w5kH",
-        "character": "zjbq-Lbt2-fJh2-oMHy"
+        "character": "zjbq-Lbt2-fJh2-oMHy",
+        "distributed": true
     },
     {
         "player": "0nkj-9foy-iSOT-Pdx7",
-        "character": "jGCO-kAF0-KI0S-iuBC"
-    },
-    {
-        "player": "tFS1-3NNN-YIGN-5ZXr",
-        "character": "9ELs-y59z-7Uqf-ut1l"
-    },
-    {
-        "player": "tZ7F-ktf5-Pm6N-st2l",
-        "character": "tWJE-k8y5-d4R0-IqUI"
+        "character": "jGCO-kAF0-KI0S-iuBC",
+        "distributed": true
     },
     {
         "player": "fyxQ-F8Qk-M2Ou-0ZAV",
-        "character": "RdgX-W4HP-o0FE-h8eV"
+        "character": "RdgX-W4HP-o0FE-h8eV",
+        "distributed": true
     },
     {
         "player": "6p7a-goqV-yXBN-9Znx",
-        "character": "6Yz2-TZ5f-p3Ri-cvlM"
+        "character": "6Yz2-TZ5f-p3Ri-cvlM",
+        "distributed": true
     },
     {
         "player": "E2Jx-leXg-g8Fw-4Ufc",
-        "character": "VDtq-4lT7-ck8Z-tFJu"
+        "character": "VDtq-4lT7-ck8Z-tFJu",
+        "distributed": true
     },
     {
         "player": "by6q-ODch-ln9n-Xmc1",
-        "character": "5XeZ-elqC-DYLA-AU17"
+        "character": "5XeZ-elqC-DYLA-AU17",
+        "distributed": true
     },
     {
         "player": "1DCj-vAMJ-zMxb-VElT",
-        "character": "fa9m-sLVA-hkBp-rI4x"
+        "character": "fa9m-sLVA-hkBp-rI4x",
+        "distributed": true
     },
     {
         "player": "YvPy-VDzg-qN6N-nrJV",
-        "character": "gMi6-SxnT-XQpS-pLRD"
+        "character": "gMi6-SxnT-XQpS-pLRD",
+        "distributed": true
     },
     {
         "player": "8h4H-Vo3z-gojy-qkB6",
-        "character": "eCb9-eWgi-GWMS-Pxg9"
+        "character": "5CFs-HWZD-jiBf-7D43",
+        "distributed": true
     },
     {
         "player": "h8p3-p250-xrHy-x8Xb",
-        "character": "6TGn-JoBH-sdeB-jyac"
+        "character": "6TGn-JoBH-sdeB-jyac",
+        "distributed": true
+    },
+    {
+        "player": "4PDC-6eqe-e2wV-yHjk",
+        "character": "gEq5-mMWO-9RQ6-azS7",
+        "distributed": true
+    },
+    {
+        "player": "hMe3-LQp0-zvfi-K757",
+        "character": "4o6s-1RWb-Et4U-sKsV",
+        "distributed": true
+    },
+    {
+        "player": "2H1s-7KdC-P8b9-VV1G",
+        "character": "1txX-Elq4-oUDm-a1oe",
+        "distributed": true
+
+    },
+    {
+        "player": "RHve-3RxS-mksQ-rxLx",
+        "character": "WTLW-mfQg-QFqb-NpzX",
+        "distributed": true
+
+    },
+    {
+        "player": "ozgc-RDBt-kNli-BFrk",
+        "character": "YWjm-oxy0-BYi5-Ku1n",
+        "distributed": true
+
+    },
+    {
+        "player": "kMGE-LeOI-XxcA-ApMV",
+        "character": "tWJE-k8y5-d4R0-IqUI",
+        "distributed": true
+
+    },
+    {
+        "player": "tFS1-3NNN-YIGN-5ZXr",
+        "character": "gMIK-3WqP-8bKC-SaYd",
+        "distributed": true
+
+    },
+    {
+        "player": "tZ7F-ktf5-Pm6N-st2l",
+        "character": "au2n-q5ev-t0zl-iNHP",
+        "distributed": true
+
+    },
+    {
+        "player": "MCPc-2azy-Yj2i-QfrV",
+        "character": "9ELs-y59z-7Uqf-ut1l",
+        "distributed": true
+
+    },
+    {
+        "player": "6NNN-be4c-xEps-LHdo",
+        "character": "br3f-wIDf-gHqo-VhTa",
+        "distributed": true
+
     }
 ]
