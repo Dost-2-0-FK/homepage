@@ -1,0 +1,436 @@
+[
+    {
+        "username": "hunter_tyndall",
+        "email": "hunter_tyndall@dost-2-0-fk.at",
+        "password": "pub_EltX-vVZe-X6S4-YjIw",
+        "fullname": "Tyndall, Hunter",
+        "bio": "Tyndall, Hunter | 1.A.4 (W)"
+    },
+    {
+        "username": "lee_sin",
+        "email": "lee_sin@dost-2-0-fk.at",
+        "password": "pub_EUKq-KBsd-Hgno-6wus",
+        "fullname": "Sin, Lee",
+        "bio": "Sin, Lee | 0.0 (E)"
+    },
+    {
+        "username": "hank_leydeck",
+        "email": "hank_leydeck@dost-2-0-fk.at",
+        "password": "pub_HN3g-huHB-14Uo-HqZh",
+        "fullname": "Leydeck, Hank",
+        "bio": "Leydeck, Hank | 1.A.5 (E)"
+    },
+    {
+        "username": "nathalia_szymanski",
+        "email": "nathalia_szymanski@dost-2-0-fk.at",
+        "password": "pub_LsE9-9y5z-7qUf-lt1u",
+        "fullname": "Szymanski, Nathalia",
+        "bio": "Szymanski, Nathalia | 0.2 (W)"
+    },
+    {
+        "username": "adrian_viksna",
+        "email": "adrian_viksna@dost-2-0-fk.at",
+        "password": "pub_15k5-41Db-Yd0j-LcUu",
+        "fullname": "Viksna, Adrian ",
+        "bio": "Viksna, Adrian  | 1.B.16 (W)"
+    },
+    {
+        "username": "luoshi_guanqi",
+        "email": "luoshi_guanqi@dost-2-0-fk.at",
+        "password": "pub_eX5Z-eCql-YDLA-U17A",
+        "fullname": "Guanqi, Luo Shi",
+        "bio": "Guanqi, Luo Shi | 0.0 (E)"
+    },
+    {
+        "username": "paul_nierendorf",
+        "email": "paul_nierendorf@dost-2-0-fk.at",
+        "password": "pub_Eg5q-WMOm-QR96-z7Sa",
+        "fullname": "Nierendorf, Paul",
+        "bio": "Nierendorf, Paul | 1.A.X"
+    },
+    {
+        "username": "ruthantonia_vogelvrai",
+        "email": "ruthantonia_vogelvrai@dost-2-0-fk.at",
+        "password": "pub_Vg0W-0KQx-8KPK-ttKN",
+        "fullname": "Vogelvrai, Ruth Antonia",
+        "bio": "Vogelvrai, Ruth Antonia | 1.A.X"
+    },
+    {
+        "username": "mika_sorin",
+        "email": "mika_sorin@dost-2-0-fk.at",
+        "password": "pub_SwlK-mXFv-pMiM-0vQV",
+        "fullname": "Sorin, Mika",
+        "bio": "Sorin, Mika | 5.0.6 (E)"
+    },
+    {
+        "username": "serafinalucifera_benedetta",
+        "email": "serafinalucifera_benedetta@dost-2-0-fk.at",
+        "password": "pub_A8x7-FTmI-YBkw-mEq2",
+        "fullname": "Benedetta, Serafina Lucifera ",
+        "bio": "Benedetta, Serafina Lucifera  | 1.B.1 (W)"
+    },
+    {
+        "username": "alixmariethereseoliviaganova_p",
+        "email": "alixmariethereseoliviaganova_p@dost-2-0-fk.at",
+        "password": "pub_dRHB-ysh9-VTbV-jhty",
+        "fullname": "Prinzessin von Luxemburg, Alix Marie Ther\u00e8se Olivia Ganova",
+        "bio": "Prinzessin von Luxemburg, Alix Marie Ther\u00e8se Olivia Ganova | 1.A.5 (W)"
+    },
+    {
+        "username": "mara_kessler",
+        "email": "mara_kessler@dost-2-0-fk.at",
+        "password": "pub_an2u-5vqe-0ltz-NHiP",
+        "fullname": "Kessler, Mara",
+        "bio": "Kessler, Mara | 5.6 (E)"
+    },
+    {
+        "username": "ruth_vonwiesenburgzufalkenstei",
+        "email": "ruth_vonwiesenburgzufalkenstei@dost-2-0-fk.at",
+        "password": "pub_DS5Q-j9bH-c6nE-WHOS",
+        "fullname": "von Wiesenburg zu Falkenstein, Ruth",
+        "bio": "von Wiesenburg zu Falkenstein, Ruth | 0.2 (W)"
+    },
+    {
+        "username": "werdi_cavelti",
+        "email": "werdi_cavelti@dost-2-0-fk.at",
+        "password": "pub_TLWW-fgmQ-qQbF-XNzp",
+        "fullname": "Cavelti, Werdi",
+        "bio": "Cavelti, Werdi | 1.A.X"
+    },
+    {
+        "username": "irina_drwolkow",
+        "email": "irina_drwolkow@dost-2-0-fk.at",
+        "password": "pub_9OIM-9QcS-W9No-fjCN",
+        "fullname": "Dr. Wolkow, Irina",
+        "bio": "Dr. Wolkow, Irina | 0.1 (E)"
+    },
+    {
+        "username": "rintaro_okabe",
+        "email": "rintaro_okabe@dost-2-0-fk.at",
+        "password": "pub_qDVt-lT47-kc8Z-JtuF",
+        "fullname": "Okabe, Rintaro",
+        "bio": "Okabe, Rintaro | 1.A.X"
+    },
+    {
+        "username": "noah_bogatst",
+        "email": "noah_bogatst@dost-2-0-fk.at",
+        "password": "pub_7IRQ-BlYg-0a9o-xtHv",
+        "fullname": "Bogatst, Noah",
+        "bio": "Bogatst, Noah | 1.A.X"
+    },
+    {
+        "username": "cara_anders",
+        "email": "cara_anders@dost-2-0-fk.at",
+        "password": "pub_JW5f-SSXb-lSGL-z0qw",
+        "fullname": "Anders , Cara",
+        "bio": "Anders , Cara | 1.A.1 (W)"
+    },
+    {
+        "username": "ekrem_imamoglu",
+        "email": "ekrem_imamoglu@dost-2-0-fk.at",
+        "password": "pub_b9eC-igWe-WSGM-gPx9",
+        "fullname": "\u0130mamo\u011flu , Ekrem",
+        "bio": "\u0130mamo\u011flu , Ekrem | 1.A.7 (W)"
+    },
+    {
+        "username": "li_profdrwen",
+        "email": "li_profdrwen@dost-2-0-fk.at",
+        "password": "pub_P3jz-RzKP-IKuo-wG3C",
+        "fullname": "Prof. Dr. Wen, Li",
+        "bio": "Prof. Dr. Wen, Li | 0.0 (E)"
+    },
+    {
+        "username": "bogenbay_batyr",
+        "email": "bogenbay_batyr@dost-2-0-fk.at",
+        "password": "pub_Y7ck-WgGX-aeIf-LjuT",
+        "fullname": "Batyr, Bogenbay",
+        "bio": "Batyr, Bogenbay | 1.B.9 (E)"
+    },
+    {
+        "username": "nikolai_lebedew",
+        "email": "nikolai_lebedew@dost-2-0-fk.at",
+        "password": "pub_RgdX-H4WP-0EoF-h8Ve",
+        "fullname": "Lebedew, Nikolai",
+        "bio": "Lebedew, Nikolai | 0.1 (E)"
+    },
+    {
+        "username": "melanie_caffner",
+        "email": "melanie_caffner@dost-2-0-fk.at",
+        "password": "pub_2AsM-xZ4J-Iv4C-4pZ2",
+        "fullname": "Caffner, M\u00e9lanie",
+        "bio": "Caffner, M\u00e9lanie | 1.A.2 (W)"
+    },
+    {
+        "username": "owen_langston",
+        "email": "owen_langston@dost-2-0-fk.at",
+        "password": "pub_am9f-sLVA-hpkB-4xIr",
+        "fullname": "Langston, Owen",
+        "bio": "Langston, Owen | 0.0 (W)"
+    },
+    {
+        "username": "serafin_santos",
+        "email": "serafin_santos@dost-2-0-fk.at",
+        "password": "pub_RGHz-CrHK-5USL-by5z",
+        "fullname": "Santos, Serafin",
+        "bio": "Santos, Serafin | 1.A.X."
+    },
+    {
+        "username": "x_8",
+        "email": "x_8@dost-2-0-fk.at",
+        "password": "pub_1txX-E4ql-moDU-1eoa",
+        "fullname": "8, X",
+        "bio": "8, X | 1.A.X"
+    },
+    {
+        "username": "anja_markova",
+        "email": "anja_markova@dost-2-0-fk.at",
+        "password": "pub_i6gM-SnTx-XSpQ-DLpR",
+        "fullname": "Markova, Anja",
+        "bio": "Markova, Anja | 5.6 (E)"
+    },
+    {
+        "username": "glen_mcarden",
+        "email": "glen_mcarden@dost-2-0-fk.at",
+        "password": "pub_nGT6-HBoJ-esdB-jacy",
+        "fullname": "McArden, Glen",
+        "bio": "McArden, Glen | 0.1 (W)"
+    },
+    {
+        "username": "segfold_",
+        "email": "segfold_@dost-2-0-fk.at",
+        "password": "pub_sQKf-00zb-012I-LGGW",
+        "fullname": ", Segfold",
+        "bio": ", Segfold | 1.B.3 (E)"
+    },
+    {
+        "username": "handala_alali",
+        "email": "handala_alali@dost-2-0-fk.at",
+        "password": "pub_zBIj-wQGX-vAXI-Hqrm",
+        "fullname": "Al-Ali, Handala",
+        "bio": "Al-Ali, Handala | 1.A.2 (W)"
+    },
+    {
+        "username": "chep_chain",
+        "email": "chep_chain@dost-2-0-fk.at",
+        "password": "pub_UO4C-msS7-VOTA-Scr6",
+        "fullname": "Chain, Chep",
+        "bio": "Chain, Chep | 1.A.2 (E)"
+    },
+    {
+        "username": "oleg_dragun",
+        "email": "oleg_dragun@dost-2-0-fk.at",
+        "password": "pub_WjYm-0oxy-BiY5-u1nK",
+        "fullname": "Dragun, Oleg",
+        "bio": "Dragun, Oleg | 1.B.6 (E)"
+    },
+    {
+        "username": "ingrid_cavelti",
+        "email": "ingrid_cavelti@dost-2-0-fk.at",
+        "password": "pub_D0Ok-Jjw6-UTek-Wx0E",
+        "fullname": "Cavelti, Ingrid",
+        "bio": "Cavelti, Ingrid | 1.A.X"
+    },
+    {
+        "username": "jung_su",
+        "email": "jung_su@dost-2-0-fk.at",
+        "password": "pub_ZETp-fCbJ-QgsG-3uC9",
+        "fullname": "Su, Jung",
+        "bio": "Su, Jung | 1.B.10 (E)"
+    },
+    {
+        "username": "deunan_knute",
+        "email": "deunan_knute@dost-2-0-fk.at",
+        "password": "pub_o2Xt-wHIF-8ODo-QPZ8",
+        "fullname": "Knute , Deunan",
+        "bio": "Knute , Deunan | 1.A.X"
+    },
+    {
+        "username": "amina_rahman",
+        "email": "amina_rahman@dost-2-0-fk.at",
+        "password": "pub_SK6K-Aj26-i0FH-g1Q4",
+        "fullname": "Rahman, Amina",
+        "bio": "Rahman, Amina | 1.A.4 (E)"
+    },
+    {
+        "username": "hulu_yiapeng",
+        "email": "hulu_yiapeng@dost-2-0-fk.at",
+        "password": "pub_7EN5-08ac-ebkx-zz94",
+        "fullname": "Yiapeng, Hulu",
+        "bio": "Yiapeng, Hulu | 1.A.5 (E)"
+    },
+    {
+        "username": "eva_sommerheim",
+        "email": "eva_sommerheim@dost-2-0-fk.at",
+        "password": "pub_QbR9-RQff-XZe3-OiBs",
+        "fullname": "Sommerheim, Eva",
+        "bio": "Sommerheim, Eva | 1.A.X"
+    },
+    {
+        "username": "juno_kade",
+        "email": "juno_kade@dost-2-0-fk.at",
+        "password": "pub_KIgM-q3PW-C8Kb-SdaY",
+        "fullname": "Kade, Juno",
+        "bio": "Kade, Juno | 1.A.X"
+    },
+    {
+        "username": "zhang_zhou",
+        "email": "zhang_zhou@dost-2-0-fk.at",
+        "password": "pub_64so-WbR1-UtE4-VsKs",
+        "fullname": "Zhou, Zhang ",
+        "bio": "Zhou, Zhang  | 0.0 (E)"
+    },
+    {
+        "username": "louis_xi",
+        "email": "louis_xi@dost-2-0-fk.at",
+        "password": "pub_93Hw-k1bd-DVp6-pQ35",
+        "fullname": "Xi, Louis",
+        "bio": "Xi, Louis | 1.A.5 (E)"
+    },
+    {
+        "username": "rishi_drkhorana",
+        "email": "rishi_drkhorana@dost-2-0-fk.at",
+        "password": "pub_CzhC-jono-exws-9Kqp",
+        "fullname": "Dr. Khorana, Rishi",
+        "bio": "Dr. Khorana, Rishi | 0.0 (E)"
+    },
+    {
+        "username": "marijn_smirnow",
+        "email": "marijn_smirnow@dost-2-0-fk.at",
+        "password": "pub_f28U-oApg-HZSP-u4v6",
+        "fullname": "Smirnow, Marijn",
+        "bio": "Smirnow, Marijn | 0.1 (E)"
+    },
+    {
+        "username": "drvoss_elena",
+        "email": "drvoss_elena@dost-2-0-fk.at",
+        "password": "pub_EvwQ-XCx0-Uf0t-d0Nq",
+        "fullname": "Elena, Dr. Voss",
+        "bio": "Elena, Dr. Voss | 1.A.X"
+    },
+    {
+        "username": "nadir_ilyan",
+        "email": "nadir_ilyan@dost-2-0-fk.at",
+        "password": "pub_kIzH-j86N-yLpC-Phtk",
+        "fullname": "Ilyan, Nadir",
+        "bio": "Ilyan, Nadir | 1.A.6 (W)"
+    },
+    {
+        "username": "kim_sokolow",
+        "email": "kim_sokolow@dost-2-0-fk.at",
+        "password": "pub_BMi9-slAN-Chr1-FtrT",
+        "fullname": "Sokolow, Kim ",
+        "bio": "Sokolow, Kim  | 5.0 (E)"
+    },
+    {
+        "username": "david_drdelavoie",
+        "email": "david_drdelavoie@dost-2-0-fk.at",
+        "password": "pub_6Yz2-5TZf-3piR-clMv",
+        "fullname": "Dr. de Lavoie, David",
+        "bio": "Dr. de Lavoie, David | 0.0 (W)"
+    },
+    {
+        "username": "yeji_song",
+        "email": "yeji_song@dost-2-0-fk.at",
+        "password": "pub_OCjG-FA0k-S0IK-BCiu",
+        "fullname": "Song, Yeji",
+        "bio": "Song, Yeji | 1.A.2 (E)"
+    },
+    {
+        "username": "gregor_anders",
+        "email": "gregor_anders@dost-2-0-fk.at",
+        "password": "pub_TQha-Q82G-rJu9-Rmq2",
+        "fullname": "Anders, Gregor",
+        "bio": "Anders, Gregor | 1.A.3 (W)"
+    },
+    {
+        "username": "roza_chwarizmi",
+        "email": "roza_chwarizmi@dost-2-0-fk.at",
+        "password": "pub_Oh0Y-4xfe-qpN6-L8fh",
+        "fullname": "Chwarizmi, Roza",
+        "bio": "Chwarizmi, Roza | 1.B.8 (E)"
+    },
+    {
+        "username": "mira_mckane",
+        "email": "mira_mckane@dost-2-0-fk.at",
+        "password": "pub_k63L-Tjn3-UUJF-Paw4",
+        "fullname": "McKane, Mira",
+        "bio": "McKane, Mira | 0.0 (W)"
+    },
+    {
+        "username": "sahra_akshat",
+        "email": "sahra_akshat@dost-2-0-fk.at",
+        "password": "pub_w9BG-6X6F-HaHF-Y93G",
+        "fullname": "Akshat, Sahra",
+        "bio": "Akshat, Sahra | 5.1 (E)"
+    },
+    {
+        "username": "roman_melnyk",
+        "email": "roman_melnyk@dost-2-0-fk.at",
+        "password": "pub_6srK-QbyG-rjjP-2Vrb",
+        "fullname": "Melnyk, Roman ",
+        "bio": "Melnyk, Roman  | 1.B.16 (W)"
+    },
+    {
+        "username": "patrizia_holm",
+        "email": "patrizia_holm@dost-2-0-fk.at",
+        "password": "pub_F5Cs-HZWD-Bfij-74D3",
+        "fullname": "Holm, Patrizia",
+        "bio": "Holm, Patrizia | 0.1 (W)"
+    },
+    {
+        "username": "claire_nixon",
+        "email": "claire_nixon@dost-2-0-fk.at",
+        "password": "pub_MlvR-DCz3-lmkR-NG76",
+        "fullname": "Nixon, Claire",
+        "bio": "Nixon, Claire | 0.0 (W)"
+    },
+    {
+        "username": "niels_vintergaard",
+        "email": "niels_vintergaard@dost-2-0-fk.at",
+        "password": "pub_qjzb-tL2b-hJf2-yoHM",
+        "fullname": "Vintergaard, Niels",
+        "bio": "Vintergaard, Niels | 1.A.3 (W)"
+    },
+    {
+        "username": "_chernobylmann",
+        "email": "_chernobylmann@dost-2-0-fk.at",
+        "password": "pub_fuwe-o3Im-QPgT-aX3P",
+        "fullname": "Chernobylmann, ???",
+        "bio": "Chernobylmann, ??? | 1.B.11 (E)"
+    },
+    {
+        "username": "niko_varn",
+        "email": "niko_varn@dost-2-0-fk.at",
+        "password": "pub_Qrhp-1Xbq-jNkW-uXxo",
+        "fullname": "V\u00e4rn, Niko",
+        "bio": "V\u00e4rn, Niko | 1.A.X"
+    },
+    {
+        "username": "dv_gragvokg",
+        "email": "dv_gragvokg@dost-2-0-fk.at",
+        "password": "pub_eCUN-9NhV-jxfR-7rUI",
+        "fullname": "Gragvokg, DV",
+        "bio": "Gragvokg, DV | 0.1 (E)"
+    },
+    {
+        "username": "paul_weber",
+        "email": "paul_weber@dost-2-0-fk.at",
+        "password": "pub_WEtJ-k5y8-40dR-UIqI",
+        "fullname": "Weber, Paul",
+        "bio": "Weber, Paul | 0.0 (W)"
+    },
+    {
+        "username": "anastasia_drvukovic",
+        "email": "anastasia_drvukovic@dost-2-0-fk.at",
+        "password": "pub_b3fr-fDIw-Hoqg-aVTh",
+        "fullname": "Dr. Vukovic, Anastasia ",
+        "bio": "Dr. Vukovic, Anastasia  | 1.B.17 (W)"
+    },
+    {
+        "username": "ladina_williams",
+        "email": "ladina_williams@dost-2-0-fk.at",
+        "password": "pub_L5TX-npXp-RVOT-bphF",
+        "fullname": "Williams, Ladina ",
+        "bio": "Williams, Ladina  | 1.A.X."
+    }
+]
