@@ -56,23 +56,33 @@ def __tags(data: Dict[str, Any]) -> List[str]:
         return data["_tags"] 
     return []
 
-def transform(data): 
-    key = data["key"]
-
+def load_char_ctx(key): 
+    print("Loading: ", key)
     # Load existing character
     ctx = None
     ctx_path = PATH_TO_TXTAD_CHARS.joinpath(f"{key}.ctx")
     if os.path.exists(ctx_path): 
+        print("- found", key)
         with open(ctx_path, "r") as f:
             ctx = json.load(f)
     else: 
         exit(f"Character {key}: does not yet exist, create all chars before updating!!")
+    return ctx
+
+def transform(data): 
+    key = data["key"]
+    # Load existing character
+    ctx = load_char_ctx(key)
 
     print(ctx["name"])
         
     # Exit if name has changed!
     if ctx["name"] != data["sirname"] + ", " + data["name"]: 
-        exit(f"Character {key}: Has CHANGED NAME!!")
+        print(f"Character {key}: Has CHANGED NAME!!: \"{ctx['name']}\" != \"{data['sirname']}, {data['name']}\"")
+        ok = input("ok? (y/n) ")
+        if ok != "y": 
+            exit("aborted")
+
 
     # Notify if zone has changed
     if ctx["attributes"]["zone"] != data["zone"]: 
@@ -125,19 +135,23 @@ def add_contacts(chars: List[Dict[str, Any]]) -> None:
 
 def safe_all(chars: List[Dict[str, Any]]) -> None: 
     for char in chars: 
-        with open(PATH_TO_TXTAD_CHARS.joinpath(f"{char['attributes']['key']}.ctx"), 'w') as f:
+        key = char['attributes']['key']
+        print("LOADING ORIGINAL: ", key)
+        orig = load_char_ctx(key)
+        with open(PATH_TO_TXTAD_CHARS.joinpath(f"{key}.ctx"), 'w') as f:
+            print("DIFF: ", diff(orig, char))
+            ok = input("apply? (y/n) ")
+            if ok != "y": 
+                exit("aborted")
             json.dump(char, f)
 
 if __name__ == "__main__": 
     chars = []
     for file in PATH_TO_DOST_CHARS.glob("*.json"):
         with open(file, "r") as f:
-            original = json.load(f)
-            chars.append(transform(json.load(f)))
-            ok = input("apply? (y/n) ")
-            if ok != "y": 
-                exit("aborted")
-            
+            data = json.load(f)
+            transformed = transform(data.copy())
+            chars.append(transformed)
 
     add_contacts(chars) 
     safe_all(chars)
