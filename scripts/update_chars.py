@@ -2,11 +2,8 @@ from pathlib import Path
 import json
 import os
 import random
+from jsondiff import diff
 from typing import Any, Dict, List
-
-from src.communicator import Comm
-from src.seafiler import Seafile
-from src.user_manager import UManager
 
 TAG_PRESIDENT = "Präsident"
 TAG_SECU = "Security"
@@ -36,10 +33,6 @@ JSON_CTX_TEMPLATE = {
     "re_entrycondition": "",
     "shared": True
 }
-
-comm = Comm()
-seafiler = Seafile(os.getenv("USE_SEAFILE", "False") == "True")
-umanger = UManager(seafiler)
 
 key_bloc_mapping = {}
 
@@ -139,6 +132,12 @@ if __name__ == "__main__":
     chars = []
     for file in PATH_TO_DOST_CHARS.glob("*.json"):
         with open(file, "r") as f:
+            original = json.load(f)
             chars.append(transform(json.load(f)))
+            ok = input("apply? (y/n) ")
+            if ok != "y": 
+                exit("aborted")
+            
+
     add_contacts(chars) 
     safe_all(chars)
