@@ -30,6 +30,12 @@ update:
 	cp -f requirements.txt $(PREFIX)/
 	cp -f app.py $(PREFIX)/
 	cp -f .env $(PREFIX)/
+
+	# create venv IN PLACE (do not copy an existing one)
+	$(PYTHON) -m venv $(PREFIX)/.venv
+	$(PREFIX)/.venv/bin/python -m pip install --upgrade pip
+	$(PREFIX)/.venv/bin/pip install -r $(PREFIX)/requirements.txt
+
 	chmod +x scripts/larp_rewrite.py
 	rsync -a --delete src/ $(PREFIX)/src/
 	rsync -a --delete static/ $(PREFIX)/static/

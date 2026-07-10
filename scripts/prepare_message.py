@@ -33,10 +33,15 @@ def prepare_posts(post_template, chars):
             if attr_value is not None and regex.fullmatch(attr_value):
                 mentioned_usernames.append(ctx["attributes"]["username"])
     # Tags
+    from_tags = []
     for tag in mentions["tags"]: 
         for (char, ctx) in chars: 
             if tag in __tags(char): 
-                mentioned_usernames.append(ctx["attributes"]["username"]) 
+                from_tags.append(ctx["attributes"]["username"]) 
+    if len(mentions) == 0: 
+        mentioned_usernames = from_tags 
+    else: 
+        mentioned_usernames = [u for u in mentioned_usernames if u in from_tags]
 
     # Direct
     for account in mentions["accounts"]: 
