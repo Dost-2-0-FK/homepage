@@ -82,7 +82,8 @@ def transform(data):
         ok = input("ok? (y/n) ")
         if ok != "y": 
             exit("aborted")
-
+        else: 
+            ctx["name"] != data["sirname"] + ", " + data["name"]
 
     # Notify if zone has changed
     if ctx["attributes"]["zone"] != data["zone"]: 
@@ -96,7 +97,7 @@ def transform(data):
     ctx["attributes"]["secu"] = str(TAG_SECU in __tags(data))
     ctx["attributes"]["amc_bloc"] = "[]"
     ctx["attributes"]["amc_zone"] = "[]"
-    ctx["attributes"]["amc_private"] = "[]"
+    ctx["attributes"]["amc_private"] = str(data["connections"])
 
     # Change old "bloc" to new "block"
     if "bloc" in ctx["attributes"]: 
