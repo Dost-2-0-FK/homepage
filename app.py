@@ -192,6 +192,33 @@ def users(key: str):
         me=me
     )
 
+@app.route("/scrts/<key>")
+def secrets(key: str): 
+    user = umanger.get_user(key)
+    if user is None: 
+        return redirect(url_for("main", msg=MSG_INVALID), code=303)
+    me = comm.get_user(user.email.lower())
+    if me is None:
+        return redirect(url_for("entry", key=key, msg=MSG_UNAUTHORIZED), code=303)
+    return render_template(
+        "secrets.html", 
+        msg=request.args.get("msg"),
+        user=user, 
+        me=me, 
+        is_orga=__is_orga(me),
+        is_editor=__is_editor(me),
+        secrets=secretor.get_secrets(key),
+        has_communicate=comm.get_user(user.email.lower()) is not None,
+    )
+
+@app.route("/scrts/<key>/store", methods=["POST"]) 
+def store_secret(key: str): 
+    identifier = request.form.get("identifier") or __create_id()
+    question = request.form.get("question", "").strip()
+    answer = request.form.get("answer", "").strip()
+    secretor.store_secret(key, identifier, question, answer)
+    return redirect(url_for("secrets", key=key), code=303)
+
 @app.route("/diary/<key>")
 def diary(key: str): 
     user = umanger.get_user(key)

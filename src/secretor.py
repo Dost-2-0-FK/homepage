@@ -11,6 +11,7 @@ LIST_PATH = "data/lists/"
 CBI_PATH = os.path.join(LIST_PATH, "cbis.json")
 GM_PATH = os.path.join(LIST_PATH, "gms.json")
 TAGS_PATH = os.path.join(LIST_PATH, "tags.json")
+SECRETS_PATH = os.path.join(LIST_PATH, "secrets.json")
 
 @dataclass 
 class SecretFileEntry: 
@@ -55,6 +56,14 @@ class Tag(Abbr):
     hidden_for_all: bool 
     hidden_for_players: bool
 
+@dataclass 
+class Secret: 
+    creator: str 
+    identifier: str 
+    question: str 
+    answer: str 
+
+
 class Secretor: 
     def __init__(self, comm, umanager):
         if not os.path.exists(SECRET_FILE_PATH):
@@ -67,6 +76,7 @@ class Secretor:
         self.tags = self.__load_list(TAGS_PATH)
         self.comm = comm 
         self.umanager = umanager
+        self.secrets = self.__load_secrets(SECRETS_PATH)
 
     def get_entry_key_by_name(self, name: str) -> str|None: 
         for _, entry in self.secret_file.items():
@@ -220,6 +230,17 @@ class Secretor:
             k:v for k, v in self.tags.items() if not v.hidden_for_all and not v.hidden_for_players
         }
 
+    def get_secrets(self, creator_key: str) -> List[Secret]: 
+        return [
+            secret for secret in self.secrets if secret.creator == creator_key
+        ]
+
+    def store_secret(self, creator_key: str, identifier: str, question: str, answer: str): 
+        self.secrets = [
+            secret for secret in self.secrets if secret.identifier != identifier
+        ]
+        self.secrets.append(Secret(creator_key, identifier, question, answer))
+
     def __save_entry(self, entry: SecretFileEntry): 
         with open(f"{os.path.join(SECRET_FILE_PATH, entry.key)}.json", "w") as f: 
             json.dump(dataclasses.asdict(entry), f)
@@ -245,6 +266,17 @@ class Secretor:
                     lst[abbr] = Tag(**j_lst)
                 else:
                     lst[abbr] = Abbr(**j_lst)
+        return lst
+
+    def __load_secrets(self, path: str) -> List[Secret]: 
+        """ Loads secrets """
+        if not os.path.exists(path):
+            with open(path,'w') as f:
+                f.write("[]")
+        lst = []
+        with open(path, "r") as f: 
+            for secret in json.load(f):
+                lst.append(Secret(**secret))
         return lst
 
     def __save_list(self, path, lst): 

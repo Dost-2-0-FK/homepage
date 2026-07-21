@@ -53,6 +53,13 @@
           </a>
         {% endif %}
 
+        {% if is_editor %} 
+          <a style="{{ 'color: #6b402b' if 'scrts' in request.endpoint else ''}}"
+            href="/scrts/{{user.key}}">
+            scrts
+          </a>
+        {% endif %}
+
         {% if is_orga %} 
           <a style="{{ 'color: #6b402b' if 'users' in request.endpoint else ''}}"
             href="/users/{{user.key}}">
