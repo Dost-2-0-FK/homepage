@@ -3,39 +3,39 @@
     "chars-schweiz": {
       "name": "Charakter-Entwicklung Schweiz",
       "members": [ "adler", "aristippos", "aristoteles" ],
-      "hide": ["it", "szenografie", "test"]
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
     },
     "chars-blau": {
       "name": "Charakter-Entwicklung blauer Block",
       "members": [ "bacon", "benjamin", "brecht" ],
-      "hide": ["it", "szenografie", "test"]
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
     },
     "chars-rot": {
       "name": "Charakter-Entwicklung roter Block", 
       "members": [ "calvin", "cassier", "cornelius", "cohen", "cervantes" ],
-      "hide": ["it", "szenografie", "test"]
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
     },
     "weltanschauung-schweiz": {
       "name": "Weltanschauung Schweiz",
       "members": ["dilthey", "durkheim"],
-      "hide": ["it", "szenografie", "test"]
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
     },
     "weltanschauung-blau": {
       "name": "Weltanschauung blauer Block",
-      "hide": ["it", "szenografie", "test"]
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
     },
     "weltanschauung-rot": {
       "name": "Weltanschauung roter Block",
-      "hide": ["it", "szenografie", "test"]
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
     },
     "background": {
       "name": "Hintergrund Setting",
-      "hide": ["it", "szenografie", "test"]
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
     },
     "kostuem": {
       "name": "Kostüm",
       "members": ["rot", "blau", "schweiz"],
-      "hide": ["it", "szenografie", "test"]
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
     },
     "it": {
       "name": "IT",
@@ -48,11 +48,15 @@
         "chars-blau",
         "weltanschauung-rot",
         "weltanschauung-blau",
-        "weltanschauung-schweiz"
+        "weltanschauung-schweiz",
+        "film", 
+        "zauberreise", 
+        "disco"
       ]
     },
     "szenografie": {
       "name": "Szenografie",
+      "members": ["richards", "rousseau"],
       "hide": [
         "test", 
         "szenografie", 
@@ -61,12 +65,35 @@
         "chars-blau",
         "weltanschauung-rot",
         "weltanschauung-blau",
-        "weltanschauung-schweiz"
+        "weltanschauung-schweiz",
+        "film", 
+        "zauberreise", 
+        "disco"
       ]
     },
     "orga": {
       "name": "Orga",
       "members": ["haffmans", "hauptmann", "hebel"]
+    },
+    "awareness": {
+      "name": "Awareness",
+      "members": ["valery", "vergilius"],
+      "hide": ["it", "szenografie", "test", "film", "zauberreise", "disco"]
+    },
+    "film": {
+      "name": "Film",
+      "members": ["tacitus", "telemann", "tiedemann"],
+      "hide": ["it", "szenografie", "test", "zauberreise", "disco"]
+    },
+    "zauberreise": {
+      "name": "Zauberreise",
+      "members": ["zekl", "zenge"],
+      "hide": ["it", "szenografie", "test", "film", "disco"]
+    },
+    "disco": {
+      "name": "Disco",
+      "members": ["xenophanes"],
+      "hide": ["it", "szenografie", "test", "film", "Zauberreise"]
     },
     "test": {
       "name": "Test",
@@ -88,7 +115,8 @@
     "janne.volz@proton.me": "it",
     "jan.dick@bdp.org": "haffmans.orga",
     "equinox.salexander@gmail.com": "hebel.orga",
-    "post@fraulou.ch": "szenografie",
+    "post@fraulou.ch": "richards.szenografie",
+    "alexlin@gmx.de": "rousseau.szenografie",
     "e.egenbauer@hotmail.de": "weltanschauung-blau",
     "ben.draeger@iesy.net": "weltanschauung-rot",
     "sophia.stricker1512@gmail.com": "cervantes.chars-rot",
@@ -96,6 +124,14 @@
     "schrammsv@gmail.com": "hauptmann.orga",
     "maddin.g@hotmail.de": "aristoteles.chars-schweiz",
     "natascha.kordts@web.de":"schweiz.kostuem",
-    "lilith@huggle.de":"blau.kostuem"
+    "lilith@huggle.de":"blau.kostuem",
+    "laura.slysz@web.de": "valery.awareness",
+    "tidianbaerens@ymail.com": "vergilius.awareness",
+    "nktbzn@outlook.de":"tacitus.film", 
+    "mulartu@web.de":"telemann.film", 
+    "burgtorfmoritz@gmail.com": "tiedemann.film",
+    "linaspringer25.ls@gmail.com":"zekl.zauberreise", 
+    "fr.juergens@proton.me":"zenge.zauberreise",
+    "fredericdoetig@gmail.com":"xenophanes.disco"
   }
 }

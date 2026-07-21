@@ -80,11 +80,6 @@
         "distributed": true
     },
     {
-        "player": "8UCy-MHss-368T-Ftmr",
-        "character": "U28f-pogA-HZSP-4v6u",
-        "distributed": true
-    },
-    {
         "player": "5yW2-TPbW-iU4E-XCDy",
         "character": "AM2s-4ZxJ-I4vC-pZ24",
         "distributed": true
@@ -172,11 +167,6 @@
     {
         "player": "0nkj-9foy-iSOT-Pdx7",
         "character": "jGCO-kAF0-KI0S-iuBC",
-        "distributed": true
-    },
-    {
-        "player": "fyxQ-F8Qk-M2Ou-0ZAV",
-        "character": "RdgX-W4HP-o0FE-h8eV",
         "distributed": true
     },
     {
@@ -271,5 +261,10 @@
         "character": "br3f-wIDf-gHqo-VhTa",
         "distributed": true
 
+    },
+    {
+      "player": "fIbl-vjhB-COtc-qQCs", 
+      "character": "x7A8-mFIT-YwkB-Em2q",
+      "distributed": true
     }
 ]

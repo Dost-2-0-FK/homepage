@@ -7,6 +7,7 @@ from typing import Any, Dict, List
 
 TAG_PRESIDENT = "Präsident"
 TAG_SECU = "Security"
+PALADIN_KEY = "test_paladin_1789"
 
 TXTAD_PATH = "/srv/txtad-data/"
 # TXTAD_PATH = "/home/fux/homepage/test/"
@@ -97,7 +98,9 @@ def transform(data):
     ctx["attributes"]["secu"] = str(TAG_SECU in __tags(data))
     ctx["attributes"]["amc_bloc"] = "[]"
     ctx["attributes"]["amc_zone"] = "[]"
-    ctx["attributes"]["amc_private"] = str(data["connections"])
+    connections = data["connections"]
+    connections.append(PALADIN_KEY)
+    ctx["attributes"]["amc_private"] = str(connections)
 
     # Change old "bloc" to new "block"
     if "bloc" in ctx["attributes"]: 
@@ -139,11 +142,11 @@ def safe_all(chars: List[Dict[str, Any]]) -> None:
         key = char['attributes']['key']
         print("LOADING ORIGINAL: ", key)
         orig = load_char_ctx(key)
+        print("DIFF: ", diff(orig, char))
+        # ok = input("apply? (y/n) ")
+        # if ok != "y": 
+        #     exit("aborted")
         with open(PATH_TO_TXTAD_CHARS.joinpath(f"{key}.ctx"), 'w') as f:
-            print("DIFF: ", diff(orig, char))
-            ok = input("apply? (y/n) ")
-            if ok != "y": 
-                exit("aborted")
             json.dump(char, f)
 
 if __name__ == "__main__": 
@@ -151,8 +154,34 @@ if __name__ == "__main__":
     for file in PATH_TO_DOST_CHARS.glob("*.json"):
         with open(file, "r") as f:
             data = json.load(f)
-            transformed = transform(data.copy())
-            chars.append(transformed)
+            if not data["_published"]: 
+                print(
+                    f"Skipping unpublished character: {data['name']}, {data['sirname']}"
+                )
+            else:
+                transformed = transform(data.copy())
+                chars.append(transformed)
 
     add_contacts(chars) 
     safe_all(chars)
+
+    # Add all characters to paladin:
+    all_keys = [char["attributes"]["key"] for char in chars] 
+    paladin = JSON_CTX_TEMPLATE;
+    paladin["attributes"]["key"] = PALADIN_KEY
+    paladin["attributes"]["name"] = "Paladin"
+    paladin["attributes"]["pub_key"] = "pub_1789"
+    paladin["attributes"]["priv"] = "161"
+    paladin["attributes"]["entropie"] = str(0)
+    paladin["attributes"]["gen_diff"] = str(0)
+    paladin["attributes"]["zone"] = "TEST ZONE"
+    paladin["attributes"]["president"] = str(False)
+    paladin["attributes"]["secu"] = str(False)
+    paladin["attributes"]["amc_bloc"] = "[]"
+    paladin["attributes"]["amc_zone"] = "[]"
+    paladin["attributes"]["amc_private"] = str(all_keys)
+    paladin["attributes"]["inactive"] = "True"
+    paladin["attributes"]["block"] = "TEST"
+
+    with open(PATH_TO_TXTAD_CHARS.joinpath(f"{PALADIN_KEY}.ctx"), 'w') as f:
+        json.dump(paladin, f)

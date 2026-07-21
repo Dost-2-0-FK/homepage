@@ -14,6 +14,15 @@ PATH_TO_DISTRIBUTION = Path("resources/character_zuteilung.json")
 
 inactive = 0 
 
+def load_char_ctxs() -> List: 
+    chars = []
+    for file in PATH_TO_TXTAD_CHARS.glob("*.ctx"):
+        with open(file, "r") as f:
+            ctx = json.load(f)
+            if "test_" not in ctx["id"]: 
+                chars.append(ctx)
+    return chars
+
 def get_player_name(key) -> str: 
     try:
         with open(PATH_TO_DOST_PLAYERS.joinpath(f"{key}.json"), "r") as f:
@@ -46,7 +55,5 @@ if __name__ == "__main__":
     with open(PATH_TO_DISTRIBUTION, "r") as f:
         distributed_chars = json.load(f)
 
-    for file in PATH_TO_TXTAD_CHARS.glob("*.ctx"):
-        with open(file, "r") as f:
-            check_distribution(json.load(f), distributed_chars)
-
+    for ctx in load_char_ctxs():
+         check_distribution(ctx, distributed_chars)
