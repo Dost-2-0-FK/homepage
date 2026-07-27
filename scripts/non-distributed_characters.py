@@ -58,8 +58,8 @@ def check_distribution(char, distributed_chars):
     if len(to) > 0:
         player = get_player_name(to[0])
         creator = get_creator(key)
-        # print(f"Character: {key} [creator={creator}, name={name}, block={block}] distributed to: {player}")
-        print(f"[creator={creator}, name={name}, block={block}] distributed to: {player}")
+        print(f"Character: {key} [creator={creator}, name={name}, block={block}] distributed to: {player}")
+        # print(f"[creator={creator}, name={name}, block={block}] distributed to: {player}")
     else: 
         print(f"Character: {key} [name={name}, block={block}] not distributed yet")
         return

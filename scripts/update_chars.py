@@ -14,7 +14,14 @@ TXTAD_PATH = "/srv/txtad-data/"
 DOST_PATH = "/usr/bin/dost/homepage/"
 
 PATH_TO_TXTAD_CHARS = Path(TXTAD_PATH, "dost/game_files/Characters/")
+PATH_TO_TXTAD_ZONES = Path(TXTAD_PATH, "dost/game_files/Zones/")
 PATH_TO_DOST_CHARS = Path(DOST_PATH, "data/file/")
+
+zones = {}
+for file in PATH_TO_TXTAD_ZONES.glob("*.ctx"):
+    with open(file, "r") as f:
+        data = json.load(f)
+        zones[data["attributes"]["zone"].strip()] = data["attributes"]["key"]
 
 JSON_CTX_TEMPLATE = {
     "attributes": {
@@ -70,6 +77,12 @@ def load_char_ctx(key):
         exit(f"Character {key}: does not yet exist, create all chars before updating!!")
     return ctx
 
+def get_zone_key_from_name(name: str) -> str | None: 
+    if name in zones: 
+        return zones[name] 
+    print("NAME NOT FOUND!: ", name)
+    return None
+
 def transform(data): 
     key = data["key"]
     # Load existing character
@@ -90,12 +103,22 @@ def transform(data):
     if ctx["attributes"]["zone"] != data["zone"]: 
         print(f"Character {key}: Updating zone: {ctx['attributes']['zone']} => {data['zone']}")
 
+
+    zone_name = data["zone"]
+    zone_key = get_zone_key_from_name(zone_name)
+    if not zone_key and "1.A.X" in zone_name: 
+        zone_name = "1.A.X"
+        zone_key = get_zone_key_from_name(zone_name)
+
     # Update flexible attributes
     ctx["attributes"]["entropie"] = str(__calc_aitropie(data))
     ctx["attributes"]["gen_diff"] = str(__calc_gen_diff(data))
-    ctx["attributes"]["zone"] = data["zone"]
+    ctx["attributes"]["emotions"] = str(1)
+    ctx["attributes"]["zone"] = zone_name
+    ctx["attributes"]["zone_key"] = zone_key
     ctx["attributes"]["president"] = str(TAG_PRESIDENT in __tags(data))
     ctx["attributes"]["secu"] = str(TAG_SECU in __tags(data))
+    ctx["attributes"]["block_mandate"] = "0"
     ctx["attributes"]["amc_bloc"] = "[]"
     ctx["attributes"]["amc_zone"] = "[]"
     connections = data["connections"]
