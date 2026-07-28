@@ -58,6 +58,7 @@ def transform(player, distribution):
     player_ctx["attributes"]["key"] = player_key
     player_ctx["attributes"]["cur_char"] = char_key
     player_ctx["attributes"]["cur_username"] = char_username
+    player_ctx["attributes"]["access"] = "False"
 
     # Create Diary
     diary_ctx = JSON_CTX_TEMPLATE.copy()
