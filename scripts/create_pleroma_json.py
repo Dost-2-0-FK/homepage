@@ -34,7 +34,8 @@ if __name__ == "__main__":
             if "attributes" not in data or "priv" not in data["attributes"]:
                 print("Skipping ", data["id"])
                 continue 
-            chars.append(transform(data))
+            if "julien" in data["name"].lower() or "roussange" in data["name"].lower():
+                chars.append(transform(data))
 
     with open(PATH_TO_USER_JSONS, 'w') as f:
         json.dump(chars, f)

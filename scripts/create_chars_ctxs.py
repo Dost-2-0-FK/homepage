@@ -169,7 +169,8 @@ def transform(data):
         "amc_bloc": "[]",
         "amc_private": "[]",
         "amc_zone": "[]",
-        "inactive": str(TAG_INACTIVE in __tags(data)),
+        # "inactive": str(TAG_INACTIVE in __tags(data)),
+        "inactive": "True"
     }
     for tag in __tags(data): 
         if TAG_HIDDEN in tag: 
@@ -198,8 +199,16 @@ def add_contacts(chars: List[Dict[str, Any]]) -> None:
 
 def safe_all(chars: List[Dict[str, Any]]) -> None: 
     for char in chars: 
-        with open(PATH_TO_TXTAD_CHARS.joinpath(f"{char['id']}.ctx"), 'w') as f:
-            json.dump(char, f)
+        print(char["name"])
+        if "julien" in char["name"].lower() or "roussange" in char["name"].lower():
+            ok = input("ok? (y/n) ")
+            if ok != "y": 
+                print("skipped")
+                continue
+            else: 
+                with open(PATH_TO_TXTAD_CHARS.joinpath(f"{char['id']}.ctx"), 'w') as f:
+                    json.dump(char, f)
+        print("skipped")
 
 if __name__ == "__main__": 
     chars = []

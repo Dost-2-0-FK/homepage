@@ -52,13 +52,20 @@ def transform(player, distribution):
 
     # Create Player
     player_ctx = JSON_CTX_TEMPLATE.copy()
+    # Safe Player
+    if os.path.exists(PATH_TO_TXTAD_PLAYERS.joinpath(f"{player_key}.ctx")):
+        with open(PATH_TO_TXTAD_PLAYERS.joinpath(f"{player_key}.ctx"), 'r') as f:
+            player_ctx = json.load(f)
+
     player_ctx["id"] = f"Players/{player_key}"
     player_ctx["name"] = player['name']
     player_ctx["attributes"] = {}
     player_ctx["attributes"]["key"] = player_key
+
+    # ALWAYS UPDATE:
+    player_ctx["attributes"]["access"] = "False"
     player_ctx["attributes"]["cur_char"] = char_key
     player_ctx["attributes"]["cur_username"] = char_username
-    player_ctx["attributes"]["access"] = "False"
 
     # Create Diary
     diary_ctx = JSON_CTX_TEMPLATE.copy()

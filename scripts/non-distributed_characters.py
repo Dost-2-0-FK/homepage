@@ -48,7 +48,7 @@ def check_distribution(char, distributed_chars):
         global inactive 
         inactive += 1
         # print("Skipping inactive characters: ", inactive)
-        return
+        # return
 
     name = char["name"]
     key = char["attributes"]["key"] 
