@@ -83,8 +83,14 @@ def get_zone_key_from_name(name: str) -> str | None:
     print("NAME NOT FOUND!: ", name)
     return None
 
-def transform(data): 
+def get_encrypted_key(key: str, identities) -> str: 
+    for identity in identities: 
+        if identity["key"] == key: 
+            return identity["encrypted_key"]
+
+def transform(data, identities): 
     key = data["key"]
+    encrypted_key = get_encrypted_key(key, identities)
     # Load existing character
     ctx = load_char_ctx(key)
 
@@ -111,6 +117,7 @@ def transform(data):
         zone_key = get_zone_key_from_name(zone_name)
 
     # Update flexible attributes
+    ctx["attributes"]["encrypted_key"] = encrypted_key
     ctx["attributes"]["entropie"] = str(__calc_aitropie(data))
     ctx["attributes"]["gen_diff"] = str(__calc_gen_diff(data))
     ctx["attributes"]["emotions"] = str(1)
@@ -173,6 +180,9 @@ def safe_all(chars: List[Dict[str, Any]]) -> None:
             json.dump(char, f)
 
 if __name__ == "__main__": 
+    identities = []
+    with open("resources/identities.json", "r") as f:
+        identities = json.load(f)
     chars = []
     for file in PATH_TO_DOST_CHARS.glob("*.json"):
         with open(file, "r") as f:
@@ -182,7 +192,7 @@ if __name__ == "__main__":
                     f"Skipping unpublished character: {data['name']}, {data['sirname']}"
                 )
             else:
-                transformed = transform(data.copy())
+                transformed = transform(data.copy(), identities)
                 chars.append(transformed)
 
     add_contacts(chars) 
