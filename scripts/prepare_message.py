@@ -27,20 +27,26 @@ def prepare_posts(post_template, chars):
     mentioned_usernames = []
     # Attributes 
     for attribute, pattern in mentions["attributes"]:
+        print(attribute, pattern)
         regex = re.compile(pattern)
         for char, ctx in chars:
             attr_value = ctx.get("attributes", {}).get(attribute)
+            print(char["name"], attribute, pattern, attr_value)
             if attr_value is not None and regex.fullmatch(attr_value):
+                print("added ", ctx["attributes"]["username"])
                 mentioned_usernames.append(ctx["attributes"]["username"])
+            else:
+                print("dropped", ctx["attributes"]["username"])
     # Tags
     from_tags = []
     for tag in mentions["tags"]: 
         for (char, ctx) in chars: 
             if tag in __tags(char): 
                 from_tags.append(ctx["attributes"]["username"]) 
+    print(mentioned_usernames)
     if len(mentions) == 0: 
         mentioned_usernames = from_tags 
-    else: 
+    elif len(from_tags) > 0: 
         mentioned_usernames = [u for u in mentioned_usernames if u in from_tags]
 
     # Direct
@@ -92,7 +98,6 @@ if __name__ == "__main__":
     # Store posted
     with open(PATH_TO_POSTS_TEMPLATE, 'w') as f:
         json.dump(post_templates, f) 
-
     
     # Store prepared posts
     with open(PATH_TO_PLEROMA_POSTS_JSON, 'w') as f:
