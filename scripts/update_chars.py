@@ -42,6 +42,8 @@ JSON_CTX_TEMPLATE = {
     "shared": True
 }
 
+INITIAL_BLACKOUTS = ["eCb9-eWgi-GWMS-Pxg9", "RdgX-W4HP-o0FE-h8eV", "wfue-m3Io-PgQT-P3Xa" ] 
+
 key_bloc_mapping = {}
 
 def __calc_aitropie(data) -> int: 
@@ -83,14 +85,15 @@ def get_zone_key_from_name(name: str) -> str | None:
     print("NAME NOT FOUND!: ", name)
     return None
 
-def get_encrypted_key(key: str, identities) -> str: 
+def get_encrypted_pub(key: str, identities) -> str: 
     for identity in identities: 
         if identity["key"] == key: 
-            return identity["encrypted_key"]
+            return identity["encrypted_pub"]
+    return ""
 
 def transform(data, identities): 
     key = data["key"]
-    encrypted_key = get_encrypted_key(key, identities)
+    encrypted_pub = get_encrypted_pub(key, identities)
     # Load existing character
     ctx = load_char_ctx(key)
 
@@ -117,7 +120,7 @@ def transform(data, identities):
         zone_key = get_zone_key_from_name(zone_name)
 
     # Update flexible attributes
-    ctx["attributes"]["encrypted_key"] = encrypted_key
+    ctx["attributes"]["encrypted_pub"] = encrypted_pub
     ctx["attributes"]["entropie"] = str(__calc_aitropie(data))
     ctx["attributes"]["gen_diff"] = str(__calc_gen_diff(data))
     ctx["attributes"]["emotions"] = str(1)
@@ -126,6 +129,7 @@ def transform(data, identities):
     ctx["attributes"]["president"] = str(TAG_PRESIDENT in __tags(data))
     ctx["attributes"]["secu"] = str(TAG_SECU in __tags(data))
     ctx["attributes"]["block_mandate"] = "0"
+    ctx["attributes"]["in_blackout"] = str(key in INITIAL_BLACKOUTS)
     ctx["attributes"]["amc_bloc"] = "[]"
     ctx["attributes"]["amc_zone"] = "[]"
     connections = data["connections"]
