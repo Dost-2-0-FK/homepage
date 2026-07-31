@@ -240,6 +240,7 @@ class Secretor:
             secret for secret in self.secrets if secret.identifier != identifier
         ]
         self.secrets.append(Secret(creator_key, identifier, question, answer))
+        self.__save_secrets(SECRETS_PATH)
 
     def __save_entry(self, entry: SecretFileEntry): 
         with open(f"{os.path.join(SECRET_FILE_PATH, entry.key)}.json", "w") as f: 
@@ -279,6 +280,11 @@ class Secretor:
                 lst.append(Secret(**secret))
         return lst
 
+    def __save_secrets(self, path: str):
+        json_ready = [dataclasses.asdict(secret) for secret in self.secrets]
+        with open(path, "w") as f:
+            json.dump(json_ready, f)
+
     def __save_list(self, path, lst): 
         json_ready = {k: dataclasses.asdict(v) for k, v in lst.items()}
         with open(path, "w") as f: 
@@ -290,4 +296,3 @@ class Secretor:
             syslog.syslog(syslog.LOG_WARNING, f"Warn: creator not found: {creator}")
             return None
         return self.comm.get_user(user.email.lower())
-
