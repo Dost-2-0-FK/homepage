@@ -63,6 +63,7 @@ def main():
         parser.error(f"refusing to overwrite existing file: {args.output}")
 
     recovered = []
+    skipped = []
     keys = list(user_keys(args.data_dir))
     with requests.Session() as session:
         for position, key in enumerate(keys, start=1):
@@ -70,9 +71,13 @@ def main():
             response = session.get(url, timeout=15, allow_redirects=False)
             response.raise_for_status()
             if response.is_redirect:
-                raise RuntimeError(
-                    f"The live app redirected {key}; recovery would be incomplete"
+                destination = response.headers.get("Location", "unknown destination")
+                skipped.append(key)
+                print(
+                    f"[{position}/{len(keys)}] skipped {key}: "
+                    f"redirected to {destination}"
                 )
+                continue
             secrets = secrets_from_page(response.text, key)
             recovered.extend(secrets)
             print(f"[{position}/{len(keys)}] recovered {len(secrets)} for {key}")
@@ -84,7 +89,10 @@ def main():
         encoding="utf-8",
     )
     temporary.replace(args.output)
-    print(f"Recovered {len(recovered)} secrets to {args.output}")
+    print(
+        f"Recovered {len(recovered)} secrets to {args.output}; "
+        f"skipped {len(skipped)} redirected users"
+    )
 
 
 if __name__ == "__main__":
